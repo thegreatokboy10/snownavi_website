@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="page-title">SnowNavi Ski Club</title>
+  <style>
+    :root {
+      --main-red: #E53512;
+      --bg-light: #F9F4F3;
+      --text-dark: #2F2F2F;
+      --text-gray: #717171;
+      --contrast-white: #FFFFFF;
+      --accent-blue: #9ED4E7;
+    }
+    body {
+      margin: 0;
+      font-family: 'Noto Sans SC', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+    }
+    header {
+      background: var(--contrast-white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    header img {
+      height: 40px;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+    }
+    nav a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: var(--text-dark);
+      font-weight: bold;
+    }
+    .language-selector {
+      margin-left: 2rem;
+      font-size: 1rem;
+    }
+    .hero {
+      background: url('assets/picture/hero.jpg') center/cover;
+      color: white;
+      padding: 6rem 2rem;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .hero .cta-btn {
+      background: var(--main-red);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .section {
+      padding: 3rem 2rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .courses {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    .course-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+    .course-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    .course-card h3 {
+      margin: 1rem;
+    }
+    .course-card button {
+      margin: 0 1rem 1rem;
+      background: var(--main-red);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .map-section, .story-section {
+      text-align: center;
+      margin: 4rem auto;
+      padding: 0 2rem;
+    }
+    .map-section h2, .story-section h2 {
+      margin-bottom: 1rem;
+    }
+    .map-section img {
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+    }
+    footer {
+      background: var(--text-dark);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="assets/picture/snownavi_logo.png" alt="SnowNavi logo">
+    <nav>
+      <a href="#courses">Courses</a>
+      <a href="#map">Interactive Ski Map</a>
+      <a href="#story">Our Story</a>
+      <a href="#contact">Contact</a>
+      <div class="language-selector">
+  <select id="lang" class="language-selector">
+    <option value="en">🇬🇧 EN</option>
+    <option value="zh">🇨🇳 中文</option>
+    <option value="nl">🇳🇱 NL</option>
+  </select>
+</div>
+      </div>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Whether you're leveling up or starting fresh, we ride with you</h1>
+    <button class="cta-btn">Join SnowNavi Courses</button>
+  </section>
+
+  <section id="courses" class="section">
+    <h2>Our Courses</h2>
+    <div class="courses">
+      <div class="course-card">
+        <img src="assets/picture/basi.jpg" alt="BASI">
+        <h3>BASI Instructor Course</h3>
+        <button>Learn More</button>
+      </div>
+      <div class="course-card">
+        <img src="assets/picture/park.jpg" alt="Park and Freestyle">
+        <h3>Park Freestyle Lessons</h3>
+        <button>Learn More</button>
+      </div>
+      <div class="course-card">
+        <img src="assets/picture/private.jpg" alt="Private">
+        <h3>Private Lessons</h3>
+        <button>Learn More</button>
+      </div>
+      <div class="course-card">
+        <img src="assets/picture/group.jpg" alt="Group">
+        <h3>Group Lessons</h3>
+        <button>Learn More</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="map" class="map-section">
+    <h2>Interactive Ski Map</h2>
+    <a href="https://snownavi.ski/preview" target="_blank">
+      <img src="assets/picture/skimap.png" alt="Interactive Ski Map">
+    </a>
+  </section>
+
+  <section id="story" class="story-section">
+    <h2>Our Story</h2>
+    <p>Born from our passion for skiing, SnowNavi is dedicated to helping Chinese-speaking skiers thrive with the best coaching and experience on snow.</p>
+  </section>
+
+  <footer id="contact">
+    <p>Contact: info@snownavi.ski | Follow our 微信公共号 SnowNavi指雪针 for updates</p>
+    <p>&copy; 2025 SnowNavi Sports. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const zhTexts = {
+        title: 'SnowNavi 滑雪俱乐部',
+        navCourses: '课程',
+        navMap: '在线滑雪地图',
+        navContact: '联系我们',
+        navStory: '我们的故事',
+        heroText: '无论是进阶挑战，还是初学启蒙，我们陪你畅滑到底',
+        ctaBtn: '加入 SnowNavi 滑雪课程',
+        sectionTitle: '我们的课程',
+        courses: ['BASI 指导员课程', '公园自由式课程', '私教课程', '团体课程'],
+        learnMore: '了解更多',
+        mapTitle: '在线滑雪地图',
+        storyTitle: '我们的故事',
+        storyText: 'SnowNavi 诞生于对滑雪的热爱，我们致力于打造最适合华人滑雪者的教学和滑行体验。',
+        contactText: '联系方式：info@snownavi.ski | 请关注微信公共号： SnowNavi指雪针',
+        copyright: '保留所有权利.'
+      };
+
+      const enTexts = {
+        title: 'SnowNavi Ski Club',
+        navCourses: 'Courses',
+        navMap: 'Interactive Ski Map',
+        navContact: 'Contact',
+        navStory: 'Our Story',
+        heroText: "Whether you're leveling up or starting fresh, we ride with you",
+        ctaBtn: 'Join SnowNavi Courses',
+        sectionTitle: 'Our Courses',
+        courses: ['BASI Instructor Course', 'Park Freestyle Lessons', 'Private Lessons', 'Group Lessons'],
+        learnMore: 'Learn More',
+        mapTitle: 'Interactive Ski Map',
+        storyTitle: 'Our Story',
+        storyText: 'Born from our passion for skiing, SnowNavi is dedicated to helping Chinese-speaking skiers thrive with the best coaching and experience on snow.',
+        contactText: 'Contact: info@snownavi.ski | Follow our 微信公共号： SnowNavi指雪针 for updates',
+        copyright: 'All rights reserved.'
+      };
+
+      const nlTexts = {
+        title: 'SnowNavi Skiclub',
+        navCourses: 'Cursussen',
+        navMap: 'Interactieve Skikaart',
+        navContact: 'Contact',
+        navStory: 'Ons Verhaal',
+        heroText: 'Of je nu verder wilt groeien of net begint, wij gaan samen de piste af',
+        ctaBtn: 'Doe mee met SnowNavi lessen',
+        sectionTitle: 'Onze Cursussen',
+        courses: ['BASI Instructeurs cursus', 'Freestyle Park lessen', 'Privé lessen', 'Groeps lessen'],
+        learnMore: 'Meer info',
+        mapTitle: 'Interactieve Skikaart',
+        storyTitle: 'Ons Verhaal',
+        storyText: 'SnowNavi is geboren uit liefde voor skiën. We bieden Nederlandstalige skiërs de beste ervaring en instructie op sneeuw.',
+        contactText: 'Contact: info@snownavi.ski | Volg ons op 微信公共号: SnowNavi指雪针',
+        copyright: 'Alle rechten voorbehouden.'
+      };
+
+      const langSelect = document.getElementById('lang');
+      if (!langSelect) return;
+
+      function setLang(lang) {
+        const texts = lang === 'zh' ? zhTexts : lang === 'nl' ? nlTexts : enTexts;
+        document.getElementById('page-title').textContent = texts.title;
+        document.querySelectorAll('nav a')[0].textContent = texts.navCourses;
+        document.querySelectorAll('nav a')[1].textContent = texts.navMap;
+        document.querySelectorAll('nav a')[2].textContent = texts.navStory;
+        document.querySelectorAll('nav a')[3].textContent = texts.navContact;
+        document.querySelector('.hero h1').textContent = texts.heroText;
+        document.querySelector('.hero .cta-btn').textContent = texts.ctaBtn;
+        document.querySelector('#courses h2').textContent = texts.sectionTitle;
+        document.querySelectorAll('.course-card h3').forEach((el, i) => {
+          if (texts.courses[i]) el.textContent = texts.courses[i];
+        });
+        document.querySelectorAll('.course-card button').forEach(el => {
+          el.textContent = texts.learnMore;
+        });
+        document.querySelector('#map h2').textContent = texts.mapTitle;
+        document.querySelector('#story h2').textContent = texts.storyTitle;
+        document.querySelector('#story p').textContent = texts.storyText;
+        document.querySelector('#contact p:first-child').textContent = texts.contactText;
+        document.querySelector('#contact p:last-child').innerHTML = `&copy; 2025 ${lang === 'zh' ? 'SnowNavi 滑雪俱乐部' : 'SnowNavi Sports'}. ${texts.copyright}`;
+      }
+
+      langSelect.addEventListener('change', e => setLang(e.target.value));
+
+      const userLang = navigator.language || navigator.userLanguage;
+      const initialLang = userLang.startsWith('zh') ? 'zh' : 'en';
+      langSelect.value = initialLang;
+      setLang(initialLang);
+    });
+  </script>
+</body>
+</html>
