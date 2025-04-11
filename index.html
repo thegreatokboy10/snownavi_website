@@ -309,6 +309,27 @@
         toTop.style.display = heroBottom < 0 ? 'block' : 'none';
       });
     });
+
+    // URL转换逻辑：若包含 ?loc= 则重定向到新格式
+    (function () {
+      const currentUrl = new URL(window.location.href);
+      const locParams = currentUrl.searchParams.getAll('loc');
+
+      if (locParams.length > 0) {
+        // 将纬度,经度 => 经度,纬度
+        const reversedCoords = locParams.map(coord => {
+          const [lat, lng] = coord.split(',');
+          return `${lng},${lat}`;
+        });
+
+        const joinedCoords = reversedCoords.join(';');
+        const newUrl = `https://snownavi.ski/preview/?coords=${joinedCoords}&resortKey=3valley`;
+
+        // 重定向到新URL
+        window.location.replace(newUrl);
+      }
+    })();
+
   </script>
 </body>
 </html>
