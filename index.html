@@ -62,6 +62,8 @@
       border-radius: 8px;
       font-size: 1rem;
       cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
     }
     .section {
       padding: 3rem 2rem;
@@ -120,7 +122,7 @@
 </head>
 <body>
   <header>
-    <img src="assets/picture/snownavi_logo.png" alt="SnowNavi logo">
+    <img src="assets/picture/snownavi_logo_banner.jpg" alt="SnowNavi logo">
     <nav>
       <a href="#courses">Courses</a>
       <a href="#map">Interactive Ski Map</a>
@@ -139,7 +141,7 @@
 
   <section class="hero">
     <h1>Whether you're leveling up or starting fresh, we ride with you</h1>
-    <button class="cta-btn">Join SnowNavi Courses</button>
+    <a href="#courses" class="cta-btn">Join SnowNavi</a>
   </section>
 
   <section id="courses" class="section">
@@ -165,6 +167,11 @@
         <h3>Group Lessons</h3>
         <button>Learn More</button>
       </div>
+          <div class="course-card">
+        <img src="assets/picture/riding_week.jpg" alt="Riding Week">
+        <h3>Riding Week</h3>
+        <button>Learn More</button>
+      </div>
     </div>
   </section>
 
@@ -177,7 +184,7 @@
 
   <section id="story" class="story-section">
     <h2>Our Story</h2>
-    <p>Born from our passion for skiing, SnowNavi is dedicated to helping Chinese-speaking skiers thrive with the best coaching and experience on snow.</p>
+    <p>“Snow” stands for purity and passion, while “Navi” means guidance. We are committed to leading our partners through a fun ride on snow. — Since 2021 @ 🇳🇱</p>
   </section>
 
   <footer id="contact">
@@ -194,13 +201,13 @@
         navContact: '联系我们',
         navStory: '我们的故事',
         heroText: '无论是进阶挑战，还是初学启蒙，我们陪你畅滑到底',
-        ctaBtn: '加入 SnowNavi 滑雪课程',
+        ctaBtn: '加入 SnowNavi ',
         sectionTitle: '我们的课程',
-        courses: ['BASI 指导员课程', '公园自由式课程', '私教课程', '团体课程'],
+        courses: ['BASI 指导员课程', '公园自由式课程', '私教课程', '团体课程', '畅滑周'],
         learnMore: '了解更多',
         mapTitle: '在线滑雪地图',
         storyTitle: '我们的故事',
-        storyText: 'SnowNavi 诞生于对滑雪的热爱，我们致力于打造最适合华人滑雪者的教学和滑行体验。',
+        storyText: '“Snow”即雪，象征着纯洁与激情；“Navi”意为指引。我们致力于以雪为引，引领伙伴们畅享自由的滑雪之旅。- Since 2021 @ 🇳🇱',
         contactText: '联系方式：info@snownavi.ski | 请关注微信公共号： SnowNavi指雪针',
         copyright: '保留所有权利.'
       };
@@ -212,14 +219,14 @@
         navContact: 'Contact',
         navStory: 'Our Story',
         heroText: "Whether you're leveling up or starting fresh, we ride with you",
-        ctaBtn: 'Join SnowNavi Courses',
+        ctaBtn: 'Join SnowNavi',
         sectionTitle: 'Our Courses',
-        courses: ['BASI Instructor Course', 'Park Freestyle Lessons', 'Private Lessons', 'Group Lessons'],
+        courses: ['BASI Instructor Course', 'Park Freestyle Lessons', 'Private Lessons', 'Group Lessons', 'Riding Week'],
         learnMore: 'Learn More',
         mapTitle: 'Interactive Ski Map',
         storyTitle: 'Our Story',
-        storyText: 'Born from our passion for skiing, SnowNavi is dedicated to helping Chinese-speaking skiers thrive with the best coaching and experience on snow.',
-        contactText: 'Contact: info@snownavi.ski | Follow our 微信公共号： SnowNavi指雪针 for updates',
+        storyText: '“Snow” stands for purity and passion, while “Navi” means guidance. We are committed to leading our partners through a fun ride on snow. — Since 2021 @ 🇳🇱',
+        contactText: 'Contact: info@snownavi.ski | Follow us on 微信公共号： SnowNavi指雪针',
         copyright: 'All rights reserved.'
       };
 
@@ -230,13 +237,13 @@
         navContact: 'Contact',
         navStory: 'Ons Verhaal',
         heroText: 'Of je nu verder wilt groeien of net begint, wij gaan samen de piste af',
-        ctaBtn: 'Doe mee met SnowNavi lessen',
+        ctaBtn: 'Doe mee met SnowNavi',
         sectionTitle: 'Onze Cursussen',
-        courses: ['BASI Instructeurs cursus', 'Freestyle Park lessen', 'Privé lessen', 'Groeps lessen'],
+        courses: ['BASI Instructeurs cursus', 'Freestyle Park lessen', 'Privé lessen', 'Groeps lessen', 'Riding Week'],
         learnMore: 'Meer info',
         mapTitle: 'Interactieve Skikaart',
         storyTitle: 'Ons Verhaal',
-        storyText: 'SnowNavi is geboren uit liefde voor skiën. We bieden Nederlandstalige skiërs de beste ervaring en instructie op sneeuw.',
+        storyText: '“Snow” staat voor puurheid en passie, terwijl “Navi” richting betekent. Wij zetten ons in om onze partners mee te nemen op een plezierige rit door de sneeuw. — Sinds 2021 @ 🇳🇱',
         contactText: 'Contact: info@snownavi.ski | Volg ons op 微信公共号: SnowNavi指雪针',
         copyright: 'Alle rechten voorbehouden.'
       };
@@ -270,7 +277,7 @@
       langSelect.addEventListener('change', e => setLang(e.target.value));
 
       const userLang = navigator.language || navigator.userLanguage;
-      const initialLang = userLang.startsWith('zh') ? 'zh' : 'en';
+      const initialLang = userLang.startsWith('zh') ? 'zh' : userLang.startsWith('nl') ? 'nl' : 'en';
       langSelect.value = initialLang;
       setLang(initialLang);
     });
