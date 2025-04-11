@@ -44,75 +44,10 @@
       margin-left: 2rem;
       font-size: 1rem;
     }
-    .hero {
-      background: url('assets/picture/hero.jpg') center/cover;
-      color: white;
-      padding: 6rem 2rem;
-      text-align: center;
-    }
-    .hero h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
-    .hero .cta-btn {
-      background: var(--main-red);
-      color: white;
-      padding: 0.8rem 1.5rem;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-    }
     .section {
       padding: 3rem 2rem;
       max-width: 1200px;
       margin: auto;
-    }
-    .courses {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-    }
-    .course-card {
-      background: white;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    }
-    .course-card img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-    }
-    .course-card h3 {
-      margin: 1rem;
-    }
-    .course-card a {
-      margin: 0 1rem 1rem;
-      display: inline-block;
-      background: var(--main-red);
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-      text-decoration: none;
-    }
-    .map-section, .story-section {
-      text-align: center;
-      margin: 4rem auto;
-      padding: 0 2rem;
-    }
-    .map-section h2, .story-section h2 {
-      margin-bottom: 1rem;
-    }
-    .map-section img {
-      max-width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      cursor: pointer;
     }
     footer {
       background: var(--text-dark);
@@ -120,30 +55,16 @@
       padding: 2rem;
       text-align: center;
     }
-    #toTop {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      background: var(--main-red);
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-      display: none;
-      z-index: 1000;
-      font-size: 0.9rem;
-    }
   </style>
 </head>
 <body>
   <header>
     <img src="assets/picture/snownavi_logo_banner.jpg" alt="SnowNavi logo">
     <nav>
-      <a href="index.html#courses">Courses</a>
-      <a href="index.html#map">Interactive Ski Map</a>
-      <a href="index.html#story">Our Story</a>
-      <a href="index.html#contact">Contact</a>
+      <a href="index.html#courses" id="nav-courses">Courses</a>
+      <a href="index.html#map" id="nav-map">Interactive Ski Map</a>
+      <a href="index.html#story" id="nav-story">Our Story</a>
+      <a href="index.html#contact" id="nav-contact">Contact</a>
       <div class="language-selector">
         <select id="lang" class="language-selector">
           <option value="en">🇬🇧 EN</option>
@@ -168,6 +89,10 @@
     const translations = {
       en: {
         title: 'SnowNavi Ski Club',
+        navCourses: 'Courses',
+        navMap: 'Interactive Ski Map',
+        navContact: 'Contact',
+        navStory: 'Our Story',
         contact: 'Contact: info@snownavi.ski | Follow our 微信公共号 SnowNavi指雪针 for updates',
         copyright: 'All rights reserved.',
         courses: {
@@ -180,6 +105,10 @@
       },
       zh: {
         title: 'SnowNavi 滑雪俱乐部',
+        navCourses: '课程',
+        navMap: '在线滑雪地图',
+        navContact: '联系我们',
+        navStory: '我们的故事',
         contact: '联系方式：info@snownavi.ski | 请关注微信公共号： SnowNavi指雪针',
         copyright: '保留所有权利.',
         courses: {
@@ -192,6 +121,10 @@
       },
       nl: {
         title: 'SnowNavi Skiclub',
+        navCourses: 'Cursussen',
+        navMap: 'Interactieve Skikaart',
+        navContact: 'Contact',
+        navStory: 'Ons Verhaal',
         contact: 'Contact: info@snownavi.ski | Volg ons op 微信公共号: SnowNavi指雪针',
         copyright: 'Alle rechten voorbehouden.',
         courses: {
@@ -211,6 +144,10 @@
     function updateContent(lang) {
       const t = translations[lang] || translations['en'];
       document.getElementById('page-title').textContent = t.title;
+      document.getElementById('nav-courses').textContent = t.navCourses;
+      document.getElementById('nav-map').textContent = t.navMap;
+      document.getElementById('nav-story').textContent = t.navStory;
+      document.getElementById('nav-contact').textContent = t.navContact;
       document.getElementById('course-title').textContent = t.courses[courseKey].title;
       document.getElementById('course-description').textContent = t.courses[courseKey].desc;
       document.getElementById('contact-text').textContent = t.contact;
