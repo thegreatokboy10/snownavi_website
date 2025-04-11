@@ -3,105 +3,229 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title id="course-title">Course Details</title>
+  <title id="page-title">SnowNavi Ski Club</title>
   <style>
+    :root {
+      --main-red: #E53512;
+      --bg-light: #F9F4F3;
+      --text-dark: #2F2F2F;
+      --text-gray: #717171;
+      --contrast-white: #FFFFFF;
+      --accent-blue: #9ED4E7;
+    }
     body {
       margin: 0;
       font-family: 'Noto Sans SC', sans-serif;
-      background-color: #F9F4F3;
-      color: #2F2F2F;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
     }
     header {
-      background: white;
+      background: var(--contrast-white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       padding: 1rem 2rem;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
-    header a {
+    header img {
+      height: 40px;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+    }
+    nav a {
+      margin-left: 1.5rem;
       text-decoration: none;
-      color: #2F2F2F;
+      color: var(--text-dark);
       font-weight: bold;
     }
-    .course-container {
-      max-width: 960px;
-      margin: 3rem auto;
-      padding: 1rem;
+    .language-selector {
+      margin-left: 2rem;
+      font-size: 1rem;
     }
-    .course-banner {
-      width: 100%;
-      height: 300px;
-      object-fit: cover;
+    .hero {
+      background: url('assets/picture/hero.jpg') center/cover;
+      color: white;
+      padding: 6rem 2rem;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .hero .cta-btn {
+      background: var(--main-red);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .section {
+      padding: 3rem 2rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .courses {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    .course-card {
+      background: white;
       border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
     }
-    .course-content h1 {
-      font-size: 2rem;
-      margin: 1rem 0;
+    .course-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
     }
-    .course-description {
-      line-height: 1.6;
-      font-size: 1.1rem;
+    .course-card h3 {
+      margin: 1rem;
+    }
+    .course-card a {
+      margin: 0 1rem 1rem;
+      display: inline-block;
+      background: var(--main-red);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .map-section, .story-section {
+      text-align: center;
+      margin: 4rem auto;
+      padding: 0 2rem;
+    }
+    .map-section h2, .story-section h2 {
+      margin-bottom: 1rem;
+    }
+    .map-section img {
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+    }
+    footer {
+      background: var(--text-dark);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+    #toTop {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--main-red);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      display: none;
+      z-index: 1000;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
   <header>
-    <a href="index.html">← Back to Homepage</a>
+    <img src="assets/picture/snownavi_logo_banner.jpg" alt="SnowNavi logo">
+    <nav>
+      <a href="index.html#courses">Courses</a>
+      <a href="index.html#map">Interactive Ski Map</a>
+      <a href="index.html#story">Our Story</a>
+      <a href="index.html#contact">Contact</a>
+      <div class="language-selector">
+        <select id="lang" class="language-selector">
+          <option value="en">🇬🇧 EN</option>
+          <option value="zh">🇨🇳 中文</option>
+          <option value="nl">🇳🇱 NL</option>
+        </select>
+      </div>
+    </nav>
   </header>
 
-  <div class="course-container">
-    <img id="course-banner" class="course-banner" src="" alt="Course Banner">
-    <div class="course-content">
-      <h1 id="course-name">Course Name</h1>
-      <p id="course-description" class="course-description">Course Description</p>
-    </div>
-  </div>
+  <section class="section" id="course-detail">
+    <h2 id="course-title">Loading...</h2>
+    <p id="course-description"></p>
+  </section>
+
+  <footer>
+    <p id="contact-text">Contact: info@snownavi.ski | Follow our 微信公共号 SnowNavi指雪针 for updates</p>
+    <p id="copyright">&copy; 2025 SnowNavi Sports. All rights reserved.</p>
+  </footer>
 
   <script>
-    // Example course data
-    const courseData = {
-      basi: {
-        title: "BASI Instructor Course",
-        image: "assets/picture/basi.jpg",
-        description: "This course is designed for those who want to become professional ski instructors certified by BASI (British Association of Snowsport Instructors)."
+    const translations = {
+      en: {
+        title: 'SnowNavi Ski Club',
+        contact: 'Contact: info@snownavi.ski | Follow our 微信公共号 SnowNavi指雪针 for updates',
+        copyright: 'All rights reserved.',
+        courses: {
+          basi: { title: 'BASI Instructor Course', desc: 'Professional instructor training certified by BASI.' },
+          park: { title: 'Park Freestyle Lessons', desc: 'Learn tricks and skills in the terrain park.' },
+          private: { title: 'Private Lessons', desc: '1-on-1 coaching tailored to your pace and goals.' },
+          group: { title: 'Group Lessons', desc: 'Fun group sessions for social learning and progress.' },
+          riding_week: { title: 'Riding Week', desc: 'An immersive week-long snow experience with SnowNavi coaches.' }
+        }
       },
-      park: {
-        title: "Park Freestyle Lessons",
-        image: "assets/picture/park.jpg",
-        description: "Explore tricks and jumps with our freestyle skiing program, ideal for adventurous riders looking to level up in the terrain park."
+      zh: {
+        title: 'SnowNavi 滑雪俱乐部',
+        contact: '联系方式：info@snownavi.ski | 请关注微信公共号： SnowNavi指雪针',
+        copyright: '保留所有权利.',
+        courses: {
+          basi: { title: 'BASI 指导员课程', desc: '国际认证的滑雪指导员专业培训课程。' },
+          park: { title: '公园自由式课程', desc: '在地形公园中学习滑雪技巧和动作。' },
+          private: { title: '私教课程', desc: '1 对 1 私人教学，根据个人节奏量身定制。' },
+          group: { title: '团体课程', desc: '小组形式教学，社交与学习两不误。' },
+          riding_week: { title: '畅滑周', desc: 'SnowNavi 教练陪你畅滑整整一周。' }
+        }
       },
-      private: {
-        title: "Private Lessons",
-        image: "assets/picture/private.jpg",
-        description: "One-on-one lessons tailored to your needs. Perfect for fast progression or personalized coaching."
-      },
-      group: {
-        title: "Group Lessons",
-        image: "assets/picture/group.jpg",
-        description: "Join others in a group setting to learn, practice, and have fun together with experienced coaches."
-      },
-      riding_week: {
-        title: "Riding Week",
-        image: "assets/picture/riding_week.jpg",
-        description: "A week-long immersive ski experience packed with guided riding, improvement sessions, and community vibes."
+      nl: {
+        title: 'SnowNavi Skiclub',
+        contact: 'Contact: info@snownavi.ski | Volg ons op 微信公共号: SnowNavi指雪针',
+        copyright: 'Alle rechten voorbehouden.',
+        courses: {
+          basi: { title: 'BASI Instructeurs cursus', desc: 'Professionele opleiding gecertificeerd door BASI.' },
+          park: { title: 'Freestyle Park lessen', desc: 'Leer tricks en vaardigheden in het funpark.' },
+          private: { title: 'Privé lessen', desc: 'Individuele begeleiding afgestemd op jouw niveau.' },
+          group: { title: 'Groeps lessen', desc: 'Leer samen in een gezellige groepssfeer.' },
+          riding_week: { title: 'Riding Week', desc: 'Een week vol sneeuwplezier met SnowNavi-coaches.' }
+        }
       }
     };
 
-    // Get query param
-    function getQueryParam(param) {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(param);
+    const langSelect = document.getElementById('lang');
+    const urlParams = new URLSearchParams(window.location.search);
+    const courseKey = urlParams.get('course') || 'basi';
+
+    function updateContent(lang) {
+      const t = translations[lang] || translations['en'];
+      document.getElementById('page-title').textContent = t.title;
+      document.getElementById('course-title').textContent = t.courses[courseKey].title;
+      document.getElementById('course-description').textContent = t.courses[courseKey].desc;
+      document.getElementById('contact-text').textContent = t.contact;
+      document.getElementById('copyright').innerHTML = `&copy; 2025 SnowNavi ${lang === 'zh' ? '滑雪俱乐部' : 'Sports'}. ${t.copyright}`;
     }
 
-    const courseKey = getQueryParam('course');
-    if (courseKey && courseData[courseKey]) {
-      const course = courseData[courseKey];
-      document.getElementById('course-title').textContent = course.title + ' - SnowNavi';
-      document.getElementById('course-name').textContent = course.title;
-      document.getElementById('course-banner').src = course.image;
-      document.getElementById('course-description').textContent = course.description;
-    } else {
-      document.getElementById('course-name').textContent = 'Course Not Found';
-      document.getElementById('course-description').textContent = 'Please go back and select a valid course from the homepage.';
-    }
+    langSelect.addEventListener('change', (e) => {
+      const lang = e.target.value;
+      localStorage.setItem('preferredLang', lang);
+      updateContent(lang);
+    });
+
+    const savedLang = localStorage.getItem('preferredLang') || (navigator.language.startsWith('zh') ? 'zh' : navigator.language.startsWith('nl') ? 'nl' : 'en');
+    langSelect.value = savedLang;
+    updateContent(savedLang);
   </script>
 </body>
 </html>
