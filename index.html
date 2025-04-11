@@ -89,14 +89,16 @@
     .course-card h3 {
       margin: 1rem;
     }
-    .course-card button {
+    .course-card a {
       margin: 0 1rem 1rem;
+      display: inline-block;
       background: var(--main-red);
       color: white;
       border: none;
       padding: 0.5rem 1rem;
       border-radius: 6px;
       cursor: pointer;
+      text-decoration: none;
     }
     .map-section, .story-section {
       text-align: center;
@@ -163,27 +165,27 @@
       <div class="course-card">
         <img src="assets/picture/basi.jpg" alt="BASI">
         <h3>BASI Instructor Course</h3>
-        <button>Learn More</button>
+        <a href="course.html?course=basi">Learn More</a>
       </div>
       <div class="course-card">
         <img src="assets/picture/park.jpg" alt="Park and Freestyle">
         <h3>Park Freestyle Lessons</h3>
-        <button>Learn More</button>
+        <a href="course.html?course=park">Learn More</a>
       </div>
       <div class="course-card">
         <img src="assets/picture/private.jpg" alt="Private">
         <h3>Private Lessons</h3>
-        <button>Learn More</button>
+        <a href="course.html?course=private">Learn More</a>
       </div>
       <div class="course-card">
         <img src="assets/picture/group.jpg" alt="Group">
         <h3>Group Lessons</h3>
-        <button>Learn More</button>
+        <a href="course.html?course=group">Learn More</a>
       </div>
       <div class="course-card">
         <img src="assets/picture/riding_week.jpg" alt="Riding Week">
         <h3>Riding Week</h3>
-        <button>Learn More</button>
+        <a href="course.html?course=riding_week">Learn More</a>
       </div>
     </div>
   </section>
@@ -279,7 +281,7 @@
         document.querySelectorAll('.course-card h3').forEach((el, i) => {
           if (texts.courses[i]) el.textContent = texts.courses[i];
         });
-        document.querySelectorAll('.course-card button').forEach(el => {
+        document.querySelectorAll('.course-card a').forEach(el => {
           el.textContent = texts.learnMore;
         });
         document.querySelector('#map h2').textContent = texts.mapTitle;
