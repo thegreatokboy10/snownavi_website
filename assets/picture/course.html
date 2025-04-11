@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="course-title">Course Details</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Noto Sans SC', sans-serif;
+      background-color: #F9F4F3;
+      color: #2F2F2F;
+    }
+    header {
+      background: white;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    header a {
+      text-decoration: none;
+      color: #2F2F2F;
+      font-weight: bold;
+    }
+    .course-container {
+      max-width: 960px;
+      margin: 3rem auto;
+      padding: 1rem;
+    }
+    .course-banner {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+    .course-content h1 {
+      font-size: 2rem;
+      margin: 1rem 0;
+    }
+    .course-description {
+      line-height: 1.6;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html">← Back to Homepage</a>
+  </header>
+
+  <div class="course-container">
+    <img id="course-banner" class="course-banner" src="" alt="Course Banner">
+    <div class="course-content">
+      <h1 id="course-name">Course Name</h1>
+      <p id="course-description" class="course-description">Course Description</p>
+    </div>
+  </div>
+
+  <script>
+    // Example course data
+    const courseData = {
+      basi: {
+        title: "BASI Instructor Course",
+        image: "assets/picture/basi.jpg",
+        description: "This course is designed for those who want to become professional ski instructors certified by BASI (British Association of Snowsport Instructors)."
+      },
+      park: {
+        title: "Park Freestyle Lessons",
+        image: "assets/picture/park.jpg",
+        description: "Explore tricks and jumps with our freestyle skiing program, ideal for adventurous riders looking to level up in the terrain park."
+      },
+      private: {
+        title: "Private Lessons",
+        image: "assets/picture/private.jpg",
+        description: "One-on-one lessons tailored to your needs. Perfect for fast progression or personalized coaching."
+      },
+      group: {
+        title: "Group Lessons",
+        image: "assets/picture/group.jpg",
+        description: "Join others in a group setting to learn, practice, and have fun together with experienced coaches."
+      },
+      riding_week: {
+        title: "Riding Week",
+        image: "assets/picture/riding_week.jpg",
+        description: "A week-long immersive ski experience packed with guided riding, improvement sessions, and community vibes."
+      }
+    };
+
+    // Get query param
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    const courseKey = getQueryParam('course');
+    if (courseKey && courseData[courseKey]) {
+      const course = courseData[courseKey];
+      document.getElementById('course-title').textContent = course.title + ' - SnowNavi';
+      document.getElementById('course-name').textContent = course.title;
+      document.getElementById('course-banner').src = course.image;
+      document.getElementById('course-description').textContent = course.description;
+    } else {
+      document.getElementById('course-name').textContent = 'Course Not Found';
+      document.getElementById('course-description').textContent = 'Please go back and select a valid course from the homepage.';
+    }
+  </script>
+</body>
+</html>
