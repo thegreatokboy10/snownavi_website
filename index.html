@@ -118,6 +118,20 @@
       padding: 2rem;
       text-align: center;
     }
+    #toTop {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--main-red);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      display: none;
+      z-index: 1000;
+      font-size: 0.9rem;
+    }
   </style>
 </head>
 <body>
@@ -129,17 +143,16 @@
       <a href="#story">Our Story</a>
       <a href="#contact">Contact</a>
       <div class="language-selector">
-  <select id="lang" class="language-selector">
-    <option value="en">🇬🇧 EN</option>
-    <option value="zh">🇨🇳 中文</option>
-    <option value="nl">🇳🇱 NL</option>
-  </select>
-</div>
+        <select id="lang" class="language-selector">
+          <option value="en">🇬🇧 EN</option>
+          <option value="zh">🇨🇳 中文</option>
+          <option value="nl">🇳🇱 NL</option>
+        </select>
       </div>
     </nav>
   </header>
 
-  <section class="hero">
+  <section class="hero" id="hero">
     <h1>Whether you're leveling up or starting fresh, we ride with you</h1>
     <a href="#courses" class="cta-btn">Join SnowNavi</a>
   </section>
@@ -167,7 +180,7 @@
         <h3>Group Lessons</h3>
         <button>Learn More</button>
       </div>
-          <div class="course-card">
+      <div class="course-card">
         <img src="assets/picture/riding_week.jpg" alt="Riding Week">
         <h3>Riding Week</h3>
         <button>Learn More</button>
@@ -191,6 +204,8 @@
     <p>Contact: info@snownavi.ski | Follow our 微信公共号 SnowNavi指雪针 for updates</p>
     <p>&copy; 2025 SnowNavi Sports. All rights reserved.</p>
   </footer>
+
+  <button id="toTop" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">↑ Top</button>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -280,6 +295,15 @@
       const initialLang = userLang.startsWith('zh') ? 'zh' : userLang.startsWith('nl') ? 'nl' : 'en';
       langSelect.value = initialLang;
       setLang(initialLang);
+
+      // Return to Top logic
+      const toTop = document.getElementById('toTop');
+      const hero = document.getElementById('hero');
+
+      window.addEventListener('scroll', function () {
+        const heroBottom = hero.getBoundingClientRect().bottom;
+        toTop.style.display = heroBottom < 0 ? 'block' : 'none';
+      });
     });
   </script>
 </body>
