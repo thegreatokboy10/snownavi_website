@@ -49,21 +49,37 @@
       max-width: 1200px;
       margin: auto;
     }
-    .back-button {
-      display: inline-block;
-      margin-bottom: 1rem;
-      color: var(--main-red);
-      text-decoration: none;
-      font-weight: bold;
+    .course-block {
+      margin-bottom: 2rem;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 2rem;
     }
-    .back-button:hover {
-      text-decoration: underline;
+    .course-block img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 1rem;
+    }
+    .course-info {
+      margin: 0.5rem 0;
+    }
+    .highlight {
+      font-weight: bold;
+      color: var(--main-red);
     }
     footer {
       background: var(--text-dark);
       color: white;
       padding: 2rem;
       text-align: center;
+    }
+    .back-btn {
+      display: inline-block;
+      margin: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: var(--main-red);
+      color: white;
+      border-radius: 5px;
+      text-decoration: none;
     }
   </style>
 </head>
@@ -86,9 +102,9 @@
   </header>
 
   <section class="section" id="course-detail">
-    <a href="index.html#courses" id="back-home" class="back-button">← Back to Home</a>
+    <a href="index.html#courses" class="back-btn" id="back-button">← Back to Homepage</a>
     <h2 id="course-title">Loading...</h2>
-    <p id="course-description"></p>
+    <div id="course-description"></div>
   </section>
 
   <footer>
@@ -97,78 +113,109 @@
   </footer>
 
   <script>
+    const langSelect = document.getElementById('lang');
+    const urlParams = new URLSearchParams(window.location.search);
+    const courseKey = urlParams.get('course') || 'basi';
+    const savedLang = localStorage.getItem('preferredLang') || (navigator.language.startsWith('zh') ? 'zh' : navigator.language.startsWith('nl') ? 'nl' : 'en');
+
+    langSelect.value = savedLang;
+
+    fetch('data/courses.json')
+      .then(response => response.json())
+      .then(data => {
+        const courseData = data[courseKey];
+        if (!courseData) return;
+        const t = courseData[savedLang] || courseData['en'];
+
+        document.getElementById('page-title').textContent = t.title;
+        document.getElementById('course-title').textContent = t.title;
+        document.getElementById('nav-courses').textContent = translations[savedLang].navCourses;
+        document.getElementById('nav-map').textContent = translations[savedLang].navMap;
+        document.getElementById('nav-story').textContent = translations[savedLang].navStory;
+        document.getElementById('nav-contact').textContent = translations[savedLang].navContact;
+        document.getElementById('contact-text').textContent = translations[savedLang].contact;
+        document.getElementById('copyright').innerHTML = `&copy; 2025 SnowNavi ${savedLang === 'zh' ? '滑雪俱乐部' : 'Sports'}. ${translations[savedLang].copyright}`;
+
+        const container = document.getElementById('course-description');
+        container.innerHTML = '';
+
+        (t.subcourses || []).forEach(sub => {
+          const div = document.createElement('div');
+          div.className = 'course-block';
+
+          const title = document.createElement('h3');
+          title.textContent = sub.title;
+          div.appendChild(title);
+
+          const time = document.createElement('p');
+          time.innerHTML = `<span class="highlight">Time:</span> ${sub.time}`;
+          div.appendChild(time);
+
+          const location = document.createElement('p');
+          location.innerHTML = `<span class="highlight">Location:</span> ${sub.location}`;
+          div.appendChild(location);
+
+          const price = document.createElement('p');
+          price.innerHTML = `<span class="highlight">Price:</span> ${sub.price}`;
+          div.appendChild(price);
+
+          if (sub.image) {
+            const img = document.createElement('img');
+            img.src = sub.image;
+            img.alt = sub.title;
+            div.appendChild(img);
+          }
+
+          const desc = document.createElement('p');
+          desc.className = 'course-info';
+          desc.textContent = sub.desc;
+          div.appendChild(desc);
+
+          if (sub.pdf) {
+            const link = document.createElement('a');
+            link.href = sub.pdf;
+            link.target = '_blank';
+            link.textContent = '📄 View PDF';
+            link.style.display = 'block';
+            link.style.marginTop = '0.5rem';
+            div.appendChild(link);
+          }
+
+          container.appendChild(div);
+        });
+      });
+
+    langSelect.addEventListener('change', (e) => {
+      localStorage.setItem('preferredLang', e.target.value);
+      location.reload();
+    });
+
     const translations = {
       en: {
-        title: 'SnowNavi Snow Club',
         navCourses: 'Courses',
         navMap: 'Interactive Ski Map',
         navContact: 'Contact',
         navStory: 'Our Story',
-        backHome: '← Back to Home',
         contact: 'Contact: info@snownavi.ski | Follow our 微信公共号 SnowNavi指雪针 for updates',
         copyright: 'All rights reserved.'
       },
       zh: {
-        title: 'SnowNavi 滑雪俱乐部',
         navCourses: '课程',
         navMap: '在线滑雪地图',
         navContact: '联系我们',
         navStory: '我们的故事',
-        backHome: '← 返回主页',
         contact: '联系方式：info@snownavi.ski | 请关注微信公共号： SnowNavi指雪针',
         copyright: '保留所有权利.'
       },
       nl: {
-        title: 'SnowNavi Snow club',
         navCourses: 'Cursussen',
         navMap: 'Interactieve Skikaart',
         navContact: 'Contact',
         navStory: 'Ons Verhaal',
-        backHome: '← Terug naar home',
         contact: 'Contact: info@snownavi.ski | Volg ons op 微信公共号: SnowNavi指雪针',
         copyright: 'Alle rechten voorbehouden.'
       }
     };
-
-    let courseData = {};
-
-    async function loadCourseData() {
-      const response = await fetch('data/courses.json');
-      courseData = await response.json();
-    }
-
-    function updateContent(lang) {
-      const t = translations[lang] || translations['en'];
-      const urlParams = new URLSearchParams(window.location.search);
-      const courseKey = urlParams.get('course') || 'basi';
-      const course = courseData[courseKey]?.[lang] || courseData[courseKey]?.en;
-      
-      document.getElementById('page-title').textContent = course.title + ' | ' + t.title;
-      document.getElementById('course-title').textContent = course.title;
-      document.getElementById('course-description').textContent = course.desc;
-      document.getElementById('nav-courses').textContent = t.navCourses;
-      document.getElementById('nav-map').textContent = t.navMap;
-      document.getElementById('nav-story').textContent = t.navStory;
-      document.getElementById('nav-contact').textContent = t.navContact;
-      document.getElementById('back-home').textContent = t.backHome;
-      document.getElementById('contact-text').textContent = t.contact;
-      document.getElementById('copyright').innerHTML = `&copy; 2025 SnowNavi ${lang === 'zh' ? '滑雪俱乐部' : 'Sports'}. ${t.copyright}`;
-    }
-
-    const langSelect = document.getElementById('lang');
-    langSelect.addEventListener('change', async (e) => {
-      const lang = e.target.value;
-      localStorage.setItem('preferredLang', lang);
-      await loadCourseData();
-      updateContent(lang);
-    });
-
-    (async () => {
-      const savedLang = localStorage.getItem('preferredLang') || (navigator.language.startsWith('zh') ? 'zh' : navigator.language.startsWith('nl') ? 'nl' : 'en');
-      langSelect.value = savedLang;
-      await loadCourseData();
-      updateContent(savedLang);
-    })();
   </script>
 </body>
 </html>

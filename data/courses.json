@@ -2,71 +2,227 @@
   "basi": {
     "en": {
       "title": "BASI Instructor Course",
-      "desc": "Professional instructor training certified by BASI."
+      "subcourses": [
+        {
+          "title": "Level 1 - Introduction",
+          "time": "Jan 10 - Jan 14, 2025",
+          "location": "Avoriaz, France",
+          "price": "€650",
+          "desc": "Get started with your journey to become a ski instructor.",
+          "image": "assets/picture/basi1.jpg",
+          "pdf": "assets/pdf/basi_level1.pdf"
+        },
+        {
+          "title": "Level 2 - Advanced",
+          "time": "Feb 15 - Feb 21, 2025",
+          "location": "Morzine, France",
+          "price": "€950",
+          "desc": "Refine your skills and prepare for Level 2 assessment.",
+          "pdf": "assets/pdf/basi_level2.pdf"
+        }
+      ]
     },
     "zh": {
       "title": "BASI 指导员课程",
-      "desc": "国际认证的滑雪指导员专业培训课程。"
+      "subcourses": [
+        {
+          "title": "一级入门",
+          "time": "2025年1月10日 - 14日",
+          "location": "法国阿沃里亚",
+          "price": "€650",
+          "desc": "开始你的滑雪指导之旅。",
+          "image": "assets/picture/basi1.jpg",
+          "pdf": "assets/pdf/basi_level1.pdf"
+        },
+        {
+          "title": "二级进阶",
+          "time": "2025年2月15日 - 21日",
+          "location": "法国莫尔济讷",
+          "price": "€950",
+          "desc": "提升技能，备战二级考试。",
+          "pdf": "assets/pdf/basi_level2.pdf"
+        }
+      ]
     },
     "nl": {
       "title": "BASI Instructeurs cursus",
-      "desc": "Professionele opleiding gecertificeerd door BASI."
+      "subcourses": [
+        {
+          "title": "Niveau 1 - Introductie",
+          "time": "10 - 14 jan 2025",
+          "location": "Avoriaz, Frankrijk",
+          "price": "€650",
+          "desc": "Begin je reis als ski-instructeur.",
+          "image": "assets/picture/basi1.jpg",
+          "pdf": "assets/pdf/basi_level1.pdf"
+        },
+        {
+          "title": "Niveau 2 - Gevorderd",
+          "time": "15 - 21 feb 2025",
+          "location": "Morzine, Frankrijk",
+          "price": "€950",
+          "desc": "Verbeter je vaardigheden en bereid je voor op het niveau 2 examen.",
+          "pdf": "assets/pdf/basi_level2.pdf"
+        }
+      ]
     }
   },
+
   "park": {
     "en": {
       "title": "Park Freestyle Lessons",
-      "desc": "Learn tricks and skills in the terrain park."
+      "subcourses": [
+        {
+          "title": "Beginner Tricks",
+          "time": "Every Monday, Jan - Mar",
+          "location": "Avoriaz Snowpark",
+          "price": "€50/session",
+          "desc": "Learn basic tricks in the terrain park."
+        }
+      ]
     },
     "zh": {
       "title": "公园自由式课程",
-      "desc": "在地形公园中学习滑雪技巧和动作。"
+      "subcourses": [
+        {
+          "title": "初级动作",
+          "time": "每周一，1月 - 3月",
+          "location": "阿沃里亚雪地公园",
+          "price": "€50/次",
+          "desc": "学习基础自由式动作。"
+        }
+      ]
     },
     "nl": {
       "title": "Freestyle Park lessen",
-      "desc": "Leer tricks en vaardigheden in het funpark."
+      "subcourses": [
+        {
+          "title": "Beginners tricks",
+          "time": "Elke maandag, jan - mrt",
+          "location": "Avoriaz Snowpark",
+          "price": "€50/sessie",
+          "desc": "Leer de basisfreestyle in het funpark."
+        }
+      ]
     }
   },
+
   "private": {
     "en": {
       "title": "Private Lessons",
-      "desc": "1-on-1 coaching tailored to your pace and goals."
+      "subcourses": [
+        {
+          "title": "1-on-1 Coaching",
+          "time": "On demand",
+          "location": "Flexible location",
+          "price": "€100/hour",
+          "desc": "Tailored private lessons for all levels."
+        }
+      ]
     },
     "zh": {
       "title": "私教课程",
-      "desc": "1 对 1 私人教学，根据个人节奏量身定制。"
+      "subcourses": [
+        {
+          "title": "一对一教学",
+          "time": "根据需求安排",
+          "location": "地点灵活",
+          "price": "€100/小时",
+          "desc": "为所有水平量身打造的私教课。"
+        }
+      ]
     },
     "nl": {
       "title": "Privé lessen",
-      "desc": "Individuele begeleiding afgestemd op jouw niveau."
+      "subcourses": [
+        {
+          "title": "Individuele coaching",
+          "time": "Op aanvraag",
+          "location": "Locatie flexibel",
+          "price": "€100/uur",
+          "desc": "Privélessen op maat voor elk niveau."
+        }
+      ]
     }
   },
+
   "group": {
     "en": {
       "title": "Group Lessons",
-      "desc": "Fun group sessions for social learning and progress."
+      "subcourses": [
+        {
+          "title": "Adult Group",
+          "time": "Every Sat/Sun",
+          "location": "Avoriaz",
+          "price": "€60/session",
+          "desc": "Fun and social learning environment."
+        }
+      ]
     },
     "zh": {
       "title": "团体课程",
-      "desc": "小组形式教学，社交与学习两不误。"
+      "subcourses": [
+        {
+          "title": "成人团课",
+          "time": "每周六/日",
+          "location": "阿沃里亚",
+          "price": "€60/次",
+          "desc": "社交与学习兼顾的团体体验。"
+        }
+      ]
     },
     "nl": {
       "title": "Groeps lessen",
-      "desc": "Leer samen in een gezellige groepssfeer."
+      "subcourses": [
+        {
+          "title": "Volwassenen groep",
+          "time": "Elke za/zo",
+          "location": "Avoriaz",
+          "price": "€60/sessie",
+          "desc": "Leer en geniet samen in groepsverband."
+        }
+      ]
     }
   },
+
   "riding_week": {
     "en": {
       "title": "Riding Week",
-      "desc": "An immersive week-long snow experience with SnowNavi crew."
+      "subcourses": [
+        {
+          "title": "Snow Adventure Week",
+          "time": "Mar 3 - Mar 9, 2025",
+          "location": "Avoriaz & Morzine",
+          "price": "€850",
+          "desc": "Join us for an unforgettable week of snow fun.",
+          "image": "assets/picture/riding_week.jpg"
+        }
+      ]
     },
     "zh": {
       "title": "畅滑周",
-      "desc": "SnowNavi 陪你上山畅滑一周。"
+      "subcourses": [
+        {
+          "title": "雪地畅玩周",
+          "time": "2025年3月3日 - 9日",
+          "location": "阿沃里亚 & 莫尔济讷",
+          "price": "€850",
+          "desc": "一周滑雪狂欢，SnowNavi 陪你嗨。"
+        }
+      ]
     },
     "nl": {
       "title": "Riding Week",
-      "desc": "Een week vol sneeuwplezier met SnowNavi."
+      "subcourses": [
+        {
+          "title": "Sneeuw Avontuur Week",
+          "time": "3 - 9 mrt 2025",
+          "location": "Avoriaz & Morzine",
+          "price": "€850",
+          "desc": "Ga met ons mee voor een week vol sneeuwpret.",
+          "image": "assets/picture/riding_week.jpg"
+        }
+      ]
     }
   }
 }
