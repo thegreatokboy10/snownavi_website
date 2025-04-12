@@ -44,10 +44,58 @@
       align-items: center;
       padding: 1rem 2rem;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      position: relative;
     }
     header img {
       height: 40px;
     }
+    .menu-toggle {
+      display: none;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-dark);
+    }
+    nav.nav-links {
+      display: flex;
+      align-items: center;
+    }
+    nav.nav-links a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: var(--text-dark);
+      font-weight: bold;
+    }
+    .language-selector {
+      margin-left: 2rem;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+      nav.nav-links {
+        display: none;
+        flex-direction: column;
+        background: var(--contrast-white);
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 220px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+      }
+      nav.nav-links.open {
+        display: flex;
+      }
+      nav.nav-links a,
+      .language-selector {
+        margin: 1rem;
+      }
+    }
+    
     nav {
       display: flex;
       align-items: center;
@@ -157,7 +205,8 @@
 <body>
   <header>
     <img src="assets/picture/snownavi_logo_banner.jpg" alt="SnowNavi logo">
-    <nav>
+    <button class="menu-toggle" id="menu-toggle">☰</button>
+    <nav class="nav-links" id="nav-links">
       <a href="#courses">Courses</a>
       <a href="#map">Interactive Ski Map</a>
       <a href="#story">Our Story</a>
@@ -348,6 +397,9 @@
       }
     })();
 
+    document.getElementById('menu-toggle').addEventListener('click', function () {
+      document.getElementById('nav-links').classList.toggle('open');
+    });
   </script>
 </body>
 </html>
