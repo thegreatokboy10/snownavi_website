@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SnowNavi Course Admin</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f2f2f2;
+    }
+    header {
+      background: #E53512;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    main {
+      padding: 2rem;
+    }
+    select, textarea, input, button {
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      font-size: 1rem;
+      width: 100%;
+    }
+    .course-block {
+      background: white;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .subcourse-block {
+      border-top: 1px solid #ccc;
+      padding-top: 1rem;
+      margin-top: 1rem;
+    }
+    button.save {
+      background-color: #E53512;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>SnowNavi Course Management</h1>
+  </header>
+  <main>
+    <div>
+      <label for="courseSelect">Select Course:</label>
+      <select id="courseSelect"></select>
+    </div>
+    <div id="courseEditor" class="course-block"></div>
+  </main>
+
+  <script>
+    let courses = {};
+    let currentCourseKey = '';
+
+    async function loadCourses() {
+      const res = await fetch('data/courses.json');
+      courses = await res.json();
+      const select = document.getElementById('courseSelect');
+      select.innerHTML = '';
+      for (const key in courses) {
+        const option = document.createElement('option');
+        option.value = key;
+        option.textContent = key;
+        select.appendChild(option);
+      }
+      currentCourseKey = select.value;
+      renderEditor();
+    }
+
+    function renderEditor() {
+      const editor = document.getElementById('courseEditor');
+      editor.innerHTML = '';
+
+      const langTabs = ['en', 'zh', 'nl'];
+      langTabs.forEach(lang => {
+        const data = courses[currentCourseKey][lang];
+        const langDiv = document.createElement('div');
+
+        const titleInput = document.createElement('input');
+        titleInput.value = data.title;
+        titleInput.placeholder = `Title (${lang})`;
+        titleInput.oninput = () => data.title = titleInput.value;
+        langDiv.appendChild(titleInput);
+
+        data.subcourses.forEach((sub, i) => {
+          const subDiv = document.createElement('div');
+          subDiv.className = 'subcourse-block';
+
+          ['title','time','location','price','desc','image','pdf'].forEach(field => {
+            const input = document.createElement(field === 'desc' ? 'textarea' : 'input');
+            input.placeholder = `${field} (${lang})`;
+            input.value = sub[field] || '';
+            input.oninput = () => sub[field] = input.value;
+            langDiv.appendChild(input);
+          });
+
+          langDiv.appendChild(subDiv);
+        });
+
+        editor.appendChild(langDiv);
+      });
+
+      const saveBtn = document.createElement('button');
+      saveBtn.textContent = 'Save JSON';
+      saveBtn.className = 'save';
+      saveBtn.onclick = downloadJSON;
+      editor.appendChild(saveBtn);
+    }
+
+    function downloadJSON() {
+      const blob = new Blob([JSON.stringify(courses, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'courses_updated.json';
+      a.click();
+    }
+
+    document.getElementById('courseSelect').addEventListener('change', (e) => {
+      currentCourseKey = e.target.value;
+      renderEditor();
+    });
+
+    loadCourses();
+  </script>
+</body>
+</html>
