@@ -49,6 +49,16 @@
       max-width: 1200px;
       margin: auto;
     }
+    .back-button {
+      display: inline-block;
+      margin-bottom: 1rem;
+      color: var(--main-red);
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .back-button:hover {
+      text-decoration: underline;
+    }
     footer {
       background: var(--text-dark);
       color: white;
@@ -76,6 +86,7 @@
   </header>
 
   <section class="section" id="course-detail">
+    <a href="index.html#courses" id="back-home" class="back-button">← Back to Home</a>
     <h2 id="course-title">Loading...</h2>
     <p id="course-description"></p>
   </section>
@@ -93,6 +104,7 @@
         navMap: 'Interactive Ski Map',
         navContact: 'Contact',
         navStory: 'Our Story',
+        backHome: '← Back to Home',
         contact: 'Contact: info@snownavi.ski | Follow our 微信公共号 SnowNavi指雪针 for updates',
         copyright: 'All rights reserved.',
         courses: {
@@ -109,6 +121,7 @@
         navMap: '在线滑雪地图',
         navContact: '联系我们',
         navStory: '我们的故事',
+        backHome: '← 返回主页',
         contact: '联系方式：info@snownavi.ski | 请关注微信公共号： SnowNavi指雪针',
         copyright: '保留所有权利.',
         courses: {
@@ -125,6 +138,7 @@
         navMap: 'Interactieve Skikaart',
         navContact: 'Contact',
         navStory: 'Ons Verhaal',
+        backHome: '← Terug naar home',
         contact: 'Contact: info@snownavi.ski | Volg ons op 微信公共号: SnowNavi指雪针',
         copyright: 'Alle rechten voorbehouden.',
         courses: {
@@ -149,6 +163,7 @@
       document.getElementById('nav-map').textContent = t.navMap;
       document.getElementById('nav-story').textContent = t.navStory;
       document.getElementById('nav-contact').textContent = t.navContact;
+      document.getElementById('back-home').textContent = t.backHome;
       document.getElementById('course-title').textContent = t.courses[courseKey].title;
       document.getElementById('course-description').textContent = t.courses[courseKey].desc;
       document.getElementById('contact-text').textContent = t.contact;
