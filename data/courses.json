@@ -4,21 +4,21 @@
       "title": "BASI Instructor Course",
       "subcourses": [
         {
-          "title": "Level 1 - Introduction",
-          "time": "Jan 10 - Jan 14, 2025",
-          "location": "Avoriaz, France",
-          "price": "€650",
-          "desc": "Get started with your journey to become a ski instructor.",
-          "image": "assets/picture/basi1.jpg",
-          "pdf": "assets/pdf/basi_level1.pdf"
+          "title": "BASI Snowboard/Ski Level 1",
+          "time": "Sep/Oct 2025",
+          "location": "SnowWorld Landgraaf, Netherlands",
+          "price": "From €1099",
+          "desc": "4-day course\n\nIncluded in the price:\n1. First year BASI membership\n2. BASI training course\n3. Instructor certification and assessment\n4. SnowWorld facility fees\n5. Full-day lift tickets during assessment\n6. Equipment rental (helmet, ski wear, skis/snowboard, boots) during assessment\n\nNot included:\nTransportation, accommodation, meals, insurance, etc.\n\nSee BASI official site: https://www.basi.org.uk/BASI/Courses/BASI/Courses/Disciplines.aspx?hkey=26544a24-cde1-4939-a16b-76f39a4a4626",
+          "image": "",
+          "pdf": ""
         },
         {
-          "title": "Level 2 - Advanced",
-          "time": "Feb 15 - Feb 21, 2025",
-          "location": "Morzine, France",
-          "price": "€950",
-          "desc": "Refine your skills and prepare for Level 2 assessment.",
-          "pdf": "assets/pdf/basi_level2.pdf"
+          "title": "BASI Snowboard/Ski UK Level 2",
+          "time": "Sep/Oct 2025",
+          "location": "SnowWorld Landgraaf, Netherlands",
+          "price": "From €1099",
+          "desc": "4-day course\n\nIncluded in the price:\n1. First year BASI membership\n2. BASI training course\n3. Instructor certification and assessment\n4. SnowWorld facility fees\n5. Full-day lift tickets during assessment\n6. Equipment rental (helmet, ski wear, skis/snowboard, boots) during assessment\n\nNot included:\nTransportation, accommodation, meals, insurance, etc.\n\nSee BASI official site: https://www.basi.org.uk/BASI/Courses/BASI/Courses/Disciplines.aspx?hkey=26544a24-cde1-4939-a16b-76f39a4a4626",
+          "pdf": ""
         }
       ]
     },
@@ -26,21 +26,21 @@
       "title": "BASI 指导员课程",
       "subcourses": [
         {
-          "title": "一级入门",
-          "time": "2025年1月10日 - 14日",
-          "location": "法国阿沃里亚",
-          "price": "€650",
-          "desc": "开始你的滑雪指导之旅。",
-          "image": "assets/picture/basi1.jpg",
-          "pdf": "assets/pdf/basi_level1.pdf"
+          "title": "BASI 单板/双板 Level 1",
+          "time": "2025年9月/10月",
+          "location": "荷兰 SnowWorld Landgraaf",
+          "price": "€1099起",
+          "desc": "课程为期4天\n\n课程费用包含：\n1.首年BASI会员年费\n2.BASI 课程培训费用\n3.BASI 指导员认证及考试费用\n4.SnowWorld场地使用费\n5.考试期间全天雪票\n6.考试期间雪具租赁（头盔/雪服/雪板/雪鞋）\n\n费用不包含：\n交通，住宿，餐饮，保险等\n\n详情可见BASI官网：https://www.basi.org.uk/BASI/Courses/BASI/Courses/Disciplines.aspx?hkey=26544a24-cde1-4939-a16b-76f39a4a4626",
+          "image": "",
+          "pdf": ""
         },
         {
-          "title": "二级进阶",
-          "time": "2025年2月15日 - 21日",
-          "location": "法国莫尔济讷",
-          "price": "€950",
-          "desc": "提升技能，备战二级考试。",
-          "pdf": "assets/pdf/basi_level2.pdf"
+          "title": "BASI 单板/双板 UK Level 2",
+          "time": "2025年9月/10月",
+          "location": "荷兰 SnowWorld Landgraaf",
+          "price": "€1099起",
+          "desc": "课程为期4天\n\n课程费用包含：\n1.首年BASI会员年费\n2.BASI 课程培训费用\n3.BASI 指导员认证及考试费用\n4.SnowWorld场地使用费\n5.考试期间全天雪票\n6.考试期间雪具租赁（头盔/雪服/雪板/雪鞋）\n\n费用不包含：\n交通，住宿，餐饮，保险等\n\n详情可见BASI官网：https://www.basi.org.uk/BASI/Courses/BASI/Courses/Disciplines.aspx?hkey=26544a24-cde1-4939-a16b-76f39a4a4626",
+          "pdf": ""
         }
       ]
     },
@@ -48,36 +48,35 @@
       "title": "BASI Instructeurs cursus",
       "subcourses": [
         {
-          "title": "Niveau 1 - Introductie",
-          "time": "10 - 14 jan 2025",
-          "location": "Avoriaz, Frankrijk",
-          "price": "€650",
-          "desc": "Begin je reis als ski-instructeur.",
-          "image": "assets/picture/basi1.jpg",
-          "pdf": "assets/pdf/basi_level1.pdf"
+          "title": "BASI Snowboard/Ski Niveau 1",
+          "time": "sep/okt 2025",
+          "location": "SnowWorld Landgraaf, Nederland",
+          "price": "Vanaf €1099",
+          "desc": "4-daagse cursus\n\nInbegrepen in de prijs:\n1. Eerste jaar BASI-lidmaatschap\n2. BASI trainingscursus\n3. Instructeurscertificering en examen\n4. SnowWorld faciliteitenkosten\n5. Dagelijkse skipas tijdens het examen\n6. Materiaalhuur tijdens het examen (helm, skikleding, ski's/snowboard, schoenen)\n\nNiet inbegrepen:\nVervoer, accommodatie, maaltijden, verzekering, etc.\n\nMeer info: https://www.basi.org.uk/BASI/Courses/BASI/Courses/Disciplines.aspx?hkey=26544a24-cde1-4939-a16b-76f39a4a4626",
+          "image": "",
+          "pdf": ""
         },
         {
-          "title": "Niveau 2 - Gevorderd",
-          "time": "15 - 21 feb 2025",
-          "location": "Morzine, Frankrijk",
-          "price": "€950",
-          "desc": "Verbeter je vaardigheden en bereid je voor op het niveau 2 examen.",
-          "pdf": "assets/pdf/basi_level2.pdf"
+          "title": "BASI Snowboard/Ski UK Niveau 2",
+          "time": "sep/okt 2025",
+          "location": "SnowWorld Landgraaf, Nederland",
+          "price": "Vanaf €1099",
+          "desc": "4-daagse cursus\n\nInbegrepen in de prijs:\n1. Eerste jaar BASI-lidmaatschap\n2. BASI trainingscursus\n3. Instructeurscertificering en examen\n4. SnowWorld faciliteitenkosten\n5. Dagelijkse skipas tijdens het examen\n6. Materiaalhuur tijdens het examen (helm, skikleding, ski's/snowboard, schoenen)\n\nNiet inbegrepen:\nVervoer, accommodatie, maaltijden, verzekering, etc.\n\nMeer info: https://www.basi.org.uk/BASI/Courses/BASI/Courses/Disciplines.aspx?hkey=26544a24-cde1-4939-a16b-76f39a4a4626",
+          "pdf": ""
         }
       ]
     }
   },
-
   "park": {
     "en": {
       "title": "Park Freestyle Lessons",
       "subcourses": [
         {
           "title": "Beginner Tricks",
-          "time": "Every Monday, Jan - Mar",
-          "location": "Avoriaz Snowpark",
-          "price": "€50/session",
-          "desc": "Learn basic tricks in the terrain park."
+          "time": "Please inquire",
+          "location": "SnowWorld, Netherlands",
+          "price": "From €250",
+          "desc": "Led by BASI Level 4 instructors to help you advance in the terrain park.\n\nEach course is a 2-day group session with 8 participants.\n\nPlease inquire for schedule."
         }
       ]
     },
@@ -86,10 +85,10 @@
       "subcourses": [
         {
           "title": "初级动作",
-          "time": "每周一，1月 - 3月",
-          "location": "阿沃里亚雪地公园",
-          "price": "€50/次",
-          "desc": "学习基础自由式动作。"
+          "time": "请咨询",
+          "location": "荷兰 SnowWorld",
+          "price": "€250起",
+          "desc": "由BASI 4级教练带领小伙伴们进阶公园。\n\n每次课程为团课形式为期2天，8人开团。\n\n开团时间可咨询"
         }
       ]
     },
@@ -98,15 +97,14 @@
       "subcourses": [
         {
           "title": "Beginners tricks",
-          "time": "Elke maandag, jan - mrt",
-          "location": "Avoriaz Snowpark",
-          "price": "€50/sessie",
-          "desc": "Leer de basisfreestyle in het funpark."
+          "time": "Informeer voor planning",
+          "location": "SnowWorld, Nederland",
+          "price": "Vanaf €250",
+          "desc": "Onder leiding van een BASI niveau 4-instructeur voor gevorderde freestyle tricks.\n\nElke cursus duurt 2 dagen in groepsvorm, minimaal 8 deelnemers.\n\nNeem contact op voor beschikbare data."
         }
       ]
     }
   },
-
   "private": {
     "en": {
       "title": "Private Lessons",
@@ -115,8 +113,8 @@
           "title": "1-on-1 Coaching",
           "time": "On demand",
           "location": "Flexible location",
-          "price": "€100/hour",
-          "desc": "Tailored private lessons for all levels."
+          "price": "From €130",
+          "desc": "Customized private sessions based on your needs.\n\nEach session is 2 hours.\n\nTaught by certified BASI or CASI instructors.\n\nUp to 4 participants per session.\n\nPlease inquire for details."
         }
       ]
     },
@@ -127,8 +125,8 @@
           "title": "一对一教学",
           "time": "根据需求安排",
           "location": "地点灵活",
-          "price": "€100/小时",
-          "desc": "为所有水平量身打造的私教课。"
+          "price": "€130起",
+          "desc": "根据个人需求定制课程。\n\n课程为2小时，授课教练均为BASI或CASI体系教练\n\n课程人数至多为4人，详细请咨询"
         }
       ]
     },
@@ -139,23 +137,22 @@
           "title": "Individuele coaching",
           "time": "Op aanvraag",
           "location": "Locatie flexibel",
-          "price": "€100/uur",
-          "desc": "Privélessen op maat voor elk niveau."
+          "price": "Vanaf €130",
+          "desc": "Privélessen op maat op basis van jouw behoeften.\n\nElke sessie duurt 2 uur.\n\nGegeven door gecertificeerde BASI of CASI instructeurs.\n\nMaximaal 4 deelnemers per sessie.\n\nInformeer voor details."
         }
       ]
     }
   },
-
   "group": {
     "en": {
       "title": "Group Lessons",
       "subcourses": [
         {
-          "title": "Adult Group",
-          "time": "Every Sat/Sun",
-          "location": "Avoriaz",
-          "price": "€60/session",
-          "desc": "Fun and social learning environment."
+          "title": "Beginner Group Course",
+          "time": "Sat/Sun",
+          "location": "SnowWorld, Netherlands",
+          "price": "From €100",
+          "desc": "For complete beginners.\n\n6 to 10 participants per session.\n\nIncludes 3 hours of instruction.\n\nPrice includes:\n1. Lesson\n2. Full-day lift ticket\n3. Full-day equipment rental\n\nNot included: transport, meals, insurance, etc."
         }
       ]
     },
@@ -163,11 +160,11 @@
       "title": "团体课程",
       "subcourses": [
         {
-          "title": "成人团课",
-          "time": "每周六/日",
-          "location": "阿沃里亚",
-          "price": "€60/次",
-          "desc": "社交与学习兼顾的团体体验。"
+          "title": "0基础入门团课",
+          "time": "周六/日",
+          "location": "荷兰 SnowWorld",
+          "price": "€100起",
+          "desc": "课程人数6人-10人\n\n0基础入门课程\n\n课程包含3小时教学\n\n费用包含：\n1. 教学\n2. 全天雪票\n3. 全天雪具租赁\n\n费用不包含：\n交通，餐饮，保险等"
         }
       ]
     },
@@ -175,27 +172,25 @@
       "title": "Groeps lessen",
       "subcourses": [
         {
-          "title": "Volwassenen groep",
-          "time": "Elke za/zo",
-          "location": "Avoriaz",
-          "price": "€60/sessie",
-          "desc": "Leer en geniet samen in groepsverband."
+          "title": "Beginners groepscursus",
+          "time": "Za/Zo",
+          "location": "SnowWorld, Nederland",
+          "price": "Vanaf €100",
+          "desc": "Geschikt voor volledige beginners.\n\nGroep van 6-10 personen.\n\nBevat 3 uur les.\n\nInbegrepen:\n1. Les\n2. Dag skipas\n3. Dag verhuur van uitrusting\n\nNiet inbegrepen: vervoer, maaltijden, verzekering, etc."
         }
       ]
     }
   },
-
   "riding_week": {
     "en": {
       "title": "Riding Week",
       "subcourses": [
         {
-          "title": "Snow Adventure Week",
-          "time": "Mar 3 - Mar 9, 2025",
-          "location": "Avoriaz & Morzine",
-          "price": "€850",
-          "desc": "Join us for an unforgettable week of snow fun.",
-          "image": "assets/picture/riding_week.jpg"
+          "title": "Easter Riding Week",
+          "time": "Apr 19 - 26, 2025",
+          "location": "Zermatt, Switzerland",
+          "price": "€495",
+          "desc": "A week-long snow adventure with SnowNavi.\n\nGroup of 8 participants.\n\nLuxury apartment with Matterhorn view included.\n\nPrice includes:\nAccommodation\n\nNot included:\nLift ticket, transport, meals, insurance, etc."
         }
       ]
     },
@@ -203,11 +198,11 @@
       "title": "畅滑周",
       "subcourses": [
         {
-          "title": "雪地畅玩周",
-          "time": "2025年3月3日 - 9日",
-          "location": "阿沃里亚 & 莫尔济讷",
-          "price": "€850",
-          "desc": "一周滑雪狂欢，SnowNavi 陪你嗨。"
+          "title": "复活节畅玩周",
+          "time": "2025年4月19日 - 26日",
+          "location": "瑞士 Zermatt",
+          "price": "€495",
+          "desc": "一周滑雪狂欢，SnowNavi 陪你嗨。\n\n人数8人\n\nSnowNavi定好豪华雪景公寓可以遥望马特洪峰\n\n费用包含：\n公寓住宿\n\n费用不包含：\n雪票，交通，餐饮，保险等"
         }
       ]
     },
@@ -215,12 +210,11 @@
       "title": "Riding Week",
       "subcourses": [
         {
-          "title": "Sneeuw Avontuur Week",
-          "time": "3 - 9 mrt 2025",
-          "location": "Avoriaz & Morzine",
-          "price": "€850",
-          "desc": "Ga met ons mee voor een week vol sneeuwpret.",
-          "image": "assets/picture/riding_week.jpg"
+          "title": "Paas Sneeuwweek",
+          "time": "19 - 26 apr 2025",
+          "location": "Zermatt, Zwitserland",
+          "price": "€495",
+          "desc": "Een week sneeuwplezier met SnowNavi.\n\nGroep van 8 personen.\n\nLuxe appartement met uitzicht op de Matterhorn inbegrepen.\n\nInbegrepen:\nAccommodatie\n\nNiet inbegrepen:\nSkipas, vervoer, maaltijden, verzekering, etc."
         }
       ]
     }
