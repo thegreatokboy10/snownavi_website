@@ -1,135 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SnowNavi Course Admin</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Course Admin Panel</title>
   <style>
     body {
-      font-family: sans-serif;
+      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
-      background: #f2f2f2;
+      padding: 1rem;
+      background: #f7f7f7;
     }
-    header {
+    h1 {
+      color: #E53512;
+    }
+    .lang-tabs button {
+      margin-right: 1rem;
+      padding: 0.5rem 1rem;
+      background: #eee;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+    .lang-tabs button.active {
       background: #E53512;
       color: white;
-      padding: 1rem;
-      text-align: center;
-    }
-    main {
-      padding: 2rem;
-    }
-    select, textarea, input, button {
-      margin: 0.5rem 0;
-      padding: 0.5rem;
-      font-size: 1rem;
-      width: 100%;
     }
     .course-block {
       background: white;
       padding: 1rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
       border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
     }
-    .subcourse-block {
-      border-top: 1px solid #ccc;
-      padding-top: 1rem;
+    label {
+      font-weight: bold;
+      display: block;
       margin-top: 1rem;
     }
-    button.save {
-      background-color: #E53512;
+    input, textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.2rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .save-btn {
+      background: #E53512;
       color: white;
       border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
       border-radius: 5px;
       cursor: pointer;
+      margin-top: 2rem;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>SnowNavi Course Management</h1>
-  </header>
-  <main>
-    <div>
-      <label for="courseSelect">Select Course:</label>
-      <select id="courseSelect"></select>
-    </div>
-    <div id="courseEditor" class="course-block"></div>
-  </main>
+  <h1>SnowNavi Course Management</h1>
+  <div class="lang-tabs">
+    <button onclick="switchLang('en')" id="tab-en">English</button>
+    <button onclick="switchLang('zh')" id="tab-zh">中文</button>
+    <button onclick="switchLang('nl')" id="tab-nl">Nederlands</button>
+  </div>
+  <div id="form-container"></div>
+  <button class="save-btn" onclick="saveCourses()">Save Changes</button>
 
   <script>
+    let currentLang = 'en';
     let courses = {};
-    let currentCourseKey = '';
 
     async function loadCourses() {
       const res = await fetch('data/courses.json');
       courses = await res.json();
-      const select = document.getElementById('courseSelect');
-      select.innerHTML = '';
-      for (const key in courses) {
-        const option = document.createElement('option');
-        option.value = key;
-        option.textContent = key;
-        select.appendChild(option);
-      }
-      currentCourseKey = select.value;
-      renderEditor();
+      renderForm();
     }
 
-    function renderEditor() {
-      const editor = document.getElementById('courseEditor');
-      editor.innerHTML = '';
+    function switchLang(lang) {
+      currentLang = lang;
+      document.querySelectorAll('.lang-tabs button').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(`tab-${lang}`).classList.add('active');
+      renderForm();
+    }
 
-      const langTabs = ['en', 'zh', 'nl'];
-      langTabs.forEach(lang => {
-        const data = courses[currentCourseKey][lang];
-        const langDiv = document.createElement('div');
+    function renderForm() {
+      const container = document.getElementById('form-container');
+      container.innerHTML = '';
+      Object.keys(courses).forEach(courseKey => {
+        const course = courses[courseKey][currentLang];
+        const div = document.createElement('div');
+        div.className = 'course-block';
 
+        const titleLabel = document.createElement('label');
+        titleLabel.textContent = `${courseKey} - Title`;
+        div.appendChild(titleLabel);
         const titleInput = document.createElement('input');
-        titleInput.value = data.title;
-        titleInput.placeholder = `Title (${lang})`;
-        titleInput.oninput = () => data.title = titleInput.value;
-        langDiv.appendChild(titleInput);
+        titleInput.value = course.title;
+        titleInput.oninput = e => course.title = e.target.value;
+        div.appendChild(titleInput);
 
-        data.subcourses.forEach((sub, i) => {
+        course.subcourses.forEach((sub, index) => {
           const subDiv = document.createElement('div');
-          subDiv.className = 'subcourse-block';
 
-          ['title','time','location','price','desc','image','pdf'].forEach(field => {
-            const input = document.createElement(field === 'desc' ? 'textarea' : 'input');
-            input.placeholder = `${field} (${lang})`;
+          ['title', 'time', 'location', 'price', 'desc', 'image', 'pdf'].forEach(field => {
+            const label = document.createElement('label');
+            label.textContent = `${courseKey} - Sub ${index + 1} - ${field}`;
+            subDiv.appendChild(label);
+            const input = field === 'desc' ? document.createElement('textarea') : document.createElement('input');
             input.value = sub[field] || '';
-            input.oninput = () => sub[field] = input.value;
-            langDiv.appendChild(input);
+            input.oninput = e => sub[field] = e.target.value;
+            subDiv.appendChild(input);
           });
-
-          langDiv.appendChild(subDiv);
+          div.appendChild(subDiv);
         });
 
-        editor.appendChild(langDiv);
+        container.appendChild(div);
       });
-
-      const saveBtn = document.createElement('button');
-      saveBtn.textContent = 'Save JSON';
-      saveBtn.className = 'save';
-      saveBtn.onclick = downloadJSON;
-      editor.appendChild(saveBtn);
     }
 
-    function downloadJSON() {
-      const blob = new Blob([JSON.stringify(courses, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'courses_updated.json';
-      a.click();
+    function saveCourses() {
+      fetch('../data/courses.json', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(courses, null, 2)
+      }).then(res => {
+        if (res.ok) alert('Saved successfully!');
+        else alert('Error saving file');
+      });
     }
-
-    document.getElementById('courseSelect').addEventListener('change', (e) => {
-      currentCourseKey = e.target.value;
-      renderEditor();
-    });
 
     loadCourses();
   </script>
