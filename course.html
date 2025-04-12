@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title id="page-title">SnowNavi Ski Club</title>
+  <title id="page-title">SnowNavi Snow Club</title>
   <style>
     :root {
       --main-red: #E53512;
@@ -106,14 +106,7 @@
         navStory: 'Our Story',
         backHome: '← Back to Home',
         contact: 'Contact: info@snownavi.ski | Follow our 微信公共号 SnowNavi指雪针 for updates',
-        copyright: 'All rights reserved.',
-        courses: {
-          basi: { title: 'BASI Instructor Course', desc: 'Professional instructor training certified by BASI. \n More info to be updated ...' },
-          park: { title: 'Park Freestyle Lessons', desc: 'Learn tricks and skills in the terrain park. \n More info to be updated ...' },
-          private: { title: 'Private Lessons', desc: '1-on-1 coaching tailored to your pace and goals. \n More info to be updated ...' },
-          group: { title: 'Group Lessons', desc: 'Fun group sessions for social learning and progress. \n More info to be updated ...' },
-          riding_week: { title: 'Riding Week', desc: 'An immersive week-long snow experience with SnowNavi crew. \n More info to be updated ...' }
-        }
+        copyright: 'All rights reserved.'
       },
       zh: {
         title: 'SnowNavi 滑雪俱乐部',
@@ -123,14 +116,7 @@
         navStory: '我们的故事',
         backHome: '← 返回主页',
         contact: '联系方式：info@snownavi.ski | 请关注微信公共号： SnowNavi指雪针',
-        copyright: '保留所有权利.',
-        courses: {
-          basi: { title: 'BASI 指导员课程', desc: '国际认证的滑雪指导员专业培训课程。\n More info to be updated ...' },
-          park: { title: '公园自由式课程', desc: '在地形公园中学习滑雪技巧和动作。 \n More info to be updated ...' },
-          private: { title: '私教课程', desc: '1 对 1 私人教学，根据个人节奏量身定制。 \n More info to be updated ...' },
-          group: { title: '团体课程', desc: '小组形式教学，社交与学习两不误。 \n More info to be updated ...' },
-          riding_week: { title: '畅滑周', desc: 'SnowNavi 陪你上山畅滑一周。 \n More info to be updated ...' }
-        }
+        copyright: '保留所有权利.'
       },
       nl: {
         title: 'SnowNavi Snow club',
@@ -140,45 +126,49 @@
         navStory: 'Ons Verhaal',
         backHome: '← Terug naar home',
         contact: 'Contact: info@snownavi.ski | Volg ons op 微信公共号: SnowNavi指雪针',
-        copyright: 'Alle rechten voorbehouden.',
-        courses: {
-          basi: { title: 'BASI Instructeurs cursus', desc: 'Professionele opleiding gecertificeerd door BASI. \n More info to be updated ...' },
-          park: { title: 'Freestyle Park lessen', desc: 'Leer tricks en vaardigheden in het funpark. \n More info to be updated ...' },
-          private: { title: 'Privé lessen', desc: 'Individuele begeleiding afgestemd op jouw niveau. \n More info to be updated ...' },
-          group: { title: 'Groeps lessen', desc: 'Leer samen in een gezellige groepssfeer. \n More info to be updated ...' },
-          riding_week: { title: 'Riding Week', desc: 'Een week vol sneeuwplezier met SnowNavi-coaches. \n More info to be updated ...' }
-        }
+        copyright: 'Alle rechten voorbehouden.'
       }
     };
 
-    const langSelect = document.getElementById('lang');
-    const urlParams = new URLSearchParams(window.location.search);
-    const courseKey = urlParams.get('course') || 'basi';
+    let courseData = {};
+
+    async function loadCourseData() {
+      const response = await fetch('data/courses.json');
+      courseData = await response.json();
+    }
 
     function updateContent(lang) {
       const t = translations[lang] || translations['en'];
-      document.getElementById('page-title').textContent = t.title;
-      document.title = `${t.courses[courseKey].title} | ${t.title}`;
+      const urlParams = new URLSearchParams(window.location.search);
+      const courseKey = urlParams.get('course') || 'basi';
+      const course = courseData[courseKey]?.[lang] || courseData[courseKey]?.en;
+      
+      document.getElementById('page-title').textContent = course.title + ' | ' + t.title;
+      document.getElementById('course-title').textContent = course.title;
+      document.getElementById('course-description').textContent = course.desc;
       document.getElementById('nav-courses').textContent = t.navCourses;
       document.getElementById('nav-map').textContent = t.navMap;
       document.getElementById('nav-story').textContent = t.navStory;
       document.getElementById('nav-contact').textContent = t.navContact;
       document.getElementById('back-home').textContent = t.backHome;
-      document.getElementById('course-title').textContent = t.courses[courseKey].title;
-      document.getElementById('course-description').textContent = t.courses[courseKey].desc;
       document.getElementById('contact-text').textContent = t.contact;
       document.getElementById('copyright').innerHTML = `&copy; 2025 SnowNavi ${lang === 'zh' ? '滑雪俱乐部' : 'Sports'}. ${t.copyright}`;
     }
 
-    langSelect.addEventListener('change', (e) => {
+    const langSelect = document.getElementById('lang');
+    langSelect.addEventListener('change', async (e) => {
       const lang = e.target.value;
       localStorage.setItem('preferredLang', lang);
+      await loadCourseData();
       updateContent(lang);
     });
 
-    const savedLang = localStorage.getItem('preferredLang') || (navigator.language.startsWith('zh') ? 'zh' : navigator.language.startsWith('nl') ? 'nl' : 'en');
-    langSelect.value = savedLang;
-    updateContent(savedLang);
+    (async () => {
+      const savedLang = localStorage.getItem('preferredLang') || (navigator.language.startsWith('zh') ? 'zh' : navigator.language.startsWith('nl') ? 'nl' : 'en');
+      langSelect.value = savedLang;
+      await loadCourseData();
+      updateContent(savedLang);
+    })();
   </script>
 </body>
 </html>

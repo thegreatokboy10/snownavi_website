@@ -1,0 +1,72 @@
+{
+  "basi": {
+    "en": {
+      "title": "BASI Instructor Course",
+      "desc": "Professional instructor training certified by BASI."
+    },
+    "zh": {
+      "title": "BASI 指导员课程",
+      "desc": "国际认证的滑雪指导员专业培训课程。"
+    },
+    "nl": {
+      "title": "BASI Instructeurs cursus",
+      "desc": "Professionele opleiding gecertificeerd door BASI."
+    }
+  },
+  "park": {
+    "en": {
+      "title": "Park Freestyle Lessons",
+      "desc": "Learn tricks and skills in the terrain park."
+    },
+    "zh": {
+      "title": "公园自由式课程",
+      "desc": "在地形公园中学习滑雪技巧和动作。"
+    },
+    "nl": {
+      "title": "Freestyle Park lessen",
+      "desc": "Leer tricks en vaardigheden in het funpark."
+    }
+  },
+  "private": {
+    "en": {
+      "title": "Private Lessons",
+      "desc": "1-on-1 coaching tailored to your pace and goals."
+    },
+    "zh": {
+      "title": "私教课程",
+      "desc": "1 对 1 私人教学，根据个人节奏量身定制。"
+    },
+    "nl": {
+      "title": "Privé lessen",
+      "desc": "Individuele begeleiding afgestemd op jouw niveau."
+    }
+  },
+  "group": {
+    "en": {
+      "title": "Group Lessons",
+      "desc": "Fun group sessions for social learning and progress."
+    },
+    "zh": {
+      "title": "团体课程",
+      "desc": "小组形式教学，社交与学习两不误。"
+    },
+    "nl": {
+      "title": "Groeps lessen",
+      "desc": "Leer samen in een gezellige groepssfeer."
+    }
+  },
+  "riding_week": {
+    "en": {
+      "title": "Riding Week",
+      "desc": "An immersive week-long snow experience with SnowNavi crew."
+    },
+    "zh": {
+      "title": "畅滑周",
+      "desc": "SnowNavi 陪你上山畅滑一周。"
+    },
+    "nl": {
+      "title": "Riding Week",
+      "desc": "Een week vol sneeuwplezier met SnowNavi."
+    }
+  }
+}
