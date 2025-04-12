@@ -168,7 +168,7 @@
 
           const desc = document.createElement('p');
           desc.className = 'course-info';
-          desc.textContent = sub.desc;
+          desc.innerHTML = (sub.desc || '').replace(/\n/g, '<br>');
           div.appendChild(desc);
 
           if (sub.pdf) {
