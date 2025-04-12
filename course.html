@@ -144,6 +144,7 @@
     function updateContent(lang) {
       const t = translations[lang] || translations['en'];
       document.getElementById('page-title').textContent = t.title;
+      document.title = `${t.courses[courseKey].title} | ${t.title}`;
       document.getElementById('nav-courses').textContent = t.navCourses;
       document.getElementById('nav-map').textContent = t.navMap;
       document.getElementById('nav-story').textContent = t.navStory;
