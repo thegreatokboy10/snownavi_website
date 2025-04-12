@@ -13,12 +13,14 @@
       --contrast-white: #FFFFFF;
       --accent-blue: #9ED4E7;
     }
+  
     body {
       margin: 0;
       font-family: 'Noto Sans SC', sans-serif;
       background-color: var(--bg-light);
       color: var(--text-dark);
     }
+  
     header {
       background: var(--contrast-white);
       display: flex;
@@ -26,52 +28,83 @@
       align-items: center;
       padding: 1rem 2rem;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      position: relative;
     }
+  
     header img {
       height: 40px;
     }
+  
     nav {
       display: flex;
       align-items: center;
     }
+  
     nav a {
       margin-left: 1.5rem;
       text-decoration: none;
       color: var(--text-dark);
       font-weight: bold;
     }
+  
     .language-selector {
       margin-left: 2rem;
       font-size: 1rem;
     }
+  
+    .menu-toggle {
+      display: none;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-dark);
+    }
+  
+    .nav-links {
+      display: flex;
+      align-items: center;
+    }
+  
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+  
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        background: var(--contrast-white);
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 200px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        z-index: 10;
+      }
+  
+      .nav-links.open {
+        display: flex;
+      }
+  
+      .nav-links a, .nav-links .language-selector {
+        margin: 1rem;
+      }
+    }
+  
     .section {
       padding: 3rem 2rem;
       max-width: 1200px;
       margin: auto;
     }
-    .course-block {
-      margin-bottom: 2rem;
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 2rem;
-    }
-    .course-block img {
-      max-width: 100%;
-      border-radius: 8px;
-      margin-top: 1rem;
-    }
-    .course-info {
-      margin: 0.5rem 0;
-    }
-    .highlight {
-      font-weight: bold;
-      color: var(--main-red);
-    }
+  
     footer {
       background: var(--text-dark);
       color: white;
       padding: 2rem;
       text-align: center;
     }
+  
     .back-btn {
       display: inline-block;
       margin: 1rem;
@@ -82,11 +115,13 @@
       text-decoration: none;
     }
   </style>
+  
 </head>
 <body>
   <header>
     <img src="assets/picture/snownavi_logo_banner.jpg" alt="SnowNavi logo">
-    <nav>
+    <button class="menu-toggle" id="menu-toggle">☰</button>
+    <nav class="nav-links" id="nav-links">
       <a href="index.html#courses" id="nav-courses">Courses</a>
       <a href="index.html#map" id="nav-map">Interactive Ski Map</a>
       <a href="index.html#story" id="nav-story">Our Story</a>
@@ -216,6 +251,11 @@
         copyright: 'Alle rechten voorbehouden.'
       }
     };
+
+    document.getElementById('menu-toggle').addEventListener('click', () => {
+    document.getElementById('nav-links').classList.toggle('open');
+  });
+
   </script>
 </body>
 </html>
