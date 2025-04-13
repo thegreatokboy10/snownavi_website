@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SnowNavi Admin Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f7f7f7;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+    h1 {
+      color: #E53512;
+      margin-top: 0;
+    }
+    .login-btn {
+      background: #4285F4;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      margin-top: 1rem;
+    }
+    .login-btn img {
+      margin-right: 10px;
+      width: 18px;
+      height: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h1>SnowNavi Admin</h1>
+    <p>Please sign in with your Google account to access the admin panel.</p>
+    <button id="login-btn" class="login-btn">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google logo">
+      Sign in with Google
+    </button>
+  </div>
+
+  <script>
+    // Fetch configuration from server
+    async function initializeAuth() {
+      try {
+        const response = await fetch('/api/config');
+        if (!response.ok) {
+          throw new Error('Failed to fetch configuration');
+        }
+
+        const config = await response.json();
+        const CLIENT_ID = config.googleClientId;
+        const REDIRECT_URI = window.location.origin + '/auth_callback.html';
+
+        // Store authorized email in sessionStorage for the callback page
+        sessionStorage.setItem('authorizedEmail', config.authorizedEmail);
+
+        document.getElementById('login-btn').addEventListener('click', () => {
+          // Construct the OAuth URL
+          const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=email%20profile&prompt=select_account`;
+
+          // Redirect to Google's OAuth page
+          window.location.href = authUrl;
+        });
+
+        // Enable the login button
+        document.getElementById('login-btn').disabled = false;
+      } catch (error) {
+        console.error('Error initializing authentication:', error);
+        document.getElementById('login-btn').textContent = 'Error loading configuration';
+      }
+    }
+
+    // Disable the button until configuration is loaded
+    document.getElementById('login-btn').disabled = true;
+
+    // Initialize authentication when the page loads
+    window.onload = initializeAuth;
+  </script>
+</body>
+</html>
