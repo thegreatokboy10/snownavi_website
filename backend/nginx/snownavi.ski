@@ -9,16 +9,27 @@ server {
 server {
     listen 443 ssl;
     server_name snownavi.ski www.snownavi.ski;
-   
+
     ssl_session_timeout 5m;
 
     ssl_certificate /etc/nginx/snownavi.ski_bundle.pem; # Path to your SSL certificate
     ssl_certificate_key /etc/nginx/snownavi.ski.key; # Path to your SSL private key
- 
+
     ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;
 
     ssl_protocols TLSv1.2 TLSv1.3; # Recommended protocols
     ssl_prefer_server_ciphers on;
+
+    # Admin and API endpoints handled by Flask server
+    location ~ ^/(course_admin\.html|login\.html|auth_callback\.html|api/|data/) {
+        proxy_pass http://localhost:8899;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_connect_timeout 300s;
+        proxy_read_timeout 300s;
+    }
 
     # Default location block for handling general requests
     # 📄 Serve the web frontend (index.html, course.html, 404.html, assets etc)

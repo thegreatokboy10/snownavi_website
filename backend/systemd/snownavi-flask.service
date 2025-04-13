@@ -1,0 +1,18 @@
+[Unit]
+Description=SnowNavi Flask Server
+After=network.target
+
+[Service]
+User=lighthouse
+Group=lighthouse
+WorkingDirectory=/home/lighthouse/git/snownavi_website
+Environment="PATH=/home/lighthouse/git/snownavi_website/venv/bin"
+ExecStart=/home/lighthouse/git/snownavi_website/venv/bin/python /home/lighthouse/git/snownavi_website/backend/server.py
+Restart=always
+RestartSec=5
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=snownavi-flask
+
+[Install]
+WantedBy=multi-user.target
