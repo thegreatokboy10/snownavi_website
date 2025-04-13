@@ -703,12 +703,20 @@
           body: formData
         });
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || 'Upload failed');
+        // Check if the response is JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          // Not a JSON response, try to get the text
+          const text = await response.text();
+          throw new Error(`Server returned non-JSON response: ${text.substring(0, 100)}...`);
         }
 
+        // Parse the JSON response
         const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Upload failed');
+        }
 
         // Reload media files
         loadMediaFiles(currentMediaType);

@@ -116,23 +116,32 @@ def generate_unique_filename(filename):
 # File upload endpoints
 @app.route('/api/upload/<file_type>', methods=['POST'])
 def upload_file(file_type):
-    if file_type not in ['images', 'pdfs']:
-        return jsonify({'error': 'Invalid file type'}), 400
+    try:
+        if file_type not in ['images', 'pdfs']:
+            return jsonify({'error': 'Invalid file type'}), 400
 
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file part'}), 400
+        if 'file' not in request.files:
+            return jsonify({'error': 'No file part'}), 400
 
-    file = request.files['file']
+        file = request.files['file']
 
-    if file.filename == '':
-        return jsonify({'error': 'No selected file'}), 400
+        if file.filename == '':
+            return jsonify({'error': 'No selected file'}), 400
 
-    if file and allowed_file(file.filename, file_type):
+        if not allowed_file(file.filename, file_type):
+            return jsonify({'error': f'File type not allowed. Allowed types for {file_type}: {ALLOWED_EXTENSIONS[file_type]}'}), 400
+
+        # Process the file
         filename = secure_filename(file.filename)
         unique_filename = generate_unique_filename(filename)
         upload_folder = os.path.join(UPLOADS_DIR, file_type)
         file_path = os.path.join(upload_folder, unique_filename)
 
+        # Ensure the upload folder exists
+        if not os.path.exists(upload_folder):
+            os.makedirs(upload_folder)
+
+        # Save the file
         file.save(file_path)
 
         # Return the relative path to the file
@@ -144,19 +153,28 @@ def upload_file(file_type):
             'path': relative_path,
             'url': relative_path
         })
-
-    return jsonify({'error': 'File type not allowed'}), 400
+    except Exception as e:
+        # Log the error
+        app.logger.error(f"Error uploading file: {str(e)}")
+        # Return a JSON error response
+        return jsonify({'error': f'Server error: {str(e)}'}), 500
 
 # File listing endpoint
 @app.route('/api/files/<file_type>', methods=['GET'])
 def list_files(file_type):
-    if file_type not in ['images', 'pdfs']:
-        return jsonify({'error': 'Invalid file type'}), 400
+    try:
+        if file_type not in ['images', 'pdfs']:
+            return jsonify({'error': 'Invalid file type'}), 400
 
-    upload_folder = os.path.join(UPLOADS_DIR, file_type)
-    files = []
+        upload_folder = os.path.join(UPLOADS_DIR, file_type)
+        files = []
 
-    if os.path.exists(upload_folder):
+        # Create the directory if it doesn't exist
+        if not os.path.exists(upload_folder):
+            os.makedirs(upload_folder)
+            return jsonify({'files': []})
+
+        # List files in the directory
         for filename in os.listdir(upload_folder):
             file_path = os.path.join(upload_folder, filename)
             if os.path.isfile(file_path) and allowed_file(filename, file_type):
@@ -169,20 +187,46 @@ def list_files(file_type):
                     'lastModified': os.path.getmtime(file_path)
                 })
 
-    # Sort files by last modified time (newest first)
-    files.sort(key=lambda x: x['lastModified'], reverse=True)
+        # Sort files by last modified time (newest first)
+        files.sort(key=lambda x: x['lastModified'], reverse=True)
 
-    return jsonify({
-        'files': files
-    })
+        return jsonify({
+            'files': files
+        })
+    except Exception as e:
+        # Log the error
+        app.logger.error(f"Error listing files: {str(e)}")
+        # Return a JSON error response
+        return jsonify({'error': f'Server error: {str(e)}', 'files': []}), 500
 
 # Serve uploaded files
+@app.route('/uploads/')
+@app.route('/uploads/<path:subpath>')
+def serve_uploads(subpath=''):
+    if not subpath:
+        return jsonify({'error': 'Directory listing not allowed'}), 403
+
+    parts = subpath.split('/')
+    if len(parts) != 2:
+        return jsonify({'error': 'Invalid path format'}), 400
+
+    file_type, filename = parts
+    return serve_uploaded_file(file_type, filename)
+
 @app.route('/uploads/<file_type>/<filename>')
 def serve_uploaded_file(file_type, filename):
-    if file_type not in ['images', 'pdfs']:
-        return 'Invalid file type', 400
+    try:
+        if file_type not in ['images', 'pdfs']:
+            return jsonify({'error': 'Invalid file type'}), 400
 
-    return send_from_directory(os.path.join(UPLOADS_DIR, file_type), filename)
+        file_path = os.path.join(UPLOADS_DIR, file_type, filename)
+        if not os.path.exists(file_path):
+            return jsonify({'error': 'File not found'}), 404
+
+        return send_from_directory(os.path.join(UPLOADS_DIR, file_type), filename)
+    except Exception as e:
+        app.logger.error(f"Error serving file: {str(e)}")
+        return jsonify({'error': f'Server error: {str(e)}'}), 500
 
 # Static files routes
 @app.route('/assets/<path:filename>')
