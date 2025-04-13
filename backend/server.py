@@ -3,22 +3,41 @@ from flask_cors import CORS
 import os
 import json
 import mimetypes
+import uuid
+import datetime
+from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
 env_path = os.path.join(os.path.dirname(__file__), '.env')
 load_dotenv(env_path)
 
-# Print environment variables for debugging (remove in production)
-print(f"Loading environment variables from: {env_path}")
-print(f"GOOGLE_CLIENT_ID: {os.environ.get('GOOGLE_CLIENT_ID', 'Not set')}")
-print(f"ALLOWED_EMAILS: {os.environ.get('ALLOWED_EMAILS', 'Not set')}")
-
 # Root directory of the project
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 DATA_DIR = os.path.join(ROOT_DIR, 'data')
 ASSETS_DIR = os.path.join(ROOT_DIR, 'assets')
+UPLOADS_DIR = os.path.join(ROOT_DIR, 'uploads')
 JSON_FILE = os.path.join(DATA_DIR, 'courses.json')
+
+# Create uploads directory if it doesn't exist
+if not os.path.exists(UPLOADS_DIR):
+    os.makedirs(UPLOADS_DIR)
+
+# Create subdirectories for images and PDFs
+images_dir = os.path.join(UPLOADS_DIR, 'images')
+pdfs_dir = os.path.join(UPLOADS_DIR, 'pdfs')
+
+if not os.path.exists(images_dir):
+    os.makedirs(images_dir)
+
+if not os.path.exists(pdfs_dir):
+    os.makedirs(pdfs_dir)
+
+# Allowed file extensions
+ALLOWED_EXTENSIONS = {
+    'images': {'png', 'jpg', 'jpeg', 'gif', 'webp'},
+    'pdfs': {'pdf'}
+}
 
 # Initialize Flask app
 app = Flask(__name__, static_folder=None)  # Disable default static folder
@@ -81,6 +100,89 @@ def update_courses():
     with open(JSON_FILE, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
     return jsonify({'status': 'success'}), 200
+
+# File upload helper functions
+def allowed_file(filename, file_type):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS.get(file_type, set())
+
+def generate_unique_filename(filename):
+    # Get file extension
+    ext = filename.rsplit('.', 1)[1].lower() if '.' in filename else ''
+    # Generate unique filename with timestamp and UUID
+    timestamp = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+    unique_id = str(uuid.uuid4())[:8]
+    return f"{timestamp}_{unique_id}.{ext}"
+
+# File upload endpoints
+@app.route('/api/upload/<file_type>', methods=['POST'])
+def upload_file(file_type):
+    if file_type not in ['images', 'pdfs']:
+        return jsonify({'error': 'Invalid file type'}), 400
+
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'}), 400
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+
+    if file and allowed_file(file.filename, file_type):
+        filename = secure_filename(file.filename)
+        unique_filename = generate_unique_filename(filename)
+        upload_folder = os.path.join(UPLOADS_DIR, file_type)
+        file_path = os.path.join(upload_folder, unique_filename)
+
+        file.save(file_path)
+
+        # Return the relative path to the file
+        relative_path = f"/uploads/{file_type}/{unique_filename}"
+        return jsonify({
+            'success': True,
+            'filename': unique_filename,
+            'originalName': filename,
+            'path': relative_path,
+            'url': relative_path
+        })
+
+    return jsonify({'error': 'File type not allowed'}), 400
+
+# File listing endpoint
+@app.route('/api/files/<file_type>', methods=['GET'])
+def list_files(file_type):
+    if file_type not in ['images', 'pdfs']:
+        return jsonify({'error': 'Invalid file type'}), 400
+
+    upload_folder = os.path.join(UPLOADS_DIR, file_type)
+    files = []
+
+    if os.path.exists(upload_folder):
+        for filename in os.listdir(upload_folder):
+            file_path = os.path.join(upload_folder, filename)
+            if os.path.isfile(file_path) and allowed_file(filename, file_type):
+                file_url = f"/uploads/{file_type}/{filename}"
+                files.append({
+                    'name': filename,
+                    'path': file_url,
+                    'url': file_url,
+                    'size': os.path.getsize(file_path),
+                    'lastModified': os.path.getmtime(file_path)
+                })
+
+    # Sort files by last modified time (newest first)
+    files.sort(key=lambda x: x['lastModified'], reverse=True)
+
+    return jsonify({
+        'files': files
+    })
+
+# Serve uploaded files
+@app.route('/uploads/<file_type>/<filename>')
+def serve_uploaded_file(file_type, filename):
+    if file_type not in ['images', 'pdfs']:
+        return 'Invalid file type', 400
+
+    return send_from_directory(os.path.join(UPLOADS_DIR, file_type), filename)
 
 # Static files routes
 @app.route('/assets/<path:filename>')
