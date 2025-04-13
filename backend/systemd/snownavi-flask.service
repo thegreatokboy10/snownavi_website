@@ -1,18 +1,24 @@
 [Unit]
 Description=SnowNavi Flask Server
 After=network.target
+Wants=network-online.target
 
 [Service]
 User=lighthouse
 Group=lighthouse
 WorkingDirectory=/home/lighthouse/git/snownavi_website
 Environment="PATH=/home/lighthouse/git/snownavi_website/venv/bin"
+Environment="PYTHONUNBUFFERED=1"
 ExecStart=/home/lighthouse/git/snownavi_website/venv/bin/python /home/lighthouse/git/snownavi_website/backend/server.py
 Restart=always
 RestartSec=5
-StandardOutput=syslog
-StandardError=syslog
+# Use journal instead of syslog for modern systemd versions
+StandardOutput=journal
+StandardError=journal
 SyslogIdentifier=snownavi-flask
+# Add security settings
+NoNewPrivileges=true
+PrivateTmp=true
 
 [Install]
 WantedBy=multi-user.target

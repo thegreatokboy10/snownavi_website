@@ -58,10 +58,22 @@ ALLOWED_EMAILS=okboy2008@gmail.com
    ```
    sudo ./setup_flask_server.sh
    ```
+   This script will:
+   - Install required packages
+   - Create a Python virtual environment
+   - Install Python dependencies
+   - Create a default .env file if needed
+   - Set correct permissions
+   - Set up and start the systemd service
 
 3. Check the service status:
    ```
    sudo systemctl status snownavi-flask.service
+   ```
+
+4. View the logs:
+   ```
+   sudo journalctl -u snownavi-flask.service
    ```
 
 ## Nginx Configuration
