@@ -104,3 +104,32 @@ sudo systemctl restart snownavi-flask.service
 sudo nginx -t
 sudo systemctl status nginx
 ```
+
+### Environment Variable Issues
+
+If you see "Error loading configuration" on the login page, it's likely an issue with environment variables:
+
+1. Test environment variable loading:
+   ```
+   cd /home/lighthouse/git/snownavi_website
+   source venv/bin/activate
+   python backend/test_env.py
+   ```
+
+2. Verify the .env file has the correct variables:
+   ```
+   cat backend/.env
+   ```
+   Make sure it contains `GOOGLE_CLIENT_ID` and `ALLOWED_EMAILS`.
+
+3. Check if the service is loading the environment file:
+   ```
+   systemctl cat snownavi-flask.service | grep Environment
+   ```
+   It should include `EnvironmentFile=/home/lighthouse/git/snownavi_website/backend/.env`
+
+4. Restart the service after making changes:
+   ```
+   sudo systemctl daemon-reload
+   sudo systemctl restart snownavi-flask.service
+   ```
