@@ -10,6 +10,14 @@ server {
     listen 443 ssl;
     server_name snownavi.ski www.snownavi.ski;
 
+    # File upload settings
+    client_max_body_size 16M;        # Allow uploads up to 16MB
+    client_body_buffer_size 128k;    # Increase buffer size for file uploads
+    client_body_timeout 60s;         # Increase timeout for larger uploads
+    client_header_timeout 60s;       # Increase header timeout
+    keepalive_timeout 60s;           # Increase keepalive timeout
+    send_timeout 60s;                # Increase send timeout
+
     ssl_session_timeout 5m;
 
     ssl_certificate /etc/nginx/snownavi.ski_bundle.pem; # Path to your SSL certificate
@@ -21,7 +29,7 @@ server {
     ssl_prefer_server_ciphers on;
 
     # Admin and API endpoints handled by Flask server
-    location ~ ^/(course_admin\.html|login\.html|auth_callback\.html|api/|data/) {
+    location ~ ^/(course_admin\.html|login\.html|auth_callback\.html|api/|data/|uploads/) {
         proxy_pass http://localhost:8899;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -29,6 +37,9 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_connect_timeout 300s;
         proxy_read_timeout 300s;
+        proxy_send_timeout 300s;
+        proxy_request_buffering off;       # Disable request buffering for large file uploads
+        proxy_buffering off;               # Disable response buffering
     }
 
     # Default location block for handling general requests

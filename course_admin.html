@@ -365,6 +365,9 @@
       <form class="media-upload-form" id="upload-form" onsubmit="event.preventDefault();">
         <input type="file" id="file-input" accept=".jpg,.jpeg,.png,.gif,.webp,.pdf" />
         <div class="media-preview" id="media-preview"></div>
+        <div class="file-size-info" style="margin-top: 0.5rem; font-size: 0.8rem; color: #777;">
+          Maximum file size: 16MB
+        </div>
         <button type="button" class="media-upload-btn" onclick="uploadFile()">Upload</button>
       </form>
     </div>
@@ -662,6 +665,17 @@
       closeMediaBrowser();
     }
 
+    // Helper function to format file size
+    function formatFileSize(bytes) {
+      if (bytes < 1024) {
+        return bytes + ' bytes';
+      } else if (bytes < 1024 * 1024) {
+        return (bytes / 1024).toFixed(1) + ' KB';
+      } else {
+        return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+      }
+    }
+
     // File upload handling
     document.getElementById('file-input').addEventListener('change', function(e) {
       const file = e.target.files[0];
@@ -669,6 +683,21 @@
 
       const preview = document.getElementById('media-preview');
       preview.innerHTML = '';
+
+      // Show file size
+      const sizeInfo = document.createElement('div');
+      sizeInfo.textContent = `File size: ${formatFileSize(file.size)}`;
+      sizeInfo.style.marginBottom = '0.5rem';
+      sizeInfo.style.fontSize = '0.9rem';
+
+      // Add warning if file is too large
+      const maxSizeBytes = 16 * 1024 * 1024;
+      if (file.size > maxSizeBytes) {
+        sizeInfo.style.color = '#ff4444';
+        sizeInfo.style.fontWeight = 'bold';
+      }
+
+      preview.appendChild(sizeInfo);
 
       if (file.type.startsWith('image/')) {
         const img = document.createElement('img');
@@ -698,10 +727,23 @@
       formData.append('file', file);
 
       try {
+        // Check file size before uploading
+        const maxSizeMB = 16; // Match the server-side limit
+        const maxSizeBytes = maxSizeMB * 1024 * 1024;
+
+        if (file.size > maxSizeBytes) {
+          throw new Error(`File too large. Maximum allowed size is ${maxSizeMB}MB. Your file is ${(file.size / (1024 * 1024)).toFixed(1)}MB.`);
+        }
+
         const response = await fetch(`/api/upload/${currentMediaType}`, {
           method: 'POST',
           body: formData
         });
+
+        // Handle 413 error specifically
+        if (response.status === 413) {
+          throw new Error(`File too large. Maximum allowed size is ${maxSizeMB}MB.`);
+        }
 
         // Check if the response is JSON
         const contentType = response.headers.get('content-type');

@@ -43,6 +43,9 @@ ALLOWED_EXTENSIONS = {
 app = Flask(__name__, static_folder=None)  # Disable default static folder
 CORS(app)  # Enable CORS
 
+# Set maximum content length for file uploads (16MB)
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+
 # Ensure proper MIME types are registered
 mimetypes.add_type('text/javascript', '.js')
 mimetypes.add_type('text/css', '.css')
@@ -251,6 +254,11 @@ def log_request_info():
 @app.errorhandler(404)
 def page_not_found(e):
     return jsonify(error=str(e)), 404
+
+@app.errorhandler(413)
+def request_entity_too_large(e):
+    max_size_mb = app.config['MAX_CONTENT_LENGTH'] / (1024 * 1024)
+    return jsonify(error=f"File too large. Maximum allowed size is {max_size_mb:.1f}MB"), 413
 
 @app.errorhandler(500)
 def server_error(e):
