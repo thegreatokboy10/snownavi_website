@@ -22,14 +22,14 @@
       --contrast-white: #FFFFFF;
       --accent-blue: #9ED4E7;
     }
-  
+
     body {
       margin: 0;
       font-family: 'Noto Sans SC', sans-serif;
       background-color: var(--bg-light);
       color: var(--text-dark);
     }
-  
+
     header {
       background: var(--contrast-white);
       display: flex;
@@ -39,28 +39,28 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
       position: relative;
     }
-  
+
     header img {
       height: 40px;
     }
-  
+
     nav {
       display: flex;
       align-items: center;
     }
-  
+
     nav a {
       margin-left: 1.5rem;
       text-decoration: none;
       color: var(--text-dark);
       font-weight: bold;
     }
-  
+
     .language-selector {
       margin-left: 2rem;
       font-size: 1rem;
     }
-  
+
     .menu-toggle {
       display: none;
       font-size: 1.5rem;
@@ -69,17 +69,17 @@
       cursor: pointer;
       color: var(--text-dark);
     }
-  
+
     .nav-links {
       display: flex;
       align-items: center;
     }
-  
+
     @media (max-width: 768px) {
       .menu-toggle {
         display: block;
       }
-  
+
       .nav-links {
         display: none;
         flex-direction: column;
@@ -91,29 +91,47 @@
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         z-index: 10;
       }
-  
+
       .nav-links.open {
         display: flex;
       }
-  
+
       .nav-links a, .nav-links .language-selector {
         margin: 1rem;
       }
     }
-  
+
     .section {
       padding: 3rem 2rem;
       max-width: 1200px;
       margin: auto;
     }
-  
+
+    .course-block {
+      margin-bottom: 2rem;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 2rem;
+    }
+    .course-block img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 1rem;
+    }
+    .course-info {
+      margin: 0.5rem 0;
+    }
+    .highlight {
+      font-weight: bold;
+      color: var(--main-red);
+    }
+
     footer {
       background: var(--text-dark);
       color: white;
       padding: 2rem;
       text-align: center;
     }
-  
+
     .back-btn {
       display: inline-block;
       margin: 1rem;
@@ -123,8 +141,19 @@
       border-radius: 5px;
       text-decoration: none;
     }
+
+    .subcourse-title {
+      background-color: var(--main-red);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      display: inline-block;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
   </style>
-  
+
 </head>
 <body>
   <header>
@@ -157,6 +186,14 @@
   </footer>
 
   <script>
+    // Function to detect URLs in text and make them clickable
+    function makeLinksClickable(text) {
+      // Regular expression to match URLs
+      const urlRegex = /(https?:\/\/[^\s]+)/g;
+      // Replace URLs with anchor tags
+      return text.replace(urlRegex, url => `<a href="${url}" target="_blank">${url}</a>`);
+    }
+
     const langSelect = document.getElementById('lang');
     const urlParams = new URLSearchParams(window.location.search);
     const courseKey = urlParams.get('course') || 'basi';
@@ -189,7 +226,15 @@
 
           const title = document.createElement('h3');
           title.textContent = sub.title;
+          title.className = 'subcourse-title';
           div.appendChild(title);
+
+          if (sub.image) {
+            const img = document.createElement('img');
+            img.src = sub.image;
+            img.alt = sub.title;
+            div.appendChild(img);
+          }
 
           const time = document.createElement('p');
           time.innerHTML = `<span class="highlight">Time:</span> ${sub.time}`;
@@ -203,16 +248,11 @@
           price.innerHTML = `<span class="highlight">Price:</span> ${sub.price}`;
           div.appendChild(price);
 
-          if (sub.image) {
-            const img = document.createElement('img');
-            img.src = sub.image;
-            img.alt = sub.title;
-            div.appendChild(img);
-          }
-
           const desc = document.createElement('p');
           desc.className = 'course-info';
-          desc.innerHTML = (sub.desc || '').replace(/\n/g, '<br>');
+          // Convert URLs to clickable links
+          const processedText = (sub.desc || '').replace(/\n/g, '<br>');
+          desc.innerHTML = makeLinksClickable(processedText);
           div.appendChild(desc);
 
           if (sub.pdf) {
