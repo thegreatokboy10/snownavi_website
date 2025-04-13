@@ -1,0 +1,13 @@
+[Unit]
+Description=Snownavi Frontend Service
+After=network.target
+
+[Service]
+Type=simple
+User=lighthouse
+WorkingDirectory=/home/lighthouse/git/snownavi-frontend
+ExecStart=/usr/bin/npm start
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

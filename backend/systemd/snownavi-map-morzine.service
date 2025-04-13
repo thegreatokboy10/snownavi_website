@@ -1,0 +1,18 @@
+[Unit]
+Description=Snownavi Map Morzine Service
+After=network.target docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+User=lighthouse
+Group=docker
+WorkingDirectory=/home/lighthouse/git/snownavi-map
+ExecStartPre=/usr/bin/docker pull ghcr.io/project-osrm/osrm-backend
+ExecStart=/usr/bin/docker run -p 5001:5000 -v "/home/lighthouse/git/snownavi-map":/data ghcr.io/project-osrm/osrm-backend osrm-routed --algorithm mld /data/Morzine/morzine.osrm
+ExecStop=/usr/bin/docker stop %n
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
