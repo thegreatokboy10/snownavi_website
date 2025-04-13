@@ -9,6 +9,8 @@ Group=lighthouse
 WorkingDirectory=/home/lighthouse/git/snownavi_website
 Environment="PATH=/home/lighthouse/git/snownavi_website/venv/bin"
 Environment="PYTHONUNBUFFERED=1"
+# Load environment variables from .env file
+EnvironmentFile=/home/lighthouse/git/snownavi_website/backend/.env
 ExecStart=/home/lighthouse/git/snownavi_website/venv/bin/python /home/lighthouse/git/snownavi_website/backend/server.py
 Restart=always
 RestartSec=5

@@ -36,6 +36,19 @@ EOF
   echo -e "${YELLOW}Please update $ENV_FILE with your actual configuration values.${NC}"
 fi
 
+# Verify .env file has the required variables
+echo -e "${YELLOW}Verifying environment variables...${NC}"
+if ! grep -q "GOOGLE_CLIENT_ID" "$ENV_FILE" || ! grep -q "ALLOWED_EMAILS" "$ENV_FILE"; then
+  echo -e "${RED}Error: .env file is missing required variables.${NC}"
+  echo -e "${YELLOW}Please ensure $ENV_FILE contains GOOGLE_CLIENT_ID and ALLOWED_EMAILS.${NC}"
+  exit 1
+fi
+
+# Display current environment variables (without showing sensitive values)
+echo -e "${YELLOW}Current environment configuration:${NC}"
+echo -e "GOOGLE_CLIENT_ID is " $(grep "GOOGLE_CLIENT_ID" "$ENV_FILE" | cut -d '=' -f1) "[value hidden]"
+echo -e "ALLOWED_EMAILS is set to: " $(grep "ALLOWED_EMAILS" "$ENV_FILE" | cut -d '=' -f2)
+
 # Check if python3-venv is installed
 if ! dpkg -l | grep -q python3-venv; then
   echo -e "${YELLOW}Installing python3-venv...${NC}"

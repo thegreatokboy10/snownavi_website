@@ -6,7 +6,13 @@ import mimetypes
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
-load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
+env_path = os.path.join(os.path.dirname(__file__), '.env')
+load_dotenv(env_path)
+
+# Print environment variables for debugging (remove in production)
+print(f"Loading environment variables from: {env_path}")
+print(f"GOOGLE_CLIENT_ID: {os.environ.get('GOOGLE_CLIENT_ID', 'Not set')}")
+print(f"ALLOWED_EMAILS: {os.environ.get('ALLOWED_EMAILS', 'Not set')}")
 
 # Root directory of the project
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -51,10 +57,17 @@ def serve_auth_callback_page():
 # API routes
 @app.route('/api/config')
 def get_config():
+    # Get environment variables
+    google_client_id = os.environ.get('GOOGLE_CLIENT_ID', '')
+    allowed_emails = os.environ.get('ALLOWED_EMAILS', '')
+
+    # Log the values being returned (remove in production)
+    app.logger.info(f"Returning config: googleClientId={google_client_id}, authorizedEmail={allowed_emails}")
+
     # Return the necessary configuration from environment variables
     return jsonify({
-        'googleClientId': os.environ.get('GOOGLE_CLIENT_ID', ''),
-        'authorizedEmail': os.environ.get('ALLOWED_EMAILS', '')
+        'googleClientId': google_client_id,
+        'authorizedEmail': allowed_emails
     })
 
 # Data routes
