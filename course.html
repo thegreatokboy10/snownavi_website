@@ -126,6 +126,22 @@
     .course-info {
       margin: 0.5rem 0;
     }
+
+    .register-btn {
+      display: inline-block;
+      background-color: var(--main-red);
+      color: white;
+      padding: 0.5rem 1.5rem;
+      border-radius: 4px;
+      text-decoration: none;
+      margin-top: 1rem;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .register-btn:hover {
+      background-color: #c52e10;
+    }
     .highlight {
       font-weight: bold;
       color: var(--main-red);
@@ -198,6 +214,13 @@
       const urlRegex = /(https?:\/\/[^\s]+)/g;
       // Replace URLs with anchor tags
       return text.replace(urlRegex, url => `<a href="${url}" target="_blank">${url}</a>`);
+    }
+
+    // Function to create a mailto link with registration template
+    function createRegistrationLink(courseTitle) {
+      const subject = encodeURIComponent(`${courseTitle} ${translations[savedLang].registration}`);
+      const body = encodeURIComponent(translations[savedLang].emailTemplate);
+      return `mailto:info@snownavi.ski?subject=${subject}&body=${body}`;
     }
 
     const langSelect = document.getElementById('lang');
@@ -277,6 +300,13 @@
             div.appendChild(link);
           }
 
+          // Add registration button
+          const registerBtn = document.createElement('a');
+          registerBtn.href = createRegistrationLink(sub.title);
+          registerBtn.className = 'register-btn';
+          registerBtn.textContent = translations[savedLang].register;
+          div.appendChild(registerBtn);
+
           container.appendChild(div);
         });
       });
@@ -293,7 +323,10 @@
         navContact: 'Contact',
         navStory: 'Our Story',
         contact: 'Contact: info@snownavi.ski | Follow our 微信公共号 SnowNavi指雪针 for updates',
-        copyright: 'All rights reserved.'
+        copyright: 'All rights reserved.',
+        register: 'Register',
+        emailTemplate: 'Name:\n\nBirthday:\n\nGender:\n\nCourse Type (Ski/Snowboard):\n\nCourse Time:\n',
+        registration: 'Registration'
       },
       zh: {
         navCourses: '课程',
@@ -301,7 +334,10 @@
         navContact: '联系我们',
         navStory: '我们的故事',
         contact: '联系方式：info@snownavi.ski | 请关注微信公共号： SnowNavi指雪针',
-        copyright: '保留所有权利.'
+        copyright: '保留所有权利.',
+        register: '报名',
+        emailTemplate: '姓名：\n\n生日：\n\n性别：\n\n课程类型（双板/单板）：\n\n课程时间：\n',
+        registration: '报名'
       },
       nl: {
         navCourses: 'Cursussen',
@@ -309,7 +345,10 @@
         navContact: 'Contact',
         navStory: 'Ons Verhaal',
         contact: 'Contact: info@snownavi.ski | Volg ons op 微信公共号: SnowNavi指雪针',
-        copyright: 'Alle rechten voorbehouden.'
+        copyright: 'Alle rechten voorbehouden.',
+        register: 'Inschrijven',
+        emailTemplate: 'Naam:\n\nGeboortedatum:\n\nGeslacht:\n\nCursustype (Ski/Snowboard):\n\nCursustijd:\n',
+        registration: 'Inschrijving'
       }
     };
 
