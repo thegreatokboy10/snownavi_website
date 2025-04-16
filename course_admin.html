@@ -90,6 +90,21 @@
     textarea {
       min-height: 100px;
     }
+    textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: inherit;
+      resize: vertical;
+      margin-bottom: 1rem;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #E53512;
+    }
     .save-btn {
       background: #E53512;
       color: white;
@@ -516,6 +531,7 @@
       titleHeader.textContent = `${courseKey}`;
       div.appendChild(titleHeader);
 
+      // Course title input
       const titleLabel = document.createElement('label');
       titleLabel.textContent = 'Course Title';
       div.appendChild(titleLabel);
@@ -524,6 +540,18 @@
       titleInput.value = course.title;
       titleInput.oninput = e => course.title = e.target.value;
       div.appendChild(titleInput);
+
+      // Course description textarea
+      const descLabel = document.createElement('label');
+      descLabel.textContent = 'Course Description (Optional)';
+      div.appendChild(descLabel);
+
+      const descInput = document.createElement('textarea');
+      descInput.value = course.description || '';
+      descInput.oninput = e => course.description = e.target.value;
+      descInput.style.minHeight = '100px';
+      descInput.placeholder = 'Enter course description (optional)';
+      div.appendChild(descInput);
 
       // Add subcourse button
       const addBtn = document.createElement('button');
@@ -535,7 +563,6 @@
 
       container.appendChild(div);
     }
-
     // Media Browser Functions
     function openMediaBrowser(fieldName, mediaType = 'images') {
       currentField = fieldName;

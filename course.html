@@ -99,6 +99,12 @@
       .nav-links a, .nav-links .language-selector {
         margin: 1rem;
       }
+
+      .course-description {
+        color: var(--text-gray);
+        margin: 1rem 0 2rem;
+        line-height: 1.6;
+      }
     }
 
     .section {
@@ -210,6 +216,12 @@
 
         document.getElementById('page-title').textContent = t.title;
         document.getElementById('course-title').textContent = t.title;
+        if (t.description) {
+          const descElement = document.createElement('p');
+          descElement.className = 'course-description';
+          descElement.innerHTML = makeLinksClickable((t.description || '').replace(/\n/g, '<br>'));
+          document.getElementById('course-title').after(descElement);
+        }
         document.getElementById('nav-courses').textContent = translations[savedLang].navCourses;
         document.getElementById('nav-map').textContent = translations[savedLang].navMap;
         document.getElementById('nav-story').textContent = translations[savedLang].navStory;
