@@ -174,6 +174,165 @@
       margin-bottom: 0.5rem;
       font-weight: bold;
     }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+
+    .modal-content {
+      background-color: var(--contrast-white);
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 80%;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .close-modal {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close-modal:hover,
+    .close-modal:focus {
+      color: var(--text-dark);
+      text-decoration: none;
+    }
+
+    .course-options {
+      margin: 20px 0;
+    }
+
+    .course-option {
+      margin-bottom: 10px;
+      padding: 8px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+
+    .course-option:hover {
+      background-color: #f5f5f5;
+    }
+
+    .course-checkbox {
+      margin-right: 10px;
+    }
+
+    .course-header {
+      color: var(--main-red);
+      border-bottom: 1px solid #eee;
+      padding-bottom: 5px;
+      margin-top: 15px;
+      margin-bottom: 10px;
+    }
+
+    .form-section {
+      margin-bottom: 20px;
+    }
+
+    .form-section h4 {
+      color: var(--main-red);
+      border-bottom: 1px solid #eee;
+      padding-bottom: 5px;
+      margin-top: 20px;
+      margin-bottom: 15px;
+    }
+
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+      gap: 15px;
+    }
+
+    .form-group {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      margin-top: 5px;
+    }
+
+    .form-input:focus, .form-select:focus {
+      outline: none;
+      border-color: var(--main-red);
+      box-shadow: 0 0 0 2px rgba(229, 53, 18, 0.2);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .email-content-container {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .email-field {
+      margin-bottom: 15px;
+    }
+
+    .email-field strong {
+      display: inline-block;
+      width: 80px;
+      margin-right: 10px;
+    }
+
+    .email-body {
+      white-space: pre-wrap;
+      background-color: white;
+      border: 1px solid #eee;
+      padding: 10px;
+      border-radius: 4px;
+      margin-top: 5px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    #copy-email {
+      margin-top: 15px;
+    }
+
+    .submit-selection {
+      background-color: var(--main-red);
+      color: white;
+      padding: 0.5rem 1.5rem;
+      border-radius: 4px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .submit-selection:hover {
+      background-color: #c52e10;
+    }
   </style>
 
 </head>
@@ -202,6 +361,75 @@
     <div id="course-description"></div>
   </section>
 
+  <!-- Course Selection Modal -->
+  <div id="courseModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h3 id="modal-title"></h3>
+      <p id="modal-subtitle"></p>
+
+      <!-- Personal Information Form -->
+      <div class="form-section">
+        <h4 id="personal-info-title"></h4>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName" id="firstName-label"></label>
+            <input type="text" id="firstName" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label for="lastName" id="lastName-label"></label>
+            <input type="text" id="lastName" class="form-input" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="gender" id="gender-label"></label>
+            <select id="gender" class="form-select" required>
+              <option value="" disabled selected></option>
+              <option value="male" id="gender-male"></option>
+              <option value="female" id="gender-female"></option>
+              <option value="other" id="gender-other"></option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Course Options -->
+      <div class="form-section">
+        <h4 id="course-selection-title"></h4>
+        <div id="course-options" class="course-options"></div>
+      </div>
+
+      <button id="submit-selection" class="submit-selection"></button>
+    </div>
+  </div>
+
+  <!-- Email Content Modal -->
+  <div id="emailModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" id="close-email-modal">&times;</span>
+      <h3 id="email-modal-title"></h3>
+      <p id="email-instructions"></p>
+
+      <div class="email-content-container">
+        <div class="email-field">
+          <strong id="email-to-label"></strong>
+          <span>info@snownavi.ski</span>
+        </div>
+        <div class="email-field">
+          <strong id="email-subject-label"></strong>
+          <span id="email-subject"></span>
+        </div>
+        <div class="email-field">
+          <strong id="email-body-label"></strong>
+          <div id="email-body" class="email-body"></div>
+        </div>
+      </div>
+
+      <button id="copy-email" class="submit-selection"></button>
+    </div>
+  </div>
+
   <footer>
     <p id="contact-text">Contact: info@snownavi.ski | Follow our 微信公共号 SnowNavi指雪针 for updates</p>
     <p id="copyright">&copy; 2025 SnowNavi Sports. All rights reserved.</p>
@@ -217,10 +445,272 @@
     }
 
     // Function to create a mailto link with registration template
-    function createRegistrationLink(courseTitle) {
-      const subject = encodeURIComponent(`${courseTitle} ${translations[savedLang].registration}`);
-      const body = encodeURIComponent(translations[savedLang].emailTemplate);
-      return `mailto:info@snownavi.ski?subject=${subject}&body=${body}`;
+    function createRegistrationLink(courseTitle, firstName, lastName, gender, selectedCourses = []) {
+      const subject = `${courseTitle} ${translations[savedLang].registration}`;
+
+      // Create a custom body with personal information and selected courses
+      let bodyText = translations[savedLang].emailTemplate
+        .replace('{firstName}', firstName)
+        .replace('{lastName}', lastName)
+        .replace('{gender}', gender);
+
+      if (selectedCourses && selectedCourses.length > 0) {
+        bodyText += '\n' + translations[savedLang].selectedCourses + ':\n';
+        selectedCourses.forEach(course => {
+          bodyText += `- ${course}\n`;
+        });
+      }
+
+      return {
+        subject: subject,
+        body: bodyText,
+        mailtoLink: `mailto:info@snownavi.ski?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`
+      };
+    }
+
+    // Function to show the email content modal
+    function showEmailModal(subject, body) {
+      const modal = document.getElementById('emailModal');
+      const modalTitle = document.getElementById('email-modal-title');
+      const instructions = document.getElementById('email-instructions');
+      const toLabel = document.getElementById('email-to-label');
+      const subjectLabel = document.getElementById('email-subject-label');
+      const subjectText = document.getElementById('email-subject');
+      const bodyLabel = document.getElementById('email-body-label');
+      const bodyText = document.getElementById('email-body');
+      const copyButton = document.getElementById('copy-email');
+
+      // Set modal content
+      modalTitle.textContent = translations[savedLang].emailModalTitle;
+      instructions.textContent = translations[savedLang].emailInstructions;
+      toLabel.textContent = translations[savedLang].emailTo;
+      subjectLabel.textContent = translations[savedLang].emailSubject;
+      subjectText.textContent = subject;
+      bodyLabel.textContent = translations[savedLang].emailBody;
+      bodyText.textContent = body;
+      copyButton.textContent = translations[savedLang].copyEmail;
+
+      // Show the modal
+      modal.style.display = 'block';
+    }
+
+    // Function to copy email content to clipboard
+    function copyEmailContent() {
+      const subject = document.getElementById('email-subject').textContent;
+      const body = document.getElementById('email-body').textContent;
+
+      const fullContent = `To: info@snownavi.ski
+Subject: ${subject}
+
+${body}`;
+
+      // Try to use the clipboard API
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(fullContent)
+          .then(() => {
+            alert(translations[savedLang].copySuccess);
+          })
+          .catch(() => {
+            alert(translations[savedLang].copyFailed);
+          });
+      } else {
+        // Fallback for browsers that don't support clipboard API
+        const textarea = document.createElement('textarea');
+        textarea.value = fullContent;
+        document.body.appendChild(textarea);
+        textarea.select();
+
+        try {
+          const successful = document.execCommand('copy');
+          if (successful) {
+            alert(translations[savedLang].copySuccess);
+          } else {
+            alert(translations[savedLang].copyFailed);
+          }
+        } catch (err) {
+          alert(translations[savedLang].copyFailed);
+        }
+
+        document.body.removeChild(textarea);
+      }
+    }
+
+    // Function to parse course information from description
+    function parseCourseInfo(desc) {
+      const courseOptions = [];
+
+      // Split the description by new lines
+      const lines = desc.split('\n');
+
+      // Variables to track current course
+      let currentCourse = null;
+      let currentPrice = null;
+
+      // Process each line
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+
+        // Skip empty lines
+        if (!line) continue;
+
+        // English pattern
+        if (savedLang === 'en') {
+          // Course title with price
+          const courseMatch = line.match(/^(Snowboard|Ski)(\s+UK)?\s+Level\s+\d+\s+(Weekday|Weekend)\s+Course\s+(€\d+)$/);
+          if (courseMatch) {
+            currentCourse = line.replace(courseMatch[4], '').trim();
+            currentPrice = courseMatch[4];
+            continue;
+          }
+
+          // Course date with examiner
+          const dateMatch = line.match(/^(\d{4}\.\d{2}\.\d{2}\s*-\s*\d{4}\.\d{2}\.\d{2}|\d{4}\.\d{2}\.\d{2}\s*-\s*\d{2}\.\d{2}(\s*&\s*\d{4}\.\d{2}\.\d{2}\s*-\s*\d{2}\.\d{2})?).*Examiner:.*$/);
+          if (dateMatch && currentCourse && currentPrice) {
+            courseOptions.push({
+              course: `${currentCourse} ${currentPrice}`,
+              time: line
+            });
+            continue;
+          }
+        }
+
+        // Chinese pattern
+        else if (savedLang === 'zh') {
+          // Course title with price
+          const courseMatch = line.match(/^(单板|双板)(一级|室内二级)周(中|末)班\s+(€\d+)$/);
+          if (courseMatch) {
+            currentCourse = line.replace(courseMatch[4], '').trim();
+            currentPrice = courseMatch[4];
+            continue;
+          }
+
+          // Course date with examiner
+          const dateMatch = line.match(/^(\d{4}\.\d{2}\.\d{2}\s*-\s*\d{4}\.\d{2}\.\d{2}|\d{4}\.\d{2}\.\d{2}\s*-\s*\d{2}\.\d{2}(\s*&\s*\d{4}\.\d{2}\.\d{2}\s*-\s*\d{2}\.\d{2})?).*考官：.*$/);
+          if (dateMatch && currentCourse && currentPrice) {
+            courseOptions.push({
+              course: `${currentCourse} ${currentPrice}`,
+              time: line
+            });
+            continue;
+          }
+        }
+
+        // Dutch pattern
+        else if (savedLang === 'nl') {
+          // Course title with price
+          const courseMatch = line.match(/^(Snowboard|Ski)(\s+UK)?\s+Niveau\s+\d+\s+(Weekdag|Weekend)cursus\s+(€\d+|Vanaf\s+€\d+)$/);
+          if (courseMatch) {
+            currentCourse = line.replace(courseMatch[4], '').trim();
+            currentPrice = courseMatch[4];
+            continue;
+          }
+
+          // Course date with examiner
+          const dateMatch = line.match(/^(\d{4}\.\d{2}\.\d{2}\s*-\s*\d{4}\.\d{2}\.\d{2}|\d{4}\.\d{2}\.\d{2}\s*-\s*\d{2}\.\d{2}(\s*&\s*\d{4}\.\d{2}\.\d{2}\s*-\s*\d{2}\.\d{2})?).*Examinator:.*$/);
+          if (dateMatch && currentCourse && currentPrice) {
+            courseOptions.push({
+              course: `${currentCourse} ${currentPrice}`,
+              time: line
+            });
+            continue;
+          }
+        }
+      }
+
+      return courseOptions;
+    }
+
+    // Function to show the course selection modal
+    function showCourseModal(courseTitle, desc) {
+      const modal = document.getElementById('courseModal');
+      const modalTitle = document.getElementById('modal-title');
+      const modalSubtitle = document.getElementById('modal-subtitle');
+      const courseOptions = document.getElementById('course-options');
+      const submitButton = document.getElementById('submit-selection');
+
+      // Set modal title and subtitle
+      modalTitle.textContent = translations[savedLang].selectCourses;
+      modalSubtitle.textContent = `${courseTitle}`;
+      submitButton.textContent = translations[savedLang].confirm;
+
+      // Set personal information section
+      document.getElementById('personal-info-title').textContent = translations[savedLang].personalInfo;
+      document.getElementById('firstName-label').textContent = translations[savedLang].firstName;
+      document.getElementById('lastName-label').textContent = translations[savedLang].lastName;
+      document.getElementById('gender-label').textContent = translations[savedLang].gender;
+
+      // Set gender options
+      document.getElementById('gender-male').textContent = translations[savedLang].male;
+      document.getElementById('gender-male').value = translations[savedLang].male;
+      document.getElementById('gender-female').textContent = translations[savedLang].female;
+      document.getElementById('gender-female').value = translations[savedLang].female;
+      document.getElementById('gender-other').textContent = translations[savedLang].other;
+      document.getElementById('gender-other').value = translations[savedLang].other;
+
+      // Set course selection title
+      document.getElementById('course-selection-title').textContent = translations[savedLang].courseSelection;
+
+      // Clear previous options
+      courseOptions.innerHTML = '';
+
+      // Parse course information from description
+      const courseData = parseCourseInfo(desc);
+
+      // Group options by course type
+      const courseGroups = {};
+      courseData.forEach(item => {
+        if (!courseGroups[item.course]) {
+          courseGroups[item.course] = [];
+        }
+        courseGroups[item.course].push(item.time);
+      });
+
+      // If no courses found, show a message
+      if (Object.keys(courseGroups).length === 0) {
+        const noCoursesMsg = document.createElement('p');
+        noCoursesMsg.textContent = translations[savedLang].noCoursesFound;
+        courseOptions.appendChild(noCoursesMsg);
+      } else {
+        // Create sections for each course type
+        Object.keys(courseGroups).forEach(courseName => {
+          // Create course header
+          const courseHeader = document.createElement('h4');
+          courseHeader.textContent = courseName;
+          courseHeader.className = 'course-header';
+          courseOptions.appendChild(courseHeader);
+
+          // Create checkboxes for each time option
+          courseGroups[courseName].forEach((timeOption, index) => {
+            const option = document.createElement('div');
+            option.className = 'course-option';
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = `course-${courseName.replace(/\s+/g, '-')}-${index}`;
+            checkbox.className = 'course-checkbox';
+            checkbox.value = `${courseName} - ${timeOption}`;
+
+            const label = document.createElement('label');
+            label.htmlFor = checkbox.id;
+            label.textContent = timeOption;
+
+            option.appendChild(checkbox);
+            option.appendChild(label);
+            courseOptions.appendChild(option);
+          });
+        });
+      }
+
+      // Reset form fields
+      document.getElementById('firstName').value = '';
+      document.getElementById('lastName').value = '';
+      document.getElementById('gender').selectedIndex = 0;
+
+      // Show the modal
+      modal.style.display = 'block';
+
+      // Store the course title for later use
+      modal.dataset.courseTitle = courseTitle;
     }
 
     const langSelect = document.getElementById('lang');
@@ -302,9 +792,13 @@
 
           // Add registration button
           const registerBtn = document.createElement('a');
-          registerBtn.href = createRegistrationLink(sub.title);
+          registerBtn.href = "#";
           registerBtn.className = 'register-btn';
           registerBtn.textContent = translations[savedLang].register;
+          registerBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            showCourseModal(sub.title, sub.desc || '');
+          });
           div.appendChild(registerBtn);
 
           container.appendChild(div);
@@ -325,8 +819,28 @@
         contact: 'Contact: info@snownavi.ski | Follow our 微信公共号 SnowNavi指雪针 for updates',
         copyright: 'All rights reserved.',
         register: 'Register',
-        emailTemplate: 'Name:\n\nBirthday:\n\nGender:\n\nCourse Type (Ski/Snowboard):\n\nCourse Time:\n',
-        registration: 'Registration'
+        emailTemplate: 'Name: {firstName} {lastName}\nGender: {gender}\n',
+        registration: 'Registration',
+        selectCourses: 'Course Registration',
+        noCoursesFound: 'No specific course times found. Please contact us for more information.',
+        confirm: 'Submit Registration',
+        selectedCourses: 'Selected Courses',
+        personalInfo: 'Personal Information',
+        firstName: 'First Name',
+        lastName: 'Last Name',
+        gender: 'Gender',
+        male: 'Male',
+        female: 'Female',
+        other: 'Other',
+        courseSelection: 'Course Selection',
+        emailModalTitle: 'Registration Email',
+        emailInstructions: 'It seems your email client could not be opened. Please copy the following information and send it to info@snownavi.ski:',
+        emailTo: 'To:',
+        emailSubject: 'Subject:',
+        emailBody: 'Message:',
+        copyEmail: 'Copy Email Content',
+        copySuccess: 'Email content copied to clipboard!',
+        copyFailed: 'Failed to copy. Please select and copy manually.'
       },
       zh: {
         navCourses: '课程',
@@ -336,8 +850,28 @@
         contact: '联系方式：info@snownavi.ski | 请关注微信公共号： SnowNavi指雪针',
         copyright: '保留所有权利.',
         register: '报名',
-        emailTemplate: '姓名：\n\n生日：\n\n性别：\n\n课程类型（双板/单板）：\n\n课程时间：\n',
-        registration: '报名'
+        emailTemplate: '姓名：{lastName} {firstName}\n性别：{gender}\n',
+        registration: '报名',
+        selectCourses: '课程报名',
+        noCoursesFound: '未找到具体课程时间，请联系我们获取更多信息。',
+        confirm: '提交报名',
+        selectedCourses: '已选课程',
+        personalInfo: '个人信息',
+        firstName: '名',
+        lastName: '姓',
+        gender: '性别',
+        male: '男',
+        female: '女',
+        other: '其他',
+        courseSelection: '课程选择',
+        emailModalTitle: '报名邮件',
+        emailInstructions: '无法打开您的邮件客户端。请复制以下信息并发送至 info@snownavi.ski:',
+        emailTo: '收件人:',
+        emailSubject: '主题:',
+        emailBody: '正文:',
+        copyEmail: '复制邮件内容',
+        copySuccess: '邮件内容已复制到剪贴板！',
+        copyFailed: '复制失败，请手动选择并复制。'
       },
       nl: {
         navCourses: 'Cursussen',
@@ -347,15 +881,122 @@
         contact: 'Contact: info@snownavi.ski | Volg ons op 微信公共号: SnowNavi指雪针',
         copyright: 'Alle rechten voorbehouden.',
         register: 'Inschrijven',
-        emailTemplate: 'Naam:\n\nGeboortedatum:\n\nGeslacht:\n\nCursustype (Ski/Snowboard):\n\nCursustijd:\n',
-        registration: 'Inschrijving'
+        emailTemplate: 'Naam: {firstName} {lastName}\nGeslacht: {gender}\n',
+        registration: 'Inschrijving',
+        selectCourses: 'Cursus Registratie',
+        noCoursesFound: 'Geen specifieke cursustijden gevonden. Neem contact met ons op voor meer informatie.',
+        confirm: 'Registratie Verzenden',
+        selectedCourses: 'Geselecteerde Cursussen',
+        personalInfo: 'Persoonlijke Informatie',
+        firstName: 'Voornaam',
+        lastName: 'Achternaam',
+        gender: 'Geslacht',
+        male: 'Man',
+        female: 'Vrouw',
+        other: 'Anders',
+        courseSelection: 'Cursus Selectie',
+        emailModalTitle: 'Registratie E-mail',
+        emailInstructions: 'Het lijkt erop dat uw e-mailclient niet kon worden geopend. Kopieer de volgende informatie en stuur deze naar info@snownavi.ski:',
+        emailTo: 'Aan:',
+        emailSubject: 'Onderwerp:',
+        emailBody: 'Bericht:',
+        copyEmail: 'E-mailinhoud kopiëren',
+        copySuccess: 'E-mailinhoud gekopieerd naar klembord!',
+        copyFailed: 'Kopiëren mislukt. Selecteer en kopieer handmatig.'
       }
     };
 
     document.getElementById('menu-toggle').addEventListener('click', () => {
-    document.getElementById('nav-links').classList.toggle('open');
-  });
+      document.getElementById('nav-links').classList.toggle('open');
+    });
 
+    // Modal close button event
+    document.querySelector('.close-modal').addEventListener('click', () => {
+      document.getElementById('courseModal').style.display = 'none';
+    });
+
+    // Close modal when clicking outside of it
+    window.addEventListener('click', (e) => {
+      const modal = document.getElementById('courseModal');
+      if (e.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+
+    // Submit button event
+    document.getElementById('submit-selection').addEventListener('click', () => {
+      const modal = document.getElementById('courseModal');
+      const courseTitle = modal.dataset.courseTitle;
+
+      // Get personal information
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const genderSelect = document.getElementById('gender');
+      const gender = genderSelect.options[genderSelect.selectedIndex].value;
+
+      // Validate form
+      if (!firstName || !lastName || !gender) {
+        alert(translations[savedLang].personalInfo + ' ' +
+              (savedLang === 'en' ? 'is required!' :
+               savedLang === 'zh' ? '为必填项！' :
+               'is verplicht!'));
+        return;
+      }
+
+      // Get selected courses
+      const checkboxes = document.querySelectorAll('.course-checkbox:checked');
+      const selectedCourses = Array.from(checkboxes).map(checkbox => checkbox.value);
+
+      // Validate course selection
+      if (selectedCourses.length === 0) {
+        alert(translations[savedLang].courseSelection + ' ' +
+              (savedLang === 'en' ? 'is required!' :
+               savedLang === 'zh' ? '为必填项！' :
+               'is verplicht!'));
+        return;
+      }
+
+      // Create email data
+      const emailData = createRegistrationLink(
+        courseTitle,
+        firstName,
+        lastName,
+        gender,
+        selectedCourses
+      );
+
+      // Try to open email client
+      try {
+        // Create a hidden iframe to attempt to open the mailto link
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+        iframe.contentWindow.location.href = emailData.mailtoLink;
+
+        // Set a timeout to check if the email client was opened
+        setTimeout(() => {
+          document.body.removeChild(iframe);
+
+          // If we're still on the page after a short delay, show the email modal
+          // This is a heuristic - there's no reliable way to detect if mailto: was handled
+          showEmailModal(emailData.subject, emailData.body);
+        }, 500);
+      } catch (e) {
+        // If there's an error, show the email modal
+        showEmailModal(emailData.subject, emailData.body);
+      }
+
+      // Close the course selection modal
+      modal.style.display = 'none';
+    });
+
+    // Email modal close button event
+    document.getElementById('close-email-modal').addEventListener('click', () => {
+      document.getElementById('emailModal').style.display = 'none';
+    });
+
+    // Copy email content button event
+    document.getElementById('copy-email').addEventListener('click', copyEmailContent);
   </script>
 </body>
 </html>
