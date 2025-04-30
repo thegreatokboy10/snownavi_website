@@ -797,6 +797,26 @@ ${body}`;
           registerBtn.textContent = translations[savedLang].register;
           registerBtn.addEventListener('click', function(e) {
             e.preventDefault();
+
+            // Check if the course description has a registration link anywhere in the text
+            if (sub.desc) {
+              // Find all URLs in the description
+              const urlRegex = /(https?:\/\/[^\s]+)/g;
+              const matches = sub.desc.match(urlRegex);
+
+              // Check if any URL starts with https://snownavi.setmore.com/
+              if (matches) {
+                for (const url of matches) {
+                  if (url.startsWith('https://snownavi.setmore.com/')) {
+                    // Redirect to the registration link
+                    window.location.href = url;
+                    return;
+                  }
+                }
+              }
+            }
+
+            // If no registration link found, show the course selection modal
             showCourseModal(sub.title, sub.desc || '');
           });
           div.appendChild(registerBtn);
