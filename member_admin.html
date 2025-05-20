@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Member Admin Panel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f7f7f7;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    h1 {
+      color: #E53512;
+      padding: 1rem;
+      margin: 0;
+    }
+    .lang-tabs {
+      padding: 0 1rem;
+      margin-bottom: 1rem;
+    }
+    .lang-tabs button {
+      margin-right: 1rem;
+      padding: 0.5rem 1rem;
+      background: #eee;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+    .lang-tabs button.active {
+      background: #E53512;
+      color: white;
+    }
+    .main-container {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+    .member-list {
+      width: 250px;
+      background: #fff;
+      border-right: 1px solid #ddd;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+    .member-item {
+      padding: 0.5rem;
+      cursor: pointer;
+      border-radius: 4px;
+      margin-bottom: 0.25rem;
+    }
+    .member-item:hover {
+      background: #f0f0f0;
+    }
+    .member-item.active {
+      background: #E53512;
+      color: white;
+    }
+    .form-container {
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+    .member-block {
+      background: white;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 1rem;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.2rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    textarea {
+      min-height: 100px;
+    }
+    .save-btn, .add-btn, .delete-btn {
+      background: #E53512;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 1rem 0;
+    }
+    .delete-btn {
+      background: #ff4444;
+    }
+    .add-btn {
+      background: #4CAF50;
+    }
+    .actions {
+      padding: 0.5rem 1rem;
+      background: #fff;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-between;
+    }
+    .no-selection {
+      display: flex;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+      color: #777;
+      font-size: 1.2rem;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      margin-left: 0.5rem;
+    }
+    .status-active {
+      background-color: #e6f7e6;
+      color: #2e7d32;
+    }
+    .status-expired {
+      background-color: #ffebee;
+      color: #c62828;
+    }
+    .custom-fields {
+      margin-top: 1rem;
+      border-top: 1px solid #eee;
+      padding-top: 1rem;
+    }
+    .custom-field {
+      display: flex;
+      margin-bottom: 0.5rem;
+      align-items: center;
+    }
+    .custom-field input {
+      margin-right: 0.5rem;
+    }
+    .custom-field button {
+      background: #ff4444;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+    }
+    .add-field-btn {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+    .back-link {
+      display: inline-block;
+      margin: 1rem;
+      color: #E53512;
+      text-decoration: none;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+    /* Authentication styles */
+    .auth-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .auth-message {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 400px;
+    }
+    .auth-message h2 {
+      color: #E53512;
+      margin-top: 0;
+    }
+    .auth-btn {
+      background: #E53512;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 1rem;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+    }
+    .user-info img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+    .logout-btn {
+      background: none;
+      border: none;
+      color: #E53512;
+      cursor: pointer;
+      margin-left: 1rem;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <!-- Authentication overlay -->
+  <div class="auth-container" id="auth-container">
+    <div class="auth-message">
+      <h2>Authentication Required</h2>
+      <p>You need to be logged in to access this page.</p>
+      <a href="login.html" class="auth-btn">Go to Login</a>
+    </div>
+  </div>
+
+  <div class="user-info" id="user-info"></div>
+
+  <a href="admin.html" class="back-link">← Back to Admin Panel</a>
+  
+  <h1>SnowNavi Member Management</h1>
+  <div class="lang-tabs">
+    <button onclick="switchLang('en')" id="tab-en">English</button>
+    <button onclick="switchLang('zh')" id="tab-zh">中文</button>
+    <button onclick="switchLang('nl')" id="tab-nl">Nederlands</button>
+  </div>
+
+  <div class="main-container">
+    <div class="member-list" id="member-list"></div>
+    <div class="form-container" id="form-container">
+      <div class="no-selection">Select a member from the left panel or add a new member</div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="add-btn" onclick="addNewMember()">Add New Member</button>
+    <button class="save-btn" onclick="saveMembers()">Save All Changes</button>
+  </div>
+
+  <script>
+    let currentLang = 'en';
+    let members = {};
+    let selectedMember = null;
+    let customFields = ['gender']; // Default custom fields
+
+    // Fetch configuration and check authentication
+    async function checkAuth() {
+      try {
+        // Fetch the authorized email from the server
+        const response = await fetch('/api/config');
+        if (!response.ok) {
+          throw new Error('Failed to fetch configuration');
+        }
+
+        const config = await response.json();
+        const authorizedEmail = config.authorizedEmail;
+
+        const auth = JSON.parse(localStorage.getItem('snownavi_auth') || '{}');
+        const authContainer = document.getElementById('auth-container');
+        const userInfoContainer = document.getElementById('user-info');
+
+        // Check if auth exists and is not expired
+        if (auth.email === authorizedEmail && auth.expiresAt && auth.expiresAt > Date.now()) {
+          // User is authenticated
+          authContainer.style.display = 'none';
+
+          // Display user info
+          userInfoContainer.innerHTML = `
+            <img src="${auth.picture}" alt="Profile">
+            <span>${auth.name}</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+          `;
+
+          // Load members
+          loadMembers();
+        } else {
+          // User is not authenticated, show auth container
+          authContainer.style.display = 'flex';
+          userInfoContainer.innerHTML = '';
+        }
+      } catch (error) {
+        console.error('Error checking authentication:', error);
+        document.getElementById('auth-container').style.display = 'flex';
+        document.querySelector('.auth-message p').textContent = 'Error loading configuration. Please try again later.';
+      }
+    }
+
+    // Logout function
+    function logout() {
+      localStorage.removeItem('snownavi_auth');
+      window.location.href = 'login.html';
+    }
+
+    async function loadMembers() {
+      try {
+        const res = await fetch('data/members.json');
+        members = await res.json();
+        document.getElementById(`tab-${currentLang}`).classList.add('active');
+        renderMemberList();
+      } catch (error) {
+        console.error('Error loading members:', error);
+        alert('Failed to load member data. Please try again later.');
+      }
+    }
+
+    function switchLang(lang) {
+      currentLang = lang;
+      document.querySelectorAll('.lang-tabs button').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(`tab-${lang}`).classList.add('active');
+      renderMemberList();
+      if (selectedMember) {
+        renderMemberForm(selectedMember);
+      }
+    }
+
+    function renderMemberList() {
+      const memberList = document.getElementById('member-list');
+      memberList.innerHTML = '';
+
+      Object.keys(members).forEach(memberId => {
+        const member = members[memberId];
+        const memberItem = document.createElement('div');
+        memberItem.className = 'member-item';
+        memberItem.textContent = member.name;
+        
+        // Add status badge
+        const statusBadge = document.createElement('span');
+        statusBadge.className = `status-badge ${member.isActive ? 'status-active' : 'status-expired'}`;
+        statusBadge.textContent = member.isActive ? 'Active' : 'Expired';
+        memberItem.appendChild(statusBadge);
+        
+        memberItem.dataset.memberId = memberId;
+        memberItem.onclick = () => selectMember(memberId);
+
+        if (selectedMember === memberId) {
+          memberItem.classList.add('active');
+        }
+
+        memberList.appendChild(memberItem);
+      });
+    }
+
+    function selectMember(memberId) {
+      selectedMember = memberId;
+      renderMemberList();
+      renderMemberForm(memberId);
+    }
+
+    function renderMemberForm(memberId) {
+      const container = document.getElementById('form-container');
+      container.innerHTML = '';
+
+      const member = members[memberId];
+      const div = document.createElement('div');
+      div.className = 'member-block';
+
+      // Member ID and Name header
+      const titleHeader = document.createElement('h2');
+      titleHeader.textContent = `${member.name} (${memberId})`;
+      div.appendChild(titleHeader);
+
+      // Member ID (read-only)
+      const idLabel = document.createElement('label');
+      idLabel.textContent = 'Member ID';
+      div.appendChild(idLabel);
+
+      const idInput = document.createElement('input');
+      idInput.value = memberId;
+      idInput.readOnly = true;
+      idInput.style.backgroundColor = '#f5f5f5';
+      div.appendChild(idInput);
+
+      // Member Name
+      const nameLabel = document.createElement('label');
+      nameLabel.textContent = 'Name';
+      div.appendChild(nameLabel);
+
+      const nameInput = document.createElement('input');
+      nameInput.value = member.name;
+      nameInput.oninput = e => member.name = e.target.value;
+      div.appendChild(nameInput);
+
+      // Membership Status
+      const statusLabel = document.createElement('label');
+      statusLabel.textContent = 'Membership Status';
+      div.appendChild(statusLabel);
+
+      const statusSelect = document.createElement('select');
+      const activeOption = document.createElement('option');
+      activeOption.value = 'true';
+      activeOption.textContent = 'Active';
+      statusSelect.appendChild(activeOption);
+
+      const expiredOption = document.createElement('option');
+      expiredOption.value = 'false';
+      expiredOption.textContent = 'Expired';
+      statusSelect.appendChild(expiredOption);
+
+      statusSelect.value = member.isActive.toString();
+      statusSelect.onchange = e => member.isActive = e.target.value === 'true';
+      div.appendChild(statusSelect);
+
+      // Validity Period
+      const validityLabel = document.createElement('label');
+      validityLabel.textContent = `Validity Period (${currentLang.toUpperCase()})`;
+      div.appendChild(validityLabel);
+
+      const validityInput = document.createElement('input');
+      validityInput.value = member.validityPeriod[currentLang] || '';
+      validityInput.oninput = e => member.validityPeriod[currentLang] = e.target.value;
+      div.appendChild(validityInput);
+
+      // Custom Fields Section
+      const customFieldsSection = document.createElement('div');
+      customFieldsSection.className = 'custom-fields';
+      
+      const customFieldsHeader = document.createElement('h3');
+      customFieldsHeader.textContent = 'Custom Fields';
+      customFieldsSection.appendChild(customFieldsHeader);
+
+      // Render existing custom fields
+      customFields.forEach(field => {
+        const fieldContainer = document.createElement('div');
+        fieldContainer.className = 'custom-field';
+        
+        const fieldLabel = document.createElement('label');
+        fieldLabel.textContent = field.charAt(0).toUpperCase() + field.slice(1);
+        fieldContainer.appendChild(fieldLabel);
+        
+        const fieldInput = document.createElement('input');
+        fieldInput.value = member[field] || '';
+        fieldInput.oninput = e => member[field] = e.target.value;
+        fieldContainer.appendChild(fieldInput);
+        
+        customFieldsSection.appendChild(fieldContainer);
+      });
+
+      // Add new custom field button
+      const addFieldBtn = document.createElement('button');
+      addFieldBtn.className = 'add-field-btn';
+      addFieldBtn.textContent = 'Add Custom Field';
+      addFieldBtn.onclick = () => addCustomField(member);
+      customFieldsSection.appendChild(addFieldBtn);
+      
+      div.appendChild(customFieldsSection);
+
+      // Delete button
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'Delete Member';
+      deleteBtn.className = 'delete-btn';
+      deleteBtn.onclick = () => deleteMember(memberId);
+      div.appendChild(deleteBtn);
+
+      container.appendChild(div);
+    }
+
+    function addCustomField(member) {
+      const fieldName = prompt('Enter the name of the new field:');
+      if (!fieldName) return;
+      
+      // Check if field already exists
+      if (customFields.includes(fieldName)) {
+        alert('This field already exists.');
+        return;
+      }
+      
+      // Add to custom fields list
+      customFields.push(fieldName);
+      
+      // Initialize the field in the member object
+      member[fieldName] = '';
+      
+      // Re-render the form
+      renderMemberForm(selectedMember);
+    }
+
+    function addNewMember() {
+      const memberId = prompt('Enter a unique member ID (e.g., SN20250001):');
+      if (!memberId) return;
+      
+      // Check if member ID already exists
+      if (members[memberId]) {
+        alert('A member with this ID already exists.');
+        return;
+      }
+      
+      // Create new member object
+      const newMember = {
+        id: memberId,
+        name: 'New Member',
+        isActive: true,
+        validityPeriod: {
+          en: 'January 1, 2025 - December 31, 2025',
+          zh: '2025年1月1日 - 2025年12月31日',
+          nl: '1 januari 2025 - 31 december 2025'
+        }
+      };
+      
+      // Add custom fields
+      customFields.forEach(field => {
+        newMember[field] = '';
+      });
+      
+      // Add to members object
+      members[memberId] = newMember;
+      
+      // Update the UI
+      renderMemberList();
+      selectMember(memberId);
+    }
+
+    function deleteMember(memberId) {
+      if (confirm(`Are you sure you want to delete member ${members[memberId].name}?`)) {
+        delete members[memberId];
+        selectedMember = null;
+        renderMemberList();
+        document.getElementById('form-container').innerHTML = '<div class="no-selection">Select a member from the left panel or add a new member</div>';
+      }
+    }
+
+    function saveMembers() {
+      fetch('data/members.json', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(members, null, 2)
+      }).then(res => {
+        if (res.ok) alert('Saved successfully!');
+        else alert('Error saving file');
+      }).catch(err => {
+        console.error('Error saving members:', err);
+        alert('Failed to save member data. Please try again later.');
+      });
+    }
+
+    // Initialize the page
+    window.onload = checkAuth;
+  </script>
+</body>
+</html>

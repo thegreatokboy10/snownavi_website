@@ -64,9 +64,17 @@ def serve_index():
 def serve_course():
     return send_from_directory(ROOT_DIR, 'course.html')
 
-@app.route('/course_admin.html')
+@app.route('/admin.html')
 def serve_admin_page():
+    return send_from_directory(ROOT_DIR, 'admin.html')
+
+@app.route('/course_admin.html')
+def serve_course_admin_page():
     return send_from_directory(ROOT_DIR, 'course_admin.html')
+
+@app.route('/member_admin.html')
+def serve_member_admin_page():
+    return send_from_directory(ROOT_DIR, 'member_admin.html')
 
 @app.route('/login.html')
 def serve_login_page():
@@ -112,6 +120,14 @@ def update_courses():
 def get_members():
     return send_from_directory(DATA_DIR, 'members.json')
 
+@app.route('/data/members.json', methods=['POST'])
+def update_members():
+    data = request.get_json()
+    members_file = os.path.join(DATA_DIR, 'members.json')
+    with open(members_file, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    return jsonify({'status': 'success'}), 200
+
 @app.route('/api/member/<member_id>', methods=['GET'])
 def get_member(member_id):
     try:
@@ -128,6 +144,94 @@ def get_member(member_id):
             return jsonify({'error': 'Member not found'}), 404
     except Exception as e:
         app.logger.error(f"Error retrieving member data: {str(e)}")
+        return jsonify({'error': f'Server error: {str(e)}'}), 500
+
+@app.route('/api/member/<member_id>', methods=['PUT'])
+def update_member(member_id):
+    try:
+        members_file = os.path.join(DATA_DIR, 'members.json')
+        if not os.path.exists(members_file):
+            return jsonify({'error': 'Members data not found'}), 404
+
+        with open(members_file, 'r', encoding='utf-8') as f:
+            members = json.load(f)
+
+        # Get the updated member data from the request
+        updated_member = request.get_json()
+
+        # Update the member in the members dictionary
+        members[member_id] = updated_member
+
+        # Write the updated members dictionary back to the file
+        with open(members_file, 'w', encoding='utf-8') as f:
+            json.dump(members, f, ensure_ascii=False, indent=2)
+
+        return jsonify({'status': 'success'}), 200
+    except Exception as e:
+        app.logger.error(f"Error updating member data: {str(e)}")
+        return jsonify({'error': f'Server error: {str(e)}'}), 500
+
+@app.route('/api/member/<member_id>', methods=['DELETE'])
+def delete_member(member_id):
+    try:
+        members_file = os.path.join(DATA_DIR, 'members.json')
+        if not os.path.exists(members_file):
+            return jsonify({'error': 'Members data not found'}), 404
+
+        with open(members_file, 'r', encoding='utf-8') as f:
+            members = json.load(f)
+
+        # Check if the member exists
+        if member_id not in members:
+            return jsonify({'error': 'Member not found'}), 404
+
+        # Delete the member from the members dictionary
+        del members[member_id]
+
+        # Write the updated members dictionary back to the file
+        with open(members_file, 'w', encoding='utf-8') as f:
+            json.dump(members, f, ensure_ascii=False, indent=2)
+
+        return jsonify({'status': 'success'}), 200
+    except Exception as e:
+        app.logger.error(f"Error deleting member data: {str(e)}")
+        return jsonify({'error': f'Server error: {str(e)}'}), 500
+
+@app.route('/api/member', methods=['POST'])
+def create_member():
+    try:
+        members_file = os.path.join(DATA_DIR, 'members.json')
+        if not os.path.exists(members_file):
+            # Create a new members file if it doesn't exist
+            members = {}
+        else:
+            # Load existing members
+            with open(members_file, 'r', encoding='utf-8') as f:
+                members = json.load(f)
+
+        # Get the new member data from the request
+        new_member = request.get_json()
+
+        # Ensure the member has an ID
+        if 'id' not in new_member:
+            return jsonify({'error': 'Member ID is required'}), 400
+
+        member_id = new_member['id']
+
+        # Check if a member with this ID already exists
+        if member_id in members:
+            return jsonify({'error': 'A member with this ID already exists'}), 409
+
+        # Add the new member to the members dictionary
+        members[member_id] = new_member
+
+        # Write the updated members dictionary back to the file
+        with open(members_file, 'w', encoding='utf-8') as f:
+            json.dump(members, f, ensure_ascii=False, indent=2)
+
+        return jsonify({'status': 'success', 'id': member_id}), 201
+    except Exception as e:
+        app.logger.error(f"Error creating member data: {str(e)}")
         return jsonify({'error': f'Server error: {str(e)}'}), 500
 
 # File upload helper functions
