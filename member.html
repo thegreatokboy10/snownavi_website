@@ -187,6 +187,51 @@
       color: #c62828;
     }
 
+    .qr-section {
+      margin-top: 2rem;
+      border-top: 1px solid #eee;
+      padding-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .qr-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      color: var(--text-dark);
+    }
+
+    .qr-code {
+      width: 200px;
+      height: 200px;
+      background-color: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .qr-code img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .qr-description {
+      margin-top: 1rem;
+      text-align: center;
+      color: var(--text-gray);
+      font-size: 0.9rem;
+      max-width: 300px;
+    }
+
+    @media (max-width: 768px) {
+      .qr-code {
+        width: 150px;
+        height: 150px;
+      }
+    }
+
     footer {
       background: var(--text-dark);
       color: white;
@@ -240,6 +285,16 @@
           <div class="info-value" id="validity-period">January 1, 2025 - December 31, 2025</div>
         </div>
       </div>
+
+      <div class="qr-section">
+        <div class="qr-title" id="qr-title">Share Membership Card</div>
+        <div class="qr-code" id="qr-code">
+          <!-- QR code will be inserted here -->
+        </div>
+        <div class="qr-description" id="qr-description">
+          Scan this QR code to share your membership information
+        </div>
+      </div>
     </div>
   </div>
 
@@ -274,6 +329,8 @@
         membershipExpired: 'Membership Expired',
         memberNotFound: 'Member Not Found',
         memberNotFoundMessage: 'The requested member information could not be found. Please check the member ID or contact support.',
+        qrTitle: 'Share Membership Card',
+        qrDescription: 'Scan this QR code to share your membership information',
         contactText: 'Contact: info@snownavi.ski | Follow our 微信公共号 SnowNavi指雪针 for updates',
         copyright: '© 2025 SnowNavi Sports. All rights reserved.'
       },
@@ -291,6 +348,8 @@
         membershipExpired: '会员已过期',
         memberNotFound: '未找到会员',
         memberNotFoundMessage: '无法找到请求的会员信息。请检查会员ID或联系客服。',
+        qrTitle: '分享会员卡',
+        qrDescription: '扫描此二维码分享您的会员信息',
         contactText: '联系方式：info@snownavi.ski | 请关注微信公共号： SnowNavi指雪针',
         copyright: '© 2025 SnowNavi Sports. 保留所有权利.'
       },
@@ -308,6 +367,8 @@
         membershipExpired: 'Lidmaatschap Verlopen',
         memberNotFound: 'Lid Niet Gevonden',
         memberNotFoundMessage: 'De gevraagde ledeninformatie kon niet worden gevonden. Controleer het lidmaatschapsnummer of neem contact op met de klantenservice.',
+        qrTitle: 'Deel Lidmaatschapskaart',
+        qrDescription: 'Scan deze QR-code om uw lidmaatschapsinformatie te delen',
         contactText: 'Contact: info@snownavi.ski | Volg ons op 微信公共号: SnowNavi指雪针',
         copyright: '© 2025 SnowNavi Sports. Alle rechten voorbehouden.'
       }
@@ -338,6 +399,10 @@
       } else {
         statusElement.textContent = t.membershipExpired;
       }
+
+      // QR code section
+      document.getElementById('qr-title').textContent = t.qrTitle;
+      document.getElementById('qr-description').textContent = t.qrDescription;
 
       // Footer
       document.getElementById('contact-text').textContent = t.contactText;
@@ -402,6 +467,9 @@
 
         const data = await response.json();
         setMemberData(data);
+
+        // Generate QR code after member data is loaded
+        generateQRCode(window.location.href);
       } catch (error) {
         console.error('Error fetching member data:', error);
         // Show error message to user
@@ -412,6 +480,22 @@
           </div>
         `;
       }
+    }
+
+    // Function to generate QR code
+    function generateQRCode(url) {
+      // Use the QR Server API to generate a QR code
+      const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`;
+
+      // Create an image element
+      const qrImage = document.createElement('img');
+      qrImage.src = qrCodeUrl;
+      qrImage.alt = 'QR Code';
+
+      // Add the image to the QR code container
+      const qrCodeContainer = document.getElementById('qr-code');
+      qrCodeContainer.innerHTML = '';
+      qrCodeContainer.appendChild(qrImage);
     }
 
     // Fetch and display member data
