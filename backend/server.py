@@ -76,6 +76,10 @@ def serve_login_page():
 def serve_auth_callback_page():
     return send_from_directory(ROOT_DIR, 'auth_callback.html')
 
+@app.route('/member.html')
+def serve_member_page():
+    return send_from_directory(ROOT_DIR, 'member.html')
+
 # API routes
 @app.route('/api/config')
 def get_config():
@@ -103,6 +107,28 @@ def update_courses():
     with open(JSON_FILE, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
     return jsonify({'status': 'success'}), 200
+
+@app.route('/data/members.json', methods=['GET'])
+def get_members():
+    return send_from_directory(DATA_DIR, 'members.json')
+
+@app.route('/api/member/<member_id>', methods=['GET'])
+def get_member(member_id):
+    try:
+        members_file = os.path.join(DATA_DIR, 'members.json')
+        if not os.path.exists(members_file):
+            return jsonify({'error': 'Members data not found'}), 404
+
+        with open(members_file, 'r', encoding='utf-8') as f:
+            members = json.load(f)
+
+        if member_id in members:
+            return jsonify(members[member_id])
+        else:
+            return jsonify({'error': 'Member not found'}), 404
+    except Exception as e:
+        app.logger.error(f"Error retrieving member data: {str(e)}")
+        return jsonify({'error': f'Server error: {str(e)}'}), 500
 
 # File upload helper functions
 def allowed_file(filename, file_type):

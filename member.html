@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-T4N8L0SRWZ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-T4N8L0SRWZ');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="page-title">SnowNavi Member Information</title>
+  <style>
+    :root {
+      --main-red: #E53512;
+      --bg-light: #F9F4F3;
+      --text-dark: #2F2F2F;
+      --text-gray: #717171;
+      --contrast-white: #FFFFFF;
+      --accent-blue: #9ED4E7;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Noto Sans SC', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+    }
+
+    header {
+      background: var(--contrast-white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      position: relative;
+    }
+
+    header img {
+      height: 40px;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
+    nav a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: var(--text-dark);
+      font-weight: bold;
+    }
+
+    .language-selector {
+      margin-left: 2rem;
+      font-size: 1rem;
+    }
+
+    .menu-toggle {
+      display: none;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-dark);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        background: var(--contrast-white);
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 200px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        z-index: 10;
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links a, .nav-links .language-selector {
+        margin: 1rem;
+      }
+    }
+
+    .section {
+      padding: 3rem 2rem;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .member-card {
+      background: var(--contrast-white);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 2rem;
+      margin-top: 2rem;
+    }
+
+    .member-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 1rem;
+    }
+
+    .member-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: var(--accent-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: var(--contrast-white);
+      margin-right: 1.5rem;
+    }
+
+    .member-name {
+      font-size: 1.8rem;
+      margin: 0;
+      color: var(--text-dark);
+    }
+
+    .member-id {
+      font-size: 1rem;
+      color: var(--text-gray);
+      margin: 0.5rem 0 0 0;
+    }
+
+    .member-info {
+      margin-bottom: 1.5rem;
+    }
+
+    .info-row {
+      display: flex;
+      margin-bottom: 1rem;
+    }
+
+    .info-label {
+      width: 40%;
+      font-weight: bold;
+      color: var(--text-dark);
+    }
+
+    .info-value {
+      width: 60%;
+      color: var(--text-gray);
+    }
+
+    .membership-status {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: bold;
+      margin-top: 0.5rem;
+    }
+
+    .status-active {
+      background-color: #e6f7e6;
+      color: #2e7d32;
+    }
+
+    .status-expired {
+      background-color: #ffebee;
+      color: #c62828;
+    }
+
+    footer {
+      background: var(--text-dark);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="assets/picture/snownavi_logo_banner.jpg" alt="SnowNavi logo">
+    <button class="menu-toggle" id="menu-toggle">☰</button>
+    <nav class="nav-links" id="nav-links">
+      <a href="index.html#courses" id="nav-courses">Courses</a>
+      <a href="index.html#map" id="nav-map">Interactive Ski Map</a>
+      <a href="index.html#story" id="nav-story">Our Story</a>
+      <a href="index.html#contact" id="nav-contact">Contact</a>
+      <div class="language-selector">
+        <select id="lang" class="language-selector">
+          <option value="en">🇬🇧 EN</option>
+          <option value="zh">🇨🇳 中文</option>
+          <option value="nl">🇳🇱 NL</option>
+        </select>
+      </div>
+    </nav>
+  </header>
+
+  <div class="section">
+    <h1 id="member-page-title">Member Information</h1>
+
+    <div class="member-card">
+      <div class="member-header">
+        <div class="member-avatar" id="member-avatar">JS</div>
+        <div>
+          <h2 class="member-name" id="member-name">John Snow</h2>
+          <p class="member-id" id="member-id">ID: SN20250001</p>
+        </div>
+      </div>
+
+      <div class="member-info">
+        <div class="info-row">
+          <div class="info-label" id="membership-type-label">Membership Type:</div>
+          <div class="info-value">
+            <span class="membership-status status-active" id="membership-status">Full Membership</span>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label" id="validity-period-label">Validity Period:</div>
+          <div class="info-value" id="validity-period">January 1, 2025 - December 31, 2025</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p id="contact-text">Contact: info@snownavi.ski | Follow our 微信公共号 SnowNavi指雪针 for updates</p>
+    <p id="copyright">&copy; 2025 SnowNavi Sports. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Toggle mobile menu
+    document.getElementById('menu-toggle').addEventListener('click', function() {
+      document.getElementById('nav-links').classList.toggle('open');
+    });
+
+    // Language handling
+    const savedLang = localStorage.getItem('snownavi_lang') || 'en';
+    document.getElementById('lang').value = savedLang;
+
+    // Translations
+    const translations = {
+      en: {
+        pageTitle: 'SnowNavi Member Information',
+        navCourses: 'Courses',
+        navMap: 'Interactive Ski Map',
+        navStory: 'Our Story',
+        navMember: 'Member',
+        navContact: 'Contact',
+        memberPageTitle: 'Member Information',
+        membershipTypeLabel: 'Membership Type:',
+        validityPeriodLabel: 'Validity Period:',
+        fullMembership: 'Full Membership',
+        membershipExpired: 'Membership Expired',
+        memberNotFound: 'Member Not Found',
+        memberNotFoundMessage: 'The requested member information could not be found. Please check the member ID or contact support.',
+        contactText: 'Contact: info@snownavi.ski | Follow our 微信公共号 SnowNavi指雪针 for updates',
+        copyright: '© 2025 SnowNavi Sports. All rights reserved.'
+      },
+      zh: {
+        pageTitle: 'SnowNavi 会员信息',
+        navCourses: '课程',
+        navMap: '在线滑雪地图',
+        navStory: '我们的故事',
+        navMember: '会员',
+        navContact: '联系我们',
+        memberPageTitle: '会员信息',
+        membershipTypeLabel: '会员类型:',
+        validityPeriodLabel: '有效期:',
+        fullMembership: '正式会员',
+        membershipExpired: '会员已过期',
+        memberNotFound: '未找到会员',
+        memberNotFoundMessage: '无法找到请求的会员信息。请检查会员ID或联系客服。',
+        contactText: '联系方式：info@snownavi.ski | 请关注微信公共号： SnowNavi指雪针',
+        copyright: '© 2025 SnowNavi Sports. 保留所有权利.'
+      },
+      nl: {
+        pageTitle: 'SnowNavi Ledeninformatie',
+        navCourses: 'Cursussen',
+        navMap: 'Interactieve Skikaart',
+        navStory: 'Ons Verhaal',
+        navMember: 'Lid',
+        navContact: 'Contact',
+        memberPageTitle: 'Ledeninformatie',
+        membershipTypeLabel: 'Lidmaatschapstype:',
+        validityPeriodLabel: 'Geldigheidsperiode:',
+        fullMembership: 'Volledig Lidmaatschap',
+        membershipExpired: 'Lidmaatschap Verlopen',
+        memberNotFound: 'Lid Niet Gevonden',
+        memberNotFoundMessage: 'De gevraagde ledeninformatie kon niet worden gevonden. Controleer het lidmaatschapsnummer of neem contact op met de klantenservice.',
+        contactText: 'Contact: info@snownavi.ski | Volg ons op 微信公共号: SnowNavi指雪针',
+        copyright: '© 2025 SnowNavi Sports. Alle rechten voorbehouden.'
+      }
+    };
+
+    // Apply translations
+    function applyTranslations(lang) {
+      const t = translations[lang];
+
+      // Page title
+      document.getElementById('page-title').textContent = t.pageTitle;
+
+      // Navigation
+      document.getElementById('nav-courses').textContent = t.navCourses;
+      document.getElementById('nav-map').textContent = t.navMap;
+      document.getElementById('nav-story').textContent = t.navStory;
+      document.getElementById('nav-contact').textContent = t.navContact;
+
+      // Member page content
+      document.getElementById('member-page-title').textContent = t.memberPageTitle;
+      document.getElementById('membership-type-label').textContent = t.membershipTypeLabel;
+      document.getElementById('validity-period-label').textContent = t.validityPeriodLabel;
+
+      // Update membership status text based on current status
+      const statusElement = document.getElementById('membership-status');
+      if (statusElement.classList.contains('status-active')) {
+        statusElement.textContent = t.fullMembership;
+      } else {
+        statusElement.textContent = t.membershipExpired;
+      }
+
+      // Footer
+      document.getElementById('contact-text').textContent = t.contactText;
+      document.getElementById('copyright').textContent = t.copyright;
+    }
+
+    // Apply initial translations
+    applyTranslations(savedLang);
+
+    // Handle language change
+    document.getElementById('lang').addEventListener('change', function() {
+      const selectedLang = this.value;
+      localStorage.setItem('snownavi_lang', selectedLang);
+      applyTranslations(selectedLang);
+    });
+
+    // Function to set member data
+    function setMemberData(data) {
+      // Set member name and update avatar initials
+      document.getElementById('member-name').textContent = data.name;
+      const initials = data.name.split(' ').map(n => n[0]).join('');
+      document.getElementById('member-avatar').textContent = initials;
+
+      // Set member ID
+      document.getElementById('member-id').textContent = `ID: ${data.id}`;
+
+      // Set membership status
+      const statusElement = document.getElementById('membership-status');
+      if (data.isActive) {
+        statusElement.classList.remove('status-expired');
+        statusElement.classList.add('status-active');
+        statusElement.textContent = translations[savedLang].fullMembership;
+      } else {
+        statusElement.classList.remove('status-active');
+        statusElement.classList.add('status-expired');
+        statusElement.textContent = translations[savedLang].membershipExpired;
+      }
+
+      // Set validity period based on language
+      const validityPeriod = data.validityPeriod[savedLang] || data.validityPeriod.en;
+      document.getElementById('validity-period').textContent = validityPeriod;
+    }
+
+    // Function to fetch member data from API
+    async function fetchMemberData() {
+      try {
+        // Get member ID from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const memberId = urlParams.get('id');
+
+        // If no member ID is provided, show an error message
+        if (!memberId) {
+          throw new Error('No member ID provided');
+        }
+
+        // Fetch member data from API
+        const response = await fetch(`/api/member/${memberId}`);
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch member data');
+        }
+
+        const data = await response.json();
+        setMemberData(data);
+      } catch (error) {
+        console.error('Error fetching member data:', error);
+        // Show error message to user
+        document.querySelector('.member-card').innerHTML = `
+          <div style="text-align: center; padding: 2rem;">
+            <h3>${translations[savedLang].memberNotFound}</h3>
+            <p>${translations[savedLang].memberNotFoundMessage}</p>
+          </div>
+        `;
+      }
+    }
+
+    // Fetch and display member data
+    fetchMemberData();
+  </script>
+</body>
+</html>
