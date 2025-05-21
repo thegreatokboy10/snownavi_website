@@ -245,7 +245,7 @@
   <div class="user-info" id="user-info"></div>
 
   <a href="admin.html" class="back-link">← Back to Admin Panel</a>
-  
+
   <h1>SnowNavi Member Management</h1>
   <div class="lang-tabs">
     <button onclick="switchLang('en')" id="tab-en">English</button>
@@ -350,13 +350,13 @@
         const memberItem = document.createElement('div');
         memberItem.className = 'member-item';
         memberItem.textContent = member.name;
-        
+
         // Add status badge
         const statusBadge = document.createElement('span');
         statusBadge.className = `status-badge ${member.isActive ? 'status-active' : 'status-expired'}`;
         statusBadge.textContent = member.isActive ? 'Active' : 'Expired';
         memberItem.appendChild(statusBadge);
-        
+
         memberItem.dataset.memberId = memberId;
         memberItem.onclick = () => selectMember(memberId);
 
@@ -387,15 +387,69 @@
       titleHeader.textContent = `${member.name} (${memberId})`;
       div.appendChild(titleHeader);
 
-      // Member ID (read-only)
+      // Member ID (read-only for existing members, editable for new members)
       const idLabel = document.createElement('label');
       idLabel.textContent = 'Member ID';
       div.appendChild(idLabel);
 
       const idInput = document.createElement('input');
       idInput.value = memberId;
-      idInput.readOnly = true;
-      idInput.style.backgroundColor = '#f5f5f5';
+
+      // Check if this is a newly created member (name is "New Member")
+      const isNewMember = member.name === 'New Member';
+
+      // Make the ID field read-only for existing members
+      idInput.readOnly = !isNewMember;
+      idInput.style.backgroundColor = isNewMember ? '#fff' : '#f5f5f5';
+
+      // Add a tooltip for the ID format
+      idInput.title = 'Format: SN + year + 4-digit sequence number (e.g., SN20250001)';
+
+      // Add event listener to update the member ID if changed
+      idInput.oninput = e => {
+        if (isNewMember) {
+          // If the ID is changed, we need to update the object key in the members object
+          const newId = e.target.value;
+
+          // Don't allow empty IDs
+          if (!newId) {
+            e.target.value = memberId;
+            return;
+          }
+
+          // Check if the new ID already exists
+          if (newId !== memberId && members[newId]) {
+            alert('A member with this ID already exists.');
+            e.target.value = memberId;
+            return;
+          }
+
+          // Validate the ID format
+          if (!validateMemberId(newId)) {
+            alert('Invalid member ID format. Please use the format: SN + year + 4-digit sequence number (e.g., SN20250001)');
+            e.target.value = memberId;
+            return;
+          }
+
+          // Update the member object with the new ID
+          member.id = newId;
+
+          // Create a copy of the member object with the new ID
+          members[newId] = member;
+
+          // Delete the old member object
+          if (newId !== memberId) {
+            delete members[memberId];
+
+            // Update the selected member
+            selectedMember = newId;
+
+            // Refresh the member list
+            renderMemberList();
+          }
+        }
+      };
+
       div.appendChild(idInput);
 
       // Member Name
@@ -441,7 +495,7 @@
       // Custom Fields Section
       const customFieldsSection = document.createElement('div');
       customFieldsSection.className = 'custom-fields';
-      
+
       const customFieldsHeader = document.createElement('h3');
       customFieldsHeader.textContent = 'Custom Fields';
       customFieldsSection.appendChild(customFieldsHeader);
@@ -450,16 +504,16 @@
       customFields.forEach(field => {
         const fieldContainer = document.createElement('div');
         fieldContainer.className = 'custom-field';
-        
+
         const fieldLabel = document.createElement('label');
         fieldLabel.textContent = field.charAt(0).toUpperCase() + field.slice(1);
         fieldContainer.appendChild(fieldLabel);
-        
+
         const fieldInput = document.createElement('input');
         fieldInput.value = member[field] || '';
         fieldInput.oninput = e => member[field] = e.target.value;
         fieldContainer.appendChild(fieldInput);
-        
+
         customFieldsSection.appendChild(fieldContainer);
       });
 
@@ -469,7 +523,7 @@
       addFieldBtn.textContent = 'Add Custom Field';
       addFieldBtn.onclick = () => addCustomField(member);
       customFieldsSection.appendChild(addFieldBtn);
-      
+
       div.appendChild(customFieldsSection);
 
       // Delete button
@@ -485,53 +539,108 @@
     function addCustomField(member) {
       const fieldName = prompt('Enter the name of the new field:');
       if (!fieldName) return;
-      
+
       // Check if field already exists
       if (customFields.includes(fieldName)) {
         alert('This field already exists.');
         return;
       }
-      
+
       // Add to custom fields list
       customFields.push(fieldName);
-      
+
       // Initialize the field in the member object
       member[fieldName] = '';
-      
+
       // Re-render the form
       renderMemberForm(selectedMember);
     }
 
+    // Function to validate member ID format (SN + year + 4-digit sequence number)
+    function validateMemberId(id) {
+      // Check if the ID matches the pattern: SN + 4-digit year + 4-digit sequence
+      const pattern = /^SN\d{4}\d{4}$/;
+      return pattern.test(id);
+    }
+
+    // Function to generate a new member ID
+    function generateMemberId() {
+      // Get current year
+      const currentYear = new Date().getFullYear();
+
+      // Format: SN + year + 4-digit sequence number
+      const prefix = `SN${currentYear}`;
+
+      // Find the highest sequence number for the current year
+      let maxSequence = 0;
+
+      Object.keys(members).forEach(id => {
+        if (id.startsWith(prefix)) {
+          // Extract the sequence number (last 4 digits)
+          const sequenceStr = id.substring(prefix.length);
+          const sequence = parseInt(sequenceStr, 10);
+
+          if (!isNaN(sequence) && sequence > maxSequence) {
+            maxSequence = sequence;
+          }
+        }
+      });
+
+      // Increment the sequence number
+      const newSequence = maxSequence + 1;
+
+      // Format the sequence number with leading zeros
+      const sequenceStr = newSequence.toString().padStart(4, '0');
+
+      // Return the new member ID
+      return `${prefix}${sequenceStr}`;
+    }
+
     function addNewMember() {
-      const memberId = prompt('Enter a unique member ID (e.g., SN20250001):');
+      // Generate a new member ID
+      const generatedId = generateMemberId();
+
+      // Prompt the user with the generated ID (allowing them to modify it)
+      const memberId = prompt('Enter a unique member ID:', generatedId);
       if (!memberId) return;
-      
+
       // Check if member ID already exists
       if (members[memberId]) {
         alert('A member with this ID already exists.');
         return;
       }
-      
+
+      // Validate the ID format
+      if (!validateMemberId(memberId)) {
+        alert('Invalid member ID format. Please use the format: SN + year + 4-digit sequence number (e.g., SN20250001)');
+        addNewMember(); // Try again
+        return;
+      }
+
+      // Get current year for default validity period
+      const currentYear = new Date().getFullYear();
+      const nextYear = currentYear + 1;
+
       // Create new member object
       const newMember = {
         id: memberId,
         name: 'New Member',
         isActive: true,
         validityPeriod: {
-          en: 'January 1, 2025 - December 31, 2025',
-          zh: '2025年1月1日 - 2025年12月31日',
-          nl: '1 januari 2025 - 31 december 2025'
+          en: `January 1, ${currentYear} - December 31, ${currentYear}`,
+          zh: `${currentYear}年1月1日 - ${currentYear}年12月31日`,
+          nl: `1 januari ${currentYear} - 31 december ${currentYear}`
         }
       };
-      
+
       // Add custom fields
       customFields.forEach(field => {
         newMember[field] = '';
       });
-      
+
       // Add to members object
       members[memberId] = newMember;
-      
+
       // Update the UI
       renderMemberList();
       selectMember(memberId);
