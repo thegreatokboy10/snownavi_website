@@ -5,6 +5,7 @@ import json
 import mimetypes
 import uuid
 import datetime
+import hashlib
 from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
 
@@ -19,6 +20,22 @@ ASSETS_DIR = os.path.join(ROOT_DIR, 'assets')
 UPLOADS_DIR = os.path.join(ROOT_DIR, 'uploads')
 JSON_FILE = os.path.join(DATA_DIR, 'courses.json')
 NAVIGATION_FILE = os.path.join(DATA_DIR, 'navigation.json')
+
+# Password generation and hashing functions
+def generate_default_password(member_id):
+    """Generate a default password based on member ID using a fixed algorithm"""
+    # Use a combination of member_id and a fixed salt for generating the password
+    salt = "SnowNavi2025Salt"  # Fixed salt for all passwords
+    raw_password = f"{member_id}{salt}"
+    # Create a SHA-256 hash of the raw password
+    hashed = hashlib.sha256(raw_password.encode()).hexdigest()
+    # Return the first 8 characters as the password
+    return hashed[:8]
+
+def hash_password(password):
+    """Hash a password for storing"""
+    # Use SHA-256 for password hashing
+    return hashlib.sha256(password.encode()).hexdigest()
 
 # Create uploads directory if it doesn't exist
 if not os.path.exists(UPLOADS_DIR):
@@ -291,6 +308,13 @@ def create_member():
         if member_id in members:
             return jsonify({'error': 'A member with this ID already exists'}), 409
 
+        # Generate default password for the new member
+        default_password = generate_default_password(member_id)
+        # Store the hashed password
+        new_member['password'] = default_password
+        # Store the plain text password temporarily for the response
+        plain_password = default_password
+
         # Add the new member to the members dictionary
         members[member_id] = new_member
 
@@ -298,9 +322,54 @@ def create_member():
         with open(members_file, 'w', encoding='utf-8') as f:
             json.dump(members, f, ensure_ascii=False, indent=2)
 
-        return jsonify({'status': 'success', 'id': member_id}), 201
+        return jsonify({
+            'status': 'success',
+            'id': member_id,
+            'password': plain_password  # Return the plain text password in the response
+        }), 201
     except Exception as e:
         app.logger.error(f"Error creating member data: {str(e)}")
+        return jsonify({'error': f'Server error: {str(e)}'}), 500
+
+@app.route('/api/members/generate-passwords', methods=['POST'])
+def generate_all_passwords():
+    """Generate or update passwords for all members"""
+    try:
+        members_file = os.path.join(DATA_DIR, 'members.json')
+        if not os.path.exists(members_file):
+            return jsonify({'error': 'Members data not found'}), 404
+
+        # Load existing members
+        with open(members_file, 'r', encoding='utf-8') as f:
+            members = json.load(f)
+
+        # Track members that had passwords generated
+        updated_members = []
+
+        # Generate passwords for all members
+        for member_id, member in members.items():
+            # Generate a default password based on member ID
+            default_password = generate_default_password(member_id)
+            # Store the hashed password
+            member['password'] = default_password
+            # Add to the list of updated members with plain text password
+            updated_members.append({
+                'id': member_id,
+                'name': member.get('name', ''),
+                'password': default_password  # Plain text password for display
+            })
+
+        # Write the updated members dictionary back to the file
+        with open(members_file, 'w', encoding='utf-8') as f:
+            json.dump(members, f, ensure_ascii=False, indent=2)
+
+        return jsonify({
+            'status': 'success',
+            'message': f'Generated passwords for {len(updated_members)} members',
+            'members': updated_members
+        }), 200
+    except Exception as e:
+        app.logger.error(f"Error generating passwords: {str(e)}")
         return jsonify({'error': f'Server error: {str(e)}'}), 500
 
 # File upload helper functions
