@@ -1,0 +1,59 @@
+{
+  "items": [
+    {
+      "id": "courses",
+      "url": "index.html#courses",
+      "translations": {
+        "en": "Courses",
+        "zh": "课程",
+        "nl": "Cursussen"
+      },
+      "visible": true,
+      "order": 1
+    },
+    {
+      "id": "map",
+      "url": "index.html#map",
+      "translations": {
+        "en": "Interactive Ski Map",
+        "zh": "在线滑雪地图",
+        "nl": "Interactieve Skikaart"
+      },
+      "visible": true,
+      "order": 2
+    },
+    {
+      "id": "story",
+      "url": "index.html#story",
+      "translations": {
+        "en": "Our Story",
+        "zh": "我们的故事",
+        "nl": "Ons Verhaal"
+      },
+      "visible": true,
+      "order": 3
+    },
+    {
+      "id": "contact",
+      "url": "index.html#contact",
+      "translations": {
+        "en": "Contact",
+        "zh": "联系我们",
+        "nl": "Contact"
+      },
+      "visible": true,
+      "order": 4
+    },
+    {
+      "id": "member",
+      "url": null,
+      "translations": {
+        "en": "Member",
+        "zh": "会员",
+        "nl": "Lid"
+      },
+      "visible": false,
+      "order": 5
+    }
+  ]
+}

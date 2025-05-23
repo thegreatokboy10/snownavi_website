@@ -18,6 +18,7 @@ DATA_DIR = os.path.join(ROOT_DIR, 'data')
 ASSETS_DIR = os.path.join(ROOT_DIR, 'assets')
 UPLOADS_DIR = os.path.join(ROOT_DIR, 'uploads')
 JSON_FILE = os.path.join(DATA_DIR, 'courses.json')
+NAVIGATION_FILE = os.path.join(DATA_DIR, 'navigation.json')
 
 # Create uploads directory if it doesn't exist
 if not os.path.exists(UPLOADS_DIR):
@@ -76,6 +77,10 @@ def serve_course_admin_page():
 def serve_member_admin_page():
     return send_from_directory(ROOT_DIR, 'member_admin.html')
 
+@app.route('/navigation_admin.html')
+def serve_navigation_admin_page():
+    return send_from_directory(ROOT_DIR, 'navigation_admin.html')
+
 @app.route('/login.html')
 def serve_login_page():
     return send_from_directory(ROOT_DIR, 'login.html')
@@ -125,6 +130,70 @@ def update_members():
     data = request.get_json()
     members_file = os.path.join(DATA_DIR, 'members.json')
     with open(members_file, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    return jsonify({'status': 'success'}), 200
+
+@app.route('/data/navigation.json', methods=['GET'])
+def get_navigation():
+    # Check if navigation.json exists, if not create a default one
+    if not os.path.exists(NAVIGATION_FILE):
+        default_navigation = {
+            "items": [
+                {
+                    "id": "courses",
+                    "url": "index.html#courses",
+                    "translations": {
+                        "en": "Courses",
+                        "zh": "课程",
+                        "nl": "Cursussen"
+                    },
+                    "visible": True,
+                    "order": 1
+                },
+                {
+                    "id": "map",
+                    "url": "index.html#map",
+                    "translations": {
+                        "en": "Interactive Ski Map",
+                        "zh": "在线滑雪地图",
+                        "nl": "Interactieve Skikaart"
+                    },
+                    "visible": True,
+                    "order": 2
+                },
+                {
+                    "id": "story",
+                    "url": "index.html#story",
+                    "translations": {
+                        "en": "Our Story",
+                        "zh": "我们的故事",
+                        "nl": "Ons Verhaal"
+                    },
+                    "visible": True,
+                    "order": 3
+                },
+                {
+                    "id": "contact",
+                    "url": "index.html#contact",
+                    "translations": {
+                        "en": "Contact",
+                        "zh": "联系我们",
+                        "nl": "Contact"
+                    },
+                    "visible": True,
+                    "order": 4
+                }
+            ]
+        }
+        with open(NAVIGATION_FILE, 'w', encoding='utf-8') as f:
+            json.dump(default_navigation, f, ensure_ascii=False, indent=2)
+
+    return send_from_directory(DATA_DIR, 'navigation.json')
+
+@app.route('/data/navigation.json', methods=['POST'])
+def update_navigation():
+    data = request.get_json()
+    with open(NAVIGATION_FILE, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
     return jsonify({'status': 'success'}), 200
 

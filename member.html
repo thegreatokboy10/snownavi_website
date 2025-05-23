@@ -246,10 +246,7 @@
     <img src="assets/picture/snownavi_logo_banner.jpg" alt="SnowNavi logo">
     <button class="menu-toggle" id="menu-toggle">☰</button>
     <nav class="nav-links" id="nav-links">
-      <a href="index.html#courses" id="nav-courses">Courses</a>
-      <a href="index.html#map" id="nav-map">Interactive Ski Map</a>
-      <a href="index.html#story" id="nav-story">Our Story</a>
-      <a href="index.html#contact" id="nav-contact">Contact</a>
+      <!-- Navigation items will be dynamically inserted here -->
       <div class="language-selector">
         <select id="lang" class="language-selector">
           <option value="en">🇬🇧 EN</option>
@@ -303,6 +300,9 @@
     <p id="copyright">&copy; 2025 SnowNavi Sports. All rights reserved.</p>
   </footer>
 
+  <!-- Include the navigation module -->
+  <script src="assets/js/navigation.js"></script>
+
   <script>
     // Toggle mobile menu
     document.getElementById('menu-toggle').addEventListener('click', function() {
@@ -310,8 +310,16 @@
     });
 
     // Language handling
-    const savedLang = localStorage.getItem('snownavi_lang') || 'en';
+    const savedLang = localStorage.getItem('preferredLang') ||
+                     (navigator.language.startsWith('zh') ? 'zh' :
+                      navigator.language.startsWith('nl') ? 'nl' : 'en');
     document.getElementById('lang').value = savedLang;
+
+    // Ensure navigation bar language is synchronized immediately
+    if (window.navigationManager) {
+      window.navigationManager.currentLang = savedLang;
+      window.navigationManager.renderNavigation();
+    }
 
     // Translations
     const translations = {
@@ -381,12 +389,6 @@
       // Page title
       document.getElementById('page-title').textContent = t.pageTitle;
 
-      // Navigation
-      document.getElementById('nav-courses').textContent = t.navCourses;
-      document.getElementById('nav-map').textContent = t.navMap;
-      document.getElementById('nav-story').textContent = t.navStory;
-      document.getElementById('nav-contact').textContent = t.navContact;
-
       // Member page content
       document.getElementById('member-page-title').textContent = t.memberPageTitle;
       document.getElementById('membership-type-label').textContent = t.membershipTypeLabel;
@@ -407,6 +409,12 @@
       // Footer
       document.getElementById('contact-text').textContent = t.contactText;
       document.getElementById('copyright').textContent = t.copyright;
+
+      // Trigger navigation update with the new language
+      if (window.navigationManager) {
+        window.navigationManager.currentLang = lang;
+        window.navigationManager.renderNavigation();
+      }
     }
 
     // Apply initial translations
@@ -415,7 +423,7 @@
     // Handle language change
     document.getElementById('lang').addEventListener('change', function() {
       const selectedLang = this.value;
-      localStorage.setItem('snownavi_lang', selectedLang);
+      localStorage.setItem('preferredLang', selectedLang);
       applyTranslations(selectedLang);
     });
 

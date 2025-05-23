@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SnowNavi Navigation Admin</title>
+  <style>
+    :root {
+      --main-red: #E53512;
+      --bg-light: #F9F4F3;
+      --text-dark: #2F2F2F;
+      --text-gray: #717171;
+      --contrast-white: #FFFFFF;
+      --accent-blue: #9ED4E7;
+    }
+    
+    body {
+      margin: 0;
+      font-family: 'Noto Sans SC', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      padding: 20px;
+    }
+    
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .admin-header h1 {
+      margin: 0;
+      color: var(--main-red);
+    }
+    
+    .admin-header .back-link {
+      background-color: var(--main-red);
+      color: white;
+      padding: 8px 15px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    
+    .admin-container {
+      background-color: var(--contrast-white);
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .admin-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    
+    .admin-button {
+      background-color: var(--main-red);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    .admin-button:hover {
+      background-color: #c52e10;
+    }
+    
+    .nav-items-container {
+      margin-bottom: 20px;
+    }
+    
+    .nav-item {
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 15px;
+      margin-bottom: 15px;
+      position: relative;
+    }
+    
+    .nav-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .nav-item-title {
+      font-weight: bold;
+      font-size: 18px;
+      color: var(--main-red);
+    }
+    
+    .nav-item-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .nav-item-action {
+      background-color: #f0f0f0;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .nav-item-action:hover {
+      background-color: #e0e0e0;
+    }
+    
+    .nav-item-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 15px;
+    }
+    
+    .nav-item-field {
+      margin-bottom: 10px;
+    }
+    
+    .nav-item-field label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    
+    .nav-item-field input,
+    .nav-item-field select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .nav-item-translations {
+      grid-column: 1 / -1;
+      border-top: 1px solid #eee;
+      padding-top: 15px;
+      margin-top: 10px;
+    }
+    
+    .translation-fields {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+    }
+    
+    .drag-handle {
+      cursor: move;
+      padding: 5px;
+      margin-right: 10px;
+      color: #999;
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+    
+    .modal-content {
+      background-color: var(--contrast-white);
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 80%;
+      max-width: 600px;
+    }
+    
+    .close-modal {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .close-modal:hover,
+    .close-modal:focus {
+      color: var(--text-dark);
+      text-decoration: none;
+    }
+    
+    .form-row {
+      margin-bottom: 15px;
+    }
+    
+    .form-row label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    
+    .form-row input,
+    .form-row select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    .checkbox-field {
+      display: flex;
+      align-items: center;
+    }
+    
+    .checkbox-field input {
+      width: auto;
+      margin-right: 10px;
+    }
+    
+    .status-message {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+      display: none;
+    }
+    
+    .status-success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .status-error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    
+    .sortable-ghost {
+      opacity: 0.4;
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-header">
+    <h1>Navigation Management</h1>
+    <a href="admin.html" class="back-link">← Back to Admin</a>
+  </div>
+  
+  <div class="admin-container">
+    <div class="admin-actions">
+      <button id="add-nav-item" class="admin-button">Add Navigation Item</button>
+      <button id="save-changes" class="admin-button">Save Changes</button>
+    </div>
+    
+    <div id="status-message" class="status-message"></div>
+    
+    <div id="nav-items-container" class="nav-items-container">
+      <!-- Navigation items will be dynamically inserted here -->
+    </div>
+  </div>
+  
+  <!-- Add/Edit Navigation Item Modal -->
+  <div id="nav-item-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2 id="modal-title">Add Navigation Item</h2>
+      
+      <form id="nav-item-form">
+        <input type="hidden" id="item-index" value="">
+        
+        <div class="form-row">
+          <label for="item-id">ID:</label>
+          <input type="text" id="item-id" required>
+        </div>
+        
+        <div class="form-row">
+          <label for="item-url">URL:</label>
+          <input type="text" id="item-url" placeholder="e.g., index.html#courses">
+          <small>Leave empty to hide from navigation but keep in configuration</small>
+        </div>
+        
+        <div class="form-row">
+          <label for="item-order">Order:</label>
+          <input type="number" id="item-order" min="1" value="1" required>
+        </div>
+        
+        <div class="form-row checkbox-field">
+          <input type="checkbox" id="item-visible" checked>
+          <label for="item-visible">Visible in navigation</label>
+        </div>
+        
+        <h3>Translations</h3>
+        
+        <div class="form-row">
+          <label for="item-en">English:</label>
+          <input type="text" id="item-en" required>
+        </div>
+        
+        <div class="form-row">
+          <label for="item-zh">Chinese:</label>
+          <input type="text" id="item-zh" required>
+        </div>
+        
+        <div class="form-row">
+          <label for="item-nl">Dutch:</label>
+          <input type="text" id="item-nl" required>
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" id="cancel-form" class="nav-item-action">Cancel</button>
+          <button type="submit" class="admin-button">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
+  <script>
+    // Global variables
+    let navigationItems = [];
+    let isEditing = false;
+    
+    // DOM elements
+    const navItemsContainer = document.getElementById('nav-items-container');
+    const addNavItemButton = document.getElementById('add-nav-item');
+    const saveChangesButton = document.getElementById('save-changes');
+    const navItemModal = document.getElementById('nav-item-modal');
+    const navItemForm = document.getElementById('nav-item-form');
+    const modalTitle = document.getElementById('modal-title');
+    const closeModalButton = document.querySelector('.close-modal');
+    const cancelFormButton = document.getElementById('cancel-form');
+    const statusMessage = document.getElementById('status-message');
+    
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadNavigationData();
+      renderNavigationItems();
+      initSortable();
+      
+      // Event listeners
+      addNavItemButton.addEventListener('click', showAddItemModal);
+      saveChangesButton.addEventListener('click', saveNavigationData);
+      closeModalButton.addEventListener('click', closeModal);
+      cancelFormButton.addEventListener('click', closeModal);
+      navItemForm.addEventListener('submit', handleFormSubmit);
+    });
+    
+    // Load navigation data from the server
+    async function loadNavigationData() {
+      try {
+        const response = await fetch('/data/navigation.json');
+        if (!response.ok) {
+          throw new Error(`Failed to load navigation data: ${response.status} ${response.statusText}`);
+        }
+        const data = await response.json();
+        navigationItems = data.items || [];
+        
+        // Sort items by order
+        navigationItems.sort((a, b) => a.order - b.order);
+      } catch (error) {
+        console.error('Error loading navigation data:', error);
+        showStatusMessage('Error loading navigation data. Please try again.', 'error');
+        navigationItems = [];
+      }
+    }
+    
+    // Render navigation items in the UI
+    function renderNavigationItems() {
+      navItemsContainer.innerHTML = '';
+      
+      if (navigationItems.length === 0) {
+        navItemsContainer.innerHTML = '<p>No navigation items found. Click "Add Navigation Item" to create one.</p>';
+        return;
+      }
+      
+      navigationItems.forEach((item, index) => {
+        const navItemElement = document.createElement('div');
+        navItemElement.className = 'nav-item';
+        navItemElement.dataset.index = index;
+        
+        navItemElement.innerHTML = `
+          <div class="nav-item-header">
+            <div class="nav-item-title">
+              <span class="drag-handle">☰</span>
+              ${item.id} (${item.translations.en})
+            </div>
+            <div class="nav-item-actions">
+              <button class="nav-item-action edit-item" data-index="${index}">Edit</button>
+              <button class="nav-item-action delete-item" data-index="${index}">Delete</button>
+            </div>
+          </div>
+          <div class="nav-item-content">
+            <div class="nav-item-field">
+              <label>URL:</label>
+              <div>${item.url || 'Not visible in navigation'}</div>
+            </div>
+            <div class="nav-item-field">
+              <label>Order:</label>
+              <div>${item.order}</div>
+            </div>
+            <div class="nav-item-field">
+              <label>Visible:</label>
+              <div>${item.visible ? 'Yes' : 'No'}</div>
+            </div>
+            <div class="nav-item-translations">
+              <label>Translations:</label>
+              <div class="translation-fields">
+                <div class="nav-item-field">
+                  <label>English:</label>
+                  <div>${item.translations.en}</div>
+                </div>
+                <div class="nav-item-field">
+                  <label>Chinese:</label>
+                  <div>${item.translations.zh}</div>
+                </div>
+                <div class="nav-item-field">
+                  <label>Dutch:</label>
+                  <div>${item.translations.nl}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        navItemsContainer.appendChild(navItemElement);
+      });
+      
+      // Add event listeners to edit and delete buttons
+      document.querySelectorAll('.edit-item').forEach(button => {
+        button.addEventListener('click', () => {
+          const index = parseInt(button.dataset.index);
+          showEditItemModal(index);
+        });
+      });
+      
+      document.querySelectorAll('.delete-item').forEach(button => {
+        button.addEventListener('click', () => {
+          const index = parseInt(button.dataset.index);
+          deleteNavigationItem(index);
+        });
+      });
+    }
+    
+    // Initialize sortable functionality
+    function initSortable() {
+      new Sortable(navItemsContainer, {
+        handle: '.drag-handle',
+        animation: 150,
+        ghostClass: 'sortable-ghost',
+        onEnd: function(evt) {
+          // Update the order of items after drag and drop
+          const items = Array.from(navItemsContainer.querySelectorAll('.nav-item'));
+          const newOrder = items.map(item => parseInt(item.dataset.index));
+          
+          // Create a new array with the updated order
+          const reorderedItems = [];
+          newOrder.forEach((oldIndex, newIndex) => {
+            const item = {...navigationItems[oldIndex]};
+            item.order = newIndex + 1;
+            reorderedItems.push(item);
+          });
+          
+          navigationItems = reorderedItems;
+          renderNavigationItems();
+        }
+      });
+    }
+    
+    // Show modal to add a new navigation item
+    function showAddItemModal() {
+      modalTitle.textContent = 'Add Navigation Item';
+      navItemForm.reset();
+      document.getElementById('item-index').value = '';
+      document.getElementById('item-order').value = navigationItems.length + 1;
+      isEditing = false;
+      navItemModal.style.display = 'block';
+    }
+    
+    // Show modal to edit an existing navigation item
+    function showEditItemModal(index) {
+      const item = navigationItems[index];
+      if (!item) return;
+      
+      modalTitle.textContent = 'Edit Navigation Item';
+      document.getElementById('item-index').value = index;
+      document.getElementById('item-id').value = item.id;
+      document.getElementById('item-url').value = item.url || '';
+      document.getElementById('item-order').value = item.order;
+      document.getElementById('item-visible').checked = item.visible;
+      document.getElementById('item-en').value = item.translations.en;
+      document.getElementById('item-zh').value = item.translations.zh;
+      document.getElementById('item-nl').value = item.translations.nl;
+      
+      isEditing = true;
+      navItemModal.style.display = 'block';
+    }
+    
+    // Close the modal
+    function closeModal() {
+      navItemModal.style.display = 'none';
+    }
+    
+    // Handle form submission
+    function handleFormSubmit(event) {
+      event.preventDefault();
+      
+      const index = document.getElementById('item-index').value;
+      const id = document.getElementById('item-id').value;
+      const url = document.getElementById('item-url').value || null;
+      const order = parseInt(document.getElementById('item-order').value);
+      const visible = document.getElementById('item-visible').checked;
+      const en = document.getElementById('item-en').value;
+      const zh = document.getElementById('item-zh').value;
+      const nl = document.getElementById('item-nl').value;
+      
+      const navItem = {
+        id,
+        url,
+        visible,
+        order,
+        translations: {
+          en,
+          zh,
+          nl
+        }
+      };
+      
+      if (isEditing) {
+        // Update existing item
+        navigationItems[index] = navItem;
+      } else {
+        // Add new item
+        navigationItems.push(navItem);
+      }
+      
+      // Sort items by order
+      navigationItems.sort((a, b) => a.order - b.order);
+      
+      // Update the UI
+      renderNavigationItems();
+      closeModal();
+    }
+    
+    // Delete a navigation item
+    function deleteNavigationItem(index) {
+      if (confirm('Are you sure you want to delete this navigation item?')) {
+        navigationItems.splice(index, 1);
+        
+        // Update order of remaining items
+        navigationItems.forEach((item, i) => {
+          item.order = i + 1;
+        });
+        
+        renderNavigationItems();
+      }
+    }
+    
+    // Save navigation data to the server
+    async function saveNavigationData() {
+      try {
+        const data = {
+          items: navigationItems
+        };
+        
+        const response = await fetch('/data/navigation.json', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Failed to save navigation data: ${response.status} ${response.statusText}`);
+        }
+        
+        showStatusMessage('Navigation data saved successfully!', 'success');
+      } catch (error) {
+        console.error('Error saving navigation data:', error);
+        showStatusMessage('Error saving navigation data. Please try again.', 'error');
+      }
+    }
+    
+    // Show status message
+    function showStatusMessage(message, type) {
+      statusMessage.textContent = message;
+      statusMessage.className = 'status-message';
+      statusMessage.classList.add(`status-${type}`);
+      statusMessage.style.display = 'block';
+      
+      // Hide the message after 5 seconds
+      setTimeout(() => {
+        statusMessage.style.display = 'none';
+      }, 5000);
+    }
+  </script>
+</body>
+</html>

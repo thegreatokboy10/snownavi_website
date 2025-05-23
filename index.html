@@ -207,10 +207,7 @@
     <img src="assets/picture/snownavi_logo_banner.jpg" alt="SnowNavi logo">
     <button class="menu-toggle" id="menu-toggle">☰</button>
     <nav class="nav-links" id="nav-links">
-      <a href="#courses">Courses</a>
-      <a href="#map">Interactive Ski Map</a>
-      <a href="#story">Our Story</a>
-      <a href="#contact">Contact</a>
+      <!-- Navigation items will be dynamically inserted here -->
       <div class="language-selector">
         <select id="lang" class="language-selector">
           <option value="en">🇬🇧 EN</option>
@@ -275,6 +272,9 @@
   </footer>
 
   <button id="toTop" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">↑ Top</button>
+
+  <!-- Include the navigation module -->
+  <script src="assets/js/navigation.js"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -341,10 +341,6 @@
       function setLang(lang) {
         const texts = lang === 'zh' ? zhTexts : lang === 'nl' ? nlTexts : enTexts;
         document.getElementById('page-title').textContent = texts.title;
-        document.querySelectorAll('nav a')[0].textContent = texts.navCourses;
-        document.querySelectorAll('nav a')[1].textContent = texts.navMap;
-        document.querySelectorAll('nav a')[2].textContent = texts.navStory;
-        document.querySelectorAll('nav a')[3].textContent = texts.navContact;
         document.querySelector('.hero h1').textContent = texts.heroText;
         document.querySelector('.hero .cta-btn').textContent = texts.ctaBtn;
         document.querySelector('#courses h2').textContent = texts.sectionTitle;
@@ -359,15 +355,28 @@
         document.querySelector('#story p').textContent = texts.storyText;
         document.querySelector('#contact p:first-child').textContent = texts.contactText;
         document.querySelector('#contact p:last-child').innerHTML = `&copy; 2025 ${lang === 'zh' ? 'SnowNavi 滑雪俱乐部' : 'SnowNavi Sports'}. ${texts.copyright}`;
+
+        // Trigger navigation update with the new language
+        if (window.navigationManager) {
+          window.navigationManager.currentLang = lang;
+          window.navigationManager.renderNavigation();
+        }
       }
 
       const savedLang = localStorage.getItem('preferredLang') || (navigator.language.startsWith('zh') ? 'zh' : navigator.language.startsWith('nl') ? 'nl' : 'en');
       langSelect.value = savedLang;
       setLang(savedLang);
 
+      // Ensure navigation bar language is synchronized
+      if (window.navigationManager) {
+        window.navigationManager.currentLang = savedLang;
+        window.navigationManager.renderNavigation();
+      }
+
       langSelect.addEventListener('change', e => {
-        localStorage.setItem('preferredLang', e.target.value);
-        setLang(e.target.value);
+        const newLang = e.target.value;
+        localStorage.setItem('preferredLang', newLang);
+        setLang(newLang);
       });
 
       // Return to Top logic
