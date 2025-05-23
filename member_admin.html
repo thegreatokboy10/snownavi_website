@@ -352,6 +352,20 @@
     let selectedMember = null;
     let customFields = ['gender']; // Default custom fields
 
+    // Function to format date as dd/mm/yyyy
+    function formatDateDDMMYYYY(date) {
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
+    }
+
+    // Function to parse date from dd/mm/yyyy format
+    function parseDateDDMMYYYY(dateStr) {
+      const [day, month, year] = dateStr.split('/').map(part => parseInt(part, 10));
+      return new Date(year, month - 1, day);
+    }
+
     // Fetch configuration and check authentication
     async function checkAuth() {
       try {
@@ -404,12 +418,168 @@
       try {
         const res = await fetch('data/members.json');
         members = await res.json();
+
+        // Standardize validity period format for all members
+        standardizeValidityPeriods();
+
         document.getElementById(`tab-${currentLang}`).classList.add('active');
         renderMemberList();
       } catch (error) {
         console.error('Error loading members:', error);
         alert('Failed to load member data. Please try again later.');
       }
+    }
+
+    // Function to check if validity period has expired
+    function checkValidityPeriodExpired(validityPeriodStr) {
+      try {
+        // Check if the validity period is in the dd/mm/yyyy - dd/mm/yyyy format
+        const match = validityPeriodStr.match(/^(\d{2}\/\d{2}\/\d{4}) - (\d{2}\/\d{2}\/\d{4})$/);
+        if (match) {
+          const endDateStr = match[2];
+          const endDate = parseDateDDMMYYYY(endDateStr);
+
+          // Set time to end of day (23:59:59)
+          endDate.setHours(23, 59, 59, 999);
+
+          // Compare with current date
+          const today = new Date();
+          return today > endDate;
+        }
+
+        // If the format doesn't match, try to extract the end date from other formats
+        // This is a fallback for any validity periods not yet converted to dd/mm/yyyy format
+        const parts = validityPeriodStr.split(' - ');
+        if (parts.length === 2) {
+          // Try to extract a year from the end date part
+          const yearMatch = parts[1].match(/\d{4}/);
+          if (yearMatch) {
+            const year = parseInt(yearMatch[0], 10);
+            // If the year is in the past, consider it expired
+            return new Date().getFullYear() > year;
+          }
+        }
+
+        // If we can't determine, default to not expired
+        return false;
+      } catch (e) {
+        console.error('Error checking validity period:', e);
+        return false;
+      }
+    }
+
+    // Function to standardize all validity periods to dd/mm/yyyy format
+    function standardizeValidityPeriods() {
+      Object.keys(members).forEach(memberId => {
+        const member = members[memberId];
+
+        // Convert old format (object with language keys) to new format (single string)
+        if (member.validityPeriod && typeof member.validityPeriod === 'object') {
+          let validityValue = '';
+
+          // Try to find a non-empty value in any language
+          for (const lang of ['en', 'zh', 'nl']) {
+            if (member.validityPeriod[lang]) {
+              validityValue = member.validityPeriod[lang];
+              break;
+            }
+          }
+
+          // If we found a value but it's not in dd/mm/yyyy format, convert it
+          if (validityValue && !validityValue.match(/^\d{2}\/\d{2}\/\d{4} - \d{2}\/\d{2}\/\d{4}$/)) {
+            try {
+              let startDate, endDate;
+
+              // Try to parse different formats
+              if (validityValue.includes(',')) {
+                // Format: "January 1, 2025 - December 31, 2025"
+                const parts = validityValue.split(' - ');
+                if (parts.length === 2) {
+                  const startParts = parts[0].split(' ');
+                  const endParts = parts[1].split(' ');
+
+                  if (startParts.length >= 3 && endParts.length >= 3) {
+                    const startMonth = new Date(Date.parse(`${startParts[0]} 1, 2000`)).getMonth();
+                    const startDay = parseInt(startParts[1].replace(',', ''));
+                    const startYear = parseInt(startParts[2]);
+
+                    const endMonth = new Date(Date.parse(`${endParts[0]} 1, 2000`)).getMonth();
+                    const endDay = parseInt(endParts[1].replace(',', ''));
+                    const endYear = parseInt(endParts[2]);
+
+                    startDate = new Date(startYear, startMonth, startDay);
+                    endDate = new Date(endYear, endMonth, endDay);
+                  }
+                }
+              } else if (validityValue.includes('年')) {
+                // Format: "2025年1月1日 - 2025年12月31日"
+                const parts = validityValue.split(' - ');
+                if (parts.length === 2) {
+                  // Extract year, month, day from Chinese format
+                  const startMatch = parts[0].match(/(\d+)年(\d+)月(\d+)日/);
+                  const endMatch = parts[1].match(/(\d+)年(\d+)月(\d+)日/);
+
+                  if (startMatch && endMatch) {
+                    startDate = new Date(parseInt(startMatch[1]), parseInt(startMatch[2]) - 1, parseInt(startMatch[3]));
+                    endDate = new Date(parseInt(endMatch[1]), parseInt(endMatch[2]) - 1, parseInt(endMatch[3]));
+                  }
+                }
+              } else if (validityValue.includes('januari') || validityValue.includes('december')) {
+                // Format: "1 januari 2025 - 31 december 2025"
+                const parts = validityValue.split(' - ');
+                if (parts.length === 2) {
+                  const startParts = parts[0].split(' ');
+                  const endParts = parts[1].split(' ');
+
+                  if (startParts.length >= 3 && endParts.length >= 3) {
+                    // Dutch month names to numbers
+                    const monthMap = {
+                      'januari': 0, 'februari': 1, 'maart': 2, 'april': 3, 'mei': 4, 'juni': 5,
+                      'juli': 6, 'augustus': 7, 'september': 8, 'oktober': 9, 'november': 10, 'december': 11
+                    };
+
+                    const startDay = parseInt(startParts[0]);
+                    const startMonth = monthMap[startParts[1].toLowerCase()];
+                    const startYear = parseInt(startParts[2]);
+
+                    const endDay = parseInt(endParts[0]);
+                    const endMonth = monthMap[endParts[1].toLowerCase()];
+                    const endYear = parseInt(endParts[2]);
+
+                    if (!isNaN(startDay) && startMonth !== undefined && !isNaN(startYear) &&
+                        !isNaN(endDay) && endMonth !== undefined && !isNaN(endYear)) {
+                      startDate = new Date(startYear, startMonth, startDay);
+                      endDate = new Date(endYear, endMonth, endDay);
+                    }
+                  }
+                }
+              }
+
+              // If we successfully parsed the dates, convert to standard format
+              if (startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) {
+                const standardStartDate = formatDateDDMMYYYY(startDate);
+                const standardEndDate = formatDateDDMMYYYY(endDate);
+                validityValue = `${standardStartDate} - ${standardEndDate}`;
+              }
+            } catch (e) {
+              console.error(`Error standardizing date format for ${memberId}:`, e);
+              // Keep the original if there's an error
+            }
+          }
+
+          // Set the standardized value as the new validityPeriod
+          member.validityPeriod = validityValue;
+        }
+
+        // Check if the validity period has expired and update member status
+        if (member.isActive && member.validityPeriod) {
+          const isExpired = checkValidityPeriodExpired(member.validityPeriod);
+          if (isExpired) {
+            console.log(`Member ${memberId} validity period has expired. Updating status.`);
+            member.isActive = false;
+          }
+        }
+      });
     }
 
     function switchLang(lang) {
@@ -560,17 +730,58 @@
       statusSelect.appendChild(expiredOption);
 
       statusSelect.value = member.isActive.toString();
-      statusSelect.onchange = e => member.isActive = e.target.value === 'true';
+      statusSelect.onchange = e => {
+        const newStatus = e.target.value === 'true';
+        const oldStatus = member.isActive;
+        member.isActive = newStatus;
+
+        // If status is changing from inactive to active (Full Membership)
+        if (!oldStatus && newStatus) {
+          // Generate a one-year validity period from today
+          const today = new Date();
+          const oneYearLater = new Date(today);
+          oneYearLater.setFullYear(today.getFullYear() + 1);
+
+          // Format dates in dd/mm/yyyy format
+          const startDate = formatDateDDMMYYYY(today);
+          const endDate = formatDateDDMMYYYY(oneYearLater);
+
+          // Set validity period as a single string
+          member.validityPeriod = `${startDate} - ${endDate}`;
+
+          // Update the validity input if it exists
+          const validityInput = document.getElementById('validity-input');
+          if (validityInput) {
+            validityInput.value = member.validityPeriod || '';
+          }
+        }
+      };
       div.appendChild(statusSelect);
 
       // Validity Period
       const validityLabel = document.createElement('label');
-      validityLabel.textContent = `Validity Period (${currentLang.toUpperCase()})`;
+      validityLabel.textContent = 'Validity Period';
       div.appendChild(validityLabel);
 
       const validityInput = document.createElement('input');
-      validityInput.value = member.validityPeriod[currentLang] || '';
-      validityInput.oninput = e => member.validityPeriod[currentLang] = e.target.value;
+      validityInput.id = 'validity-input';
+
+      // If validityPeriod is an object (old format), get the first non-empty value or convert to string
+      if (typeof member.validityPeriod === 'object') {
+        let validityValue = '';
+        for (const lang of ['en', 'zh', 'nl']) {
+          if (member.validityPeriod[lang]) {
+            validityValue = member.validityPeriod[lang];
+            break;
+          }
+        }
+        // Convert to string format
+        member.validityPeriod = validityValue;
+      }
+
+      validityInput.value = member.validityPeriod || '';
+      validityInput.placeholder = 'dd/mm/yyyy - dd/mm/yyyy';
+      validityInput.oninput = e => member.validityPeriod = e.target.value;
       div.appendChild(validityInput);
 
       // Password Field (read-only)
@@ -756,20 +967,21 @@
         return;
       }
 
-      // Get current year for default validity period
-      const currentYear = new Date().getFullYear();
-      const nextYear = currentYear + 1;
+      // Generate a one-year validity period from today
+      const today = new Date();
+      const oneYearLater = new Date(today);
+      oneYearLater.setFullYear(today.getFullYear() + 1);
+
+      // Format dates in dd/mm/yyyy format
+      const startDate = formatDateDDMMYYYY(today);
+      const endDate = formatDateDDMMYYYY(oneYearLater);
 
       // Create new member object
       const newMember = {
         id: memberId,
         name: 'New Member',
         isActive: true,
-        validityPeriod: {
-          en: `January 1, ${currentYear} - December 31, ${currentYear}`,
-          zh: `${currentYear}年1月1日 - ${currentYear}年12月31日`,
-          nl: `1 januari ${currentYear} - 31 december ${currentYear}`
-        }
+        validityPeriod: `${startDate} - ${endDate}`
       };
 
       // Add custom fields
@@ -819,12 +1031,35 @@
     }
 
     function saveMembers() {
+      // Make sure all validity periods are in the standard format before saving
+      standardizeValidityPeriods();
+
+      // Check all members for expired validity periods
+      Object.keys(members).forEach(memberId => {
+        const member = members[memberId];
+        if (member.isActive && member.validityPeriod) {
+          const isExpired = checkValidityPeriodExpired(member.validityPeriod);
+          if (isExpired) {
+            console.log(`Member ${memberId} validity period has expired. Updating status.`);
+            member.isActive = false;
+          }
+        }
+      });
+
       fetch('data/members.json', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(members, null, 2)
       }).then(res => {
-        if (res.ok) alert('Saved successfully!');
+        if (res.ok) {
+          alert('Saved successfully!');
+          // Refresh the member list to show updated status
+          renderMemberList();
+          // Re-render the current member form if one is selected
+          if (selectedMember) {
+            renderMemberForm(selectedMember);
+          }
+        }
         else alert('Error saving file');
       }).catch(err => {
         console.error('Error saving members:', err);

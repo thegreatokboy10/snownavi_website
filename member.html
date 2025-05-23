@@ -427,8 +427,85 @@
       applyTranslations(selectedLang);
     });
 
+    // Function to parse date from dd/mm/yyyy format
+    function parseDateDDMMYYYY(dateStr) {
+      const [day, month, year] = dateStr.split('/').map(part => parseInt(part, 10));
+      return new Date(year, month - 1, day);
+    }
+
+    // Function to check if validity period has expired
+    function checkValidityPeriodExpired(validityPeriodStr) {
+      try {
+        // Check if the validity period is in the dd/mm/yyyy - dd/mm/yyyy format
+        const match = validityPeriodStr.match(/^(\d{2}\/\d{2}\/\d{4}) - (\d{2}\/\d{2}\/\d{4})$/);
+        if (match) {
+          const endDateStr = match[2];
+          const endDate = parseDateDDMMYYYY(endDateStr);
+
+          // Set time to end of day (23:59:59)
+          endDate.setHours(23, 59, 59, 999);
+
+          // Compare with current date
+          const today = new Date();
+          return today > endDate;
+        }
+
+        // If the format doesn't match, try to extract the end date from other formats
+        // This is a fallback for any validity periods not yet converted to dd/mm/yyyy format
+        const parts = validityPeriodStr.split(' - ');
+        if (parts.length === 2) {
+          // Try to extract a year from the end date part
+          const yearMatch = parts[1].match(/\d{4}/);
+          if (yearMatch) {
+            const year = parseInt(yearMatch[0], 10);
+            // If the year is in the past, consider it expired
+            return new Date().getFullYear() > year;
+          }
+        }
+
+        // If we can't determine, default to not expired
+        return false;
+      } catch (e) {
+        console.error('Error checking validity period:', e);
+        return false;
+      }
+    }
+
+    // Function to notify the server to check and update member status if expired
+    async function notifyServerToCheckExpiration(memberId) {
+      try {
+        // Instead of directly updating the member data, call a dedicated API endpoint
+        // that will handle the expiration check on the server side
+        const response = await fetch(`/api/member/${memberId}/check-expiration`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            // Add a CSRF token if your server implements CSRF protection
+            // 'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+          },
+          // Send minimal data - just enough for the server to identify the request
+          body: JSON.stringify({
+            requestTime: new Date().toISOString()
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(`Server error: ${errorData.error || 'Unknown error'}`);
+        }
+
+        const result = await response.json();
+        console.log('Expiration check result:', result.message);
+        return result.updated; // Return whether the status was updated
+
+      } catch (error) {
+        console.error('Error checking member expiration:', error);
+        return false;
+      }
+    }
+
     // Function to set member data
-    function setMemberData(data) {
+    async function setMemberData(data) {
       // Set member name and update avatar initials
       document.getElementById('member-name').textContent = data.name;
       const initials = data.name.split(' ').map(n => n[0]).join('');
@@ -437,9 +514,39 @@
       // Set member ID
       document.getElementById('member-id').textContent = `ID: ${data.id}`;
 
+      // Get validity period (now a single string instead of an object with language keys)
+      let validityPeriod = '';
+
+      if (typeof data.validityPeriod === 'string') {
+        // New format: single string
+        validityPeriod = data.validityPeriod;
+      } else if (typeof data.validityPeriod === 'object') {
+        // Old format: object with language keys
+        validityPeriod = data.validityPeriod[savedLang] || data.validityPeriod.en || '';
+      }
+
+      // Check if validity period has expired
+      const isExpired = checkValidityPeriodExpired(validityPeriod);
+
+      // Local variable to track if we should display as expired
+      let displayAsExpired = !data.isActive || isExpired;
+
+      // If the member appears active but the validity period has expired,
+      // notify the server to perform the expiration check securely
+      if (isExpired && data.isActive) {
+        // Notify the server to check and update expiration status
+        // This is a more secure approach as the server will validate the request
+        const wasUpdated = await notifyServerToCheckExpiration(data.id);
+
+        // If the server confirmed an update, reflect that in our display
+        if (wasUpdated) {
+          displayAsExpired = true;
+        }
+      }
+
       // Set membership status
       const statusElement = document.getElementById('membership-status');
-      if (data.isActive) {
+      if (!displayAsExpired) {
         statusElement.classList.remove('status-expired');
         statusElement.classList.add('status-active');
         statusElement.textContent = translations[savedLang].fullMembership;
@@ -449,8 +556,7 @@
         statusElement.textContent = translations[savedLang].membershipExpired;
       }
 
-      // Set validity period based on language
-      const validityPeriod = data.validityPeriod[savedLang] || data.validityPeriod.en;
+      // Set validity period text
       document.getElementById('validity-period').textContent = validityPeriod;
     }
 
@@ -466,15 +572,34 @@
           throw new Error('No member ID provided');
         }
 
+        // Validate member ID format to prevent injection attacks
+        if (!validateMemberId(memberId)) {
+          throw new Error('Invalid member ID format');
+        }
+
         // Fetch member data from API
-        const response = await fetch(`/api/member/${memberId}`);
+        const response = await fetch(`/api/member/${memberId}`, {
+          headers: {
+            // Add cache control to prevent caching of sensitive data
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+          }
+        });
 
         if (!response.ok) {
           throw new Error('Failed to fetch member data');
         }
 
         const data = await response.json();
-        setMemberData(data);
+
+        // Validate the received data structure before processing
+        if (!validateMemberData(data)) {
+          throw new Error('Invalid member data received');
+        }
+
+        // Now set the member data (this is now an async function)
+        await setMemberData(data);
 
         // Generate QR code after member data is loaded
         generateQRCode(window.location.href);
@@ -488,6 +613,25 @@
           </div>
         `;
       }
+    }
+
+    // Function to validate member ID format
+    function validateMemberId(id) {
+      // Check if the ID matches the pattern: SN + 4-digit year + 4-digit sequence
+      const pattern = /^SN\d{4}\d{4}$/;
+      return pattern.test(id);
+    }
+
+    // Function to validate member data structure
+    function validateMemberData(data) {
+      // Check if the data has the required properties
+      return data &&
+             typeof data === 'object' &&
+             'id' in data &&
+             'name' in data &&
+             'isActive' in data &&
+             'validityPeriod' in data &&
+             (typeof data.validityPeriod === 'object' || typeof data.validityPeriod === 'string');
     }
 
     // Function to generate QR code

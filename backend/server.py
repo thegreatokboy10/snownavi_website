@@ -6,6 +6,7 @@ import mimetypes
 import uuid
 import datetime
 import hashlib
+import re
 from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
 
@@ -235,6 +236,10 @@ def get_member(member_id):
 @app.route('/api/member/<member_id>', methods=['PUT'])
 def update_member(member_id):
     try:
+        # Validate member_id format to prevent injection attacks
+        if not re.match(r'^SN\d{4}\d{4}$', member_id):
+            return jsonify({'error': 'Invalid member ID format'}), 400
+
         members_file = os.path.join(DATA_DIR, 'members.json')
         if not os.path.exists(members_file):
             return jsonify({'error': 'Members data not found'}), 404
@@ -242,8 +247,30 @@ def update_member(member_id):
         with open(members_file, 'r', encoding='utf-8') as f:
             members = json.load(f)
 
+        # Check if the member exists
+        if member_id not in members:
+            return jsonify({'error': 'Member not found'}), 404
+
         # Get the updated member data from the request
         updated_member = request.get_json()
+
+        # Validate the updated member data
+        if not updated_member or not isinstance(updated_member, dict):
+            return jsonify({'error': 'Invalid member data'}), 400
+
+        # Ensure the member ID in the data matches the URL parameter
+        if 'id' not in updated_member or updated_member['id'] != member_id:
+            return jsonify({'error': 'Member ID mismatch'}), 400
+
+        # Validate required fields
+        required_fields = ['name', 'isActive', 'validityPeriod']
+        for field in required_fields:
+            if field not in updated_member:
+                return jsonify({'error': f'Missing required field: {field}'}), 400
+
+        # Validate validityPeriod is an object
+        if not isinstance(updated_member['validityPeriod'], dict):
+            return jsonify({'error': 'validityPeriod must be an object'}), 400
 
         # Update the member in the members dictionary
         members[member_id] = updated_member
@@ -329,6 +356,109 @@ def create_member():
         }), 201
     except Exception as e:
         app.logger.error(f"Error creating member data: {str(e)}")
+        return jsonify({'error': f'Server error: {str(e)}'}), 500
+
+@app.route('/api/member/<member_id>/check-expiration', methods=['POST'])
+def check_member_expiration(member_id):
+    """Check if a member's validity period has expired and update status if needed"""
+    try:
+        # Validate member_id format to prevent injection attacks
+        if not re.match(r'^SN\d{4}\d{4}$', member_id):
+            return jsonify({'error': 'Invalid member ID format'}), 400
+
+        members_file = os.path.join(DATA_DIR, 'members.json')
+        if not os.path.exists(members_file):
+            return jsonify({'error': 'Members data not found'}), 404
+
+        with open(members_file, 'r', encoding='utf-8') as f:
+            members = json.load(f)
+
+        # Check if the member exists
+        if member_id not in members:
+            return jsonify({'error': 'Member not found'}), 404
+
+        member = members[member_id]
+
+        # Only proceed if the member is currently active
+        if not member.get('isActive', False):
+            return jsonify({
+                'status': 'success',
+                'message': 'Member is already marked as expired',
+                'updated': False
+            }), 200
+
+        # Check if validity period exists
+        if not member.get('validityPeriod'):
+            return jsonify({'error': 'Missing validity period data'}), 400
+
+        # Get the validity period (could be string or object with language keys)
+        validity_period = None
+        if isinstance(member['validityPeriod'], str):
+            # New format: single string
+            validity_period = member['validityPeriod']
+        elif isinstance(member['validityPeriod'], dict):
+            # Old format: object with language keys
+            for lang in ['en', 'zh', 'nl']:
+                if lang in member['validityPeriod'] and member['validityPeriod'][lang]:
+                    validity_period = member['validityPeriod'][lang]
+                    break
+        else:
+            return jsonify({'error': 'Invalid validity period format'}), 400
+
+        if not validity_period:
+            return jsonify({
+                'status': 'success',
+                'message': 'No validity period found to check',
+                'updated': False
+            }), 200
+
+        # Check if the validity period is in the dd/mm/yyyy - dd/mm/yyyy format
+        is_expired = False
+        match = re.match(r'^(\d{2}/\d{2}/\d{4}) - (\d{2}/\d{2}/\d{4})$', validity_period)
+        if match:
+            end_date_str = match.group(2)
+            try:
+                # Parse the end date
+                day, month, year = map(int, end_date_str.split('/'))
+                end_date = datetime.datetime(year, month, day, 23, 59, 59)
+
+                # Compare with current date
+                now = datetime.datetime.now()
+                is_expired = now > end_date
+            except ValueError:
+                app.logger.error(f"Error parsing date: {end_date_str}")
+                return jsonify({'error': 'Invalid date format'}), 400
+        else:
+            # If not in standard format, try to extract year from the end date
+            parts = validity_period.split(' - ')
+            if len(parts) == 2:
+                year_match = re.search(r'\d{4}', parts[1])
+                if year_match:
+                    year = int(year_match.group(0))
+                    is_expired = datetime.datetime.now().year > year
+
+        # If expired, update the member status
+        if is_expired:
+            member['isActive'] = False
+
+            # Write the updated members dictionary back to the file
+            with open(members_file, 'w', encoding='utf-8') as f:
+                json.dump(members, f, ensure_ascii=False, indent=2)
+
+            return jsonify({
+                'status': 'success',
+                'message': 'Member status updated to expired',
+                'updated': True
+            }), 200
+        else:
+            return jsonify({
+                'status': 'success',
+                'message': 'Member validity period has not expired',
+                'updated': False
+            }), 200
+
+    except Exception as e:
+        app.logger.error(f"Error checking member expiration: {str(e)}")
         return jsonify({'error': f'Server error: {str(e)}'}), 500
 
 @app.route('/api/members/generate-passwords', methods=['POST'])
