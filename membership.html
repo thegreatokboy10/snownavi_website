@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-T4N8L0SRWZ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-T4N8L0SRWZ');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="page-title">SnowNavi Membership Guide</title>
+  <style>
+    :root {
+      --main-red: #E53512;
+      --bg-light: #F9F4F3;
+      --text-dark: #2F2F2F;
+      --text-gray: #717171;
+      --contrast-white: #FFFFFF;
+      --accent-blue: #9ED4E7;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Noto Sans SC', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+    }
+
+    header {
+      background: var(--contrast-white);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    header img {
+      height: 50px;
+    }
+
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+      nav.nav-links {
+        display: none;
+        flex-direction: column;
+        background: var(--contrast-white);
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 220px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+      }
+      nav.nav-links.open {
+        display: flex;
+      }
+      nav.nav-links a,
+      .language-selector {
+        margin: 1rem;
+      }
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+    }
+    nav a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: var(--text-dark);
+      font-weight: bold;
+    }
+    .language-selector {
+      margin-left: 2rem;
+      font-size: 1rem;
+    }
+
+    .membership-container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background-color: var(--contrast-white);
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .membership-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .membership-header h1 {
+      color: var(--main-red);
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .membership-intro {
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .membership-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    .membership-option {
+      flex: 1;
+      min-width: 250px;
+      background-color: var(--bg-light);
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .membership-option h2 {
+      color: var(--main-red);
+      font-size: 1.5rem;
+      margin-top: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .membership-option h2 span {
+      margin-right: 0.5rem;
+      font-size: 1.8rem;
+    }
+
+    .membership-option ul {
+      padding-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .membership-option li {
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+
+    .membership-notes {
+      background-color: var(--accent-blue);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-top: 2rem;
+    }
+
+    .membership-notes h3 {
+      margin-top: 0;
+      color: var(--text-dark);
+    }
+
+    .membership-notes ul {
+      padding-left: 1.5rem;
+      margin-bottom: 0;
+    }
+
+    .membership-notes li {
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+
+    .membership-benefits {
+      background-color: #f5e6c8;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-top: 2rem;
+      border-left: 4px solid var(--main-red);
+    }
+
+    .membership-benefits h3 {
+      margin-top: 0;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+    }
+
+    .membership-benefits h3 span {
+      margin-right: 0.5rem;
+      font-size: 1.5rem;
+    }
+
+    .membership-benefits ul {
+      padding-left: 1.5rem;
+      margin-bottom: 0;
+    }
+
+    .membership-benefits li {
+      margin-bottom: 0.8rem;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+
+    .apply-button {
+      display: block;
+      background-color: var(--main-red);
+      color: white;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+      padding: 1rem 2rem;
+      margin: 2rem auto 0;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      width: 80%;
+      max-width: 300px;
+    }
+
+    .apply-button:hover {
+      background-color: #c52e10;
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      overflow: auto;
+    }
+
+    .modal-content {
+      background-color: var(--contrast-white);
+      margin: 10% auto;
+      padding: 2rem;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 1rem;
+      right: 1.5rem;
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--text-gray);
+      cursor: pointer;
+    }
+
+    .close-modal:hover {
+      color: var(--text-dark);
+    }
+
+    .modal-title {
+      color: var(--main-red);
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    .membership-options-radio {
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 0.8rem;
+      text-align: left;
+      justify-content: flex-start;
+    }
+
+    .radio-option input {
+      margin-right: 0.8rem;
+      margin-top: 0.1rem;
+      flex-shrink: 0;
+      width: auto;
+    }
+
+    .radio-option label {
+      text-align: left;
+      line-height: 1.4;
+      flex: 1;
+      cursor: pointer;
+      margin-bottom: 0;
+      font-weight: normal;
+    }
+
+    .submit-button {
+      background-color: var(--main-red);
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .submit-button:hover {
+      background-color: #c52e10;
+    }
+
+    .email-content-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 1001;
+      overflow: auto;
+    }
+
+    .email-content {
+      background-color: var(--contrast-white);
+      margin: 10% auto;
+      padding: 2rem;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .email-header {
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .email-instruction {
+      background-color: #f0f8ff;
+      padding: 1rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      border-left: 4px solid var(--accent-blue);
+    }
+
+    .email-instruction p {
+      margin: 0;
+      color: var(--text-dark);
+      font-weight: 500;
+    }
+
+    .email-body {
+      margin-bottom: 1.5rem;
+      white-space: pre-line;
+      background-color: #f9f9f9;
+      padding: 1rem;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      font-family: monospace;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .email-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .copy-button {
+      background-color: var(--accent-blue);
+      color: var(--text-dark);
+      font-size: 0.9rem;
+      font-weight: bold;
+      padding: 0.6rem 1rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-right: 1rem;
+    }
+
+    .copy-button:hover {
+      background-color: #7bc4d9;
+    }
+
+    .copy-button.copied {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    footer {
+      background: var(--text-dark);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 768px) {
+      .membership-options {
+        flex-direction: column;
+      }
+      .membership-option {
+        min-width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="assets/picture/snownavi_logo_banner.jpg" alt="SnowNavi logo">
+    <button class="menu-toggle" id="menu-toggle">☰</button>
+    <nav class="nav-links" id="nav-links">
+      <!-- Navigation items will be dynamically inserted here -->
+      <div class="language-selector">
+        <select id="lang" class="language-selector">
+          <option value="en">🇬🇧 EN</option>
+          <option value="zh">🇨🇳 中文</option>
+          <option value="nl">🇳🇱 NL</option>
+        </select>
+      </div>
+    </nav>
+  </header>
+
+  <div class="membership-container">
+    <div class="membership-header">
+      <h1 id="membership-title">SnowNavi Membership Guide</h1>
+    </div>
+
+    <div class="membership-intro" id="membership-intro">
+      Welcome to SnowNavi Snow Club! Becoming a member means you're not just part of a community of snow enthusiasts, but you also enjoy exclusive benefits, priority course bookings, internal discounts, and event privileges. Here are three ways to obtain membership:
+    </div>
+
+    <div class="membership-options">
+      <div class="membership-option">
+        <h2><span>🏂</span> <span id="option1-title">Join SnowNavi Instructor Team</span></h2>
+        <p id="option1-desc">If you're a snow enthusiast who wants to share your passion and teach others, consider applying to join the SnowNavi instructor team. As an instructor, you'll automatically receive membership, earn money through teaching, participate in internal training, and get priority in course scheduling.</p>
+        <ul>
+          <li id="option1-point1">✅ Membership automatically activated</li>
+          <li id="option1-point2">💸 Paid teaching opportunities, instructor development system</li>
+          <li id="option1-point3">📚 Free/discounted instructor advanced training</li>
+        </ul>
+      </div>
+
+      <div class="membership-option">
+        <h2><span>🎿</span> <span id="option2-title">Actively Participate in Club Activities</span></h2>
+        <p id="option2-desc">Simply by actively participating in our organized ski activities and meeting certain attendance requirements (see specific activity guidelines for details), you'll automatically be upgraded to membership status and enjoy more skiing benefits.</p>
+        <ul>
+          <li id="option2-point1">✅ No additional fees, automatic membership</li>
+          <li id="option2-point2">📅 More participation, more benefits unlocked</li>
+          <li id="option2-point3">🌟 Priority booking for ski lessons and group activities</li>
+        </ul>
+      </div>
+
+      <div class="membership-option">
+        <h2><span>💳</span> <span id="option3-title">Pay Annual Fee to Become a Member</span></h2>
+        <p id="option3-desc">You can also become a member by paying a membership fee, valid for one year (from the date of payment).</p>
+        <ul>
+          <li id="option3-point1">💶 Annual fee only €50</li>
+          <li id="option3-point2">⏰ One-year validity, join anytime</li>
+          <li id="option3-point3">🎁 Unlock member-exclusive courses, discounts, and benefits</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="membership-benefits">
+      <h3><span>🎁</span> <span id="benefits-title">Exclusive Member Benefits</span></h3>
+      <ul>
+        <li id="benefit1">Bataleon - 40% discount on all products</li>
+        <li id="benefit2">Rome SDS - 40% discount on all products</li>
+        <li id="benefit3">Outdoor Master - 40%-50% discount on ski goggles</li>
+      </ul>
+    </div>
+
+    <div class="membership-notes">
+      <h3 id="notes-title">Important Notes</h3>
+      <ul>
+        <li id="note1">Each member will receive a unique membership number and can use an electronic membership card</li>
+        <li id="note2">Instructors and activity participants who meet the criteria will receive membership activation notifications</li>
+        <li id="note3">All members can enjoy priority participation in ski activities, course discounts, and internal benefit draws during the validity period</li>
+      </ul>
+    </div>
+
+    <button id="apply-button" class="apply-button">Apply for Membership</button>
+  </div>
+
+  <!-- Membership Application Modal -->
+  <div id="application-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" id="close-modal">&times;</span>
+      <h2 class="modal-title" id="modal-title">Apply for SnowNavi Membership</h2>
+
+      <form id="membership-form">
+        <div class="form-group">
+          <label for="name" id="name-label">Full Name:</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="gender" id="gender-label">Gender:</label>
+          <select id="gender" name="gender" required>
+            <option value="" disabled selected id="gender-placeholder">Select your gender</option>
+            <option value="male" id="gender-male">Male</option>
+            <option value="female" id="gender-female">Female</option>
+            <option value="other" id="gender-other">Other</option>
+            <option value="prefer-not-to-say" id="gender-prefer-not">Prefer not to say</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label id="membership-type-label">Membership Type:</label>
+          <div class="membership-options-radio">
+            <div class="radio-option">
+              <input type="radio" id="instructor" name="membershipType" value="instructor" required>
+              <label for="instructor" id="instructor-label">Join SnowNavi Instructor Team</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="activities" name="membershipType" value="activities">
+              <label for="activities" id="activities-label">Participate in Club Activities</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="fee" name="membershipType" value="fee">
+              <label for="fee" id="fee-label">Pay Annual Fee (€50)</label>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-button" id="submit-button">Submit Application</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Email Content Modal -->
+  <div id="email-modal" class="email-content-modal">
+    <div class="email-content">
+      <div class="email-header">
+        <h3 id="email-subject">SnowNavi Membership Application</h3>
+        <p><strong id="email-to-label">To:</strong> info@snownavi.ski</p>
+      </div>
+      <div class="email-instruction">
+        <p id="email-instruction-text">Please send the following email content to info@snownavi.ski to complete your membership application:</p>
+      </div>
+      <div class="email-body" id="email-body">
+        <!-- Email content will be inserted here -->
+      </div>
+      <div class="email-actions">
+        <div>
+          <button class="copy-button" id="copy-button">Copy Email Content</button>
+        </div>
+        <button class="submit-button" id="close-email-modal">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p id="contact-text">Contact: info@snownavi.ski | Follow our 微信公共号 SnowNavi指雪针 for updates</p>
+    <p id="copyright">&copy; 2025 SnowNavi Sports. All rights reserved.</p>
+  </footer>
+
+  <!-- Include the navigation module -->
+  <script src="assets/js/navigation.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Initialize the navigation manager
+      const navManager = new NavigationManager();
+      navManager.init();
+
+      // Get the language selector
+      const langSelect = document.getElementById('lang');
+
+      // Get the saved language preference or default to English
+      const savedLang = localStorage.getItem('preferredLang') ||
+                        (navigator.language.startsWith('zh') ? 'zh' :
+                         navigator.language.startsWith('nl') ? 'nl' : 'en');
+
+      // Set the language selector to the saved preference
+      langSelect.value = savedLang;
+
+      // Define translations object globally
+      const translations = {
+          en: {
+            pageTitle: 'SnowNavi Membership Guide',
+            membershipTitle: 'SnowNavi Membership Guide',
+            membershipIntro: 'Welcome to SnowNavi Snow Club! Becoming a member means you\'re not just part of a community of snow enthusiasts, but you also enjoy exclusive benefits, priority course bookings, internal discounts, and event privileges. Here are three ways to obtain membership:',
+            option1Title: 'Join SnowNavi Instructor Team',
+            option1Desc: 'If you\'re a snow enthusiast who wants to share your passion and teach others, consider applying to join the SnowNavi instructor team. As an instructor, you\'ll automatically receive membership, earn money through teaching, participate in internal training, and get priority in course scheduling.',
+            option1Point1: '✅ Membership automatically activated',
+            option1Point2: '💸 Paid teaching opportunities, instructor development system',
+            option1Point3: '📚 Free/discounted instructor advanced training',
+            option2Title: 'Actively Participate in Club Activities',
+            option2Desc: 'Simply by actively participating in our organized ski activities and meeting certain attendance requirements (see specific activity guidelines for details), you\'ll automatically be upgraded to membership status and enjoy more skiing benefits.',
+            option2Point1: '✅ No additional fees, automatic membership',
+            option2Point2: '📅 More participation, more benefits unlocked',
+            option2Point3: '🌟 Priority booking for ski lessons and group activities',
+            option3Title: 'Pay Annual Fee to Become a Member',
+            option3Desc: 'You can also become a member by paying a membership fee, valid for one year (from the date of payment).',
+            option3Point1: '💶 Annual fee only €50',
+            option3Point2: '⏰ One-year validity, join anytime',
+            option3Point3: '🎁 Unlock member-exclusive courses, discounts, and benefits',
+            benefitsTitle: 'Exclusive Member Benefits',
+            benefit1: 'Bataleon - 40% discount on all products',
+            benefit2: 'Rome SDS - 40% discount on all products',
+            benefit3: 'Outdoor Master - 40%-50% discount on ski goggles',
+            notesTitle: 'Important Notes',
+            note1: 'Each member will receive a unique membership number and can use an electronic membership card',
+            note2: 'Instructors and activity participants who meet the criteria will receive membership activation notifications',
+            note3: 'All members can enjoy priority participation in ski activities, course discounts, and internal benefit draws during the validity period',
+            applyButton: 'Apply for Membership',
+            modalTitle: 'Apply for SnowNavi Membership',
+            nameLabel: 'Full Name:',
+            genderLabel: 'Gender:',
+            genderPlaceholder: 'Select your gender',
+            genderMale: 'Male',
+            genderFemale: 'Female',
+            genderOther: 'Other',
+            genderPreferNot: 'Prefer not to say',
+            membershipTypeLabel: 'Membership Type:',
+            instructorLabel: 'Join SnowNavi Instructor Team',
+            activitiesLabel: 'Participate in Club Activities',
+            feeLabel: 'Pay Annual Fee (€50)',
+            submitButton: 'Submit Application',
+            emailSubject: 'SnowNavi Membership Application',
+            emailToLabel: 'To:',
+            emailInstructionText: 'Please send the following email content to info@snownavi.ski to complete your membership application:',
+            copyButton: 'Copy Email Content',
+            copyButtonCopied: 'Copied!',
+            closeEmailModal: 'Close',
+            contactText: 'Contact: info@snownavi.ski | Follow our 微信公共号 SnowNavi指雪针 for updates',
+            copyright: '© 2025 SnowNavi Sports. All rights reserved.'
+          },
+          zh: {
+            pageTitle: 'SnowNavi会员资格说明',
+            membershipTitle: '❄️ SnowNavi会员资格说明',
+            membershipIntro: '欢迎加入 SnowNavi滑雪俱乐部！成为会员不仅意味着你是滑雪爱好者的一员，更代表你享受专属福利、优先课程、内部折扣与活动优先权。以下是获得会员资格的三种方式：',
+            option1Title: '加入SnowNavi教练团',
+            option1Desc: '如果你是一位滑雪爱好者并希望分享热情、教学他人，欢迎申请加入SnowNavi教练团。成为教练后可 自动获得会员资格，同时可通过教学获得报酬、参与内部培训和优先排课。',
+            option1Point1: '✅ 会员资格自动激活',
+            option1Point2: '💸 可带薪授课，参与教练成长体系',
+            option1Point3: '📚 免费/折扣参与教练进阶培训',
+            option2Title: '积极参与俱乐部活动',
+            option2Desc: '只要你积极参加我们组织的滑雪活动，满足一定参与次数（具体标准见每期活动说明），即可自动升级为会员，享受更多滑雪福利。',
+            option2Point1: '✅ 无需额外付费，自动获取会员',
+            option2Point2: '📅 参与活动越多，解锁权益越多',
+            option2Point3: '🌟 优先预定滑雪课程与团体活动',
+            option3Title: '支付年费成为会员',
+            option3Desc: '你也可以通过支付会员费的方式直接成为会员，有效期为 一年（从支付之日起）。',
+            option3Point1: '💶 年费仅需 €50',
+            option3Point2: '⏰ 有效期为一年，随时加入',
+            option3Point3: '🎁 解锁会员专属课程、折扣与福利',
+            benefitsTitle: '🎁 专属会员福利',
+            benefit1: 'Bataleon品牌所有产品40%折扣',
+            benefit2: 'Rome SDS品牌所有产品40%折扣',
+            benefit3: 'Outdoor Master雪镜40%-50%折扣',
+            notesTitle: '📌 注意事项',
+            note1: '每位会员将获得一个唯一的会员编号，并可使用电子会员卡',
+            note2: '教练与活动参与会员在符合条件后将收到会员激活通知',
+            note3: '所有会员在有效期内均可优先参与滑雪活动、获得课程折扣、参与内部福利抽奖等',
+            applyButton: '申请会员',
+            modalTitle: '申请SnowNavi会员',
+            nameLabel: '姓名：',
+            genderLabel: '性别：',
+            genderPlaceholder: '请选择性别',
+            genderMale: '男',
+            genderFemale: '女',
+            genderOther: '其他',
+            genderPreferNot: '不愿透露',
+            membershipTypeLabel: '会员类型：',
+            instructorLabel: '加入SnowNavi教练团',
+            activitiesLabel: '积极参与俱乐部活动',
+            feeLabel: '支付年费（€50）',
+            submitButton: '提交申请',
+            emailSubject: 'SnowNavi会员申请',
+            emailToLabel: '收件人：',
+            emailInstructionText: '请将以下邮件内容发送至 info@snownavi.ski 以完成您的会员申请：',
+            copyButton: '复制邮件内容',
+            copyButtonCopied: '已复制！',
+            closeEmailModal: '关闭',
+            contactText: '联系方式：info@snownavi.ski | 请关注微信公共号： SnowNavi指雪针',
+            copyright: '© 2025 SnowNavi Sports. 保留所有权利.'
+          },
+          nl: {
+            pageTitle: 'SnowNavi Lidmaatschapsgids',
+            membershipTitle: 'SnowNavi Lidmaatschapsgids',
+            membershipIntro: 'Welkom bij SnowNavi Snow Club! Lid worden betekent niet alleen dat je deel uitmaakt van een gemeenschap van sneeuwliefhebbers, maar ook dat je exclusieve voordelen geniet, voorrang bij cursusboekingen, interne kortingen en evenementenprivileges. Hier zijn drie manieren om lid te worden:',
+            option1Title: 'Word lid van het SnowNavi instructeursteam',
+            option1Desc: 'Als je een sneeuwliefhebber bent die zijn passie wil delen en anderen wil lesgeven, overweeg dan om je aan te melden bij het SnowNavi instructeursteam. Als instructeur ontvang je automatisch lidmaatschap, verdien je geld door lesgeven, neem je deel aan interne trainingen en krijg je voorrang bij cursusplanning.',
+            option1Point1: '✅ Lidmaatschap automatisch geactiveerd',
+            option1Point2: '💸 Betaalde leermogelijkheden, instructeursontwikkelingssysteem',
+            option1Point3: '📚 Gratis/korting op geavanceerde instructeurstraining',
+            option2Title: 'Actief deelnemen aan clubactiviteiten',
+            option2Desc: 'Door actief deel te nemen aan onze georganiseerde skiactiviteiten en te voldoen aan bepaalde aanwezigheidsvereisten (zie specifieke activiteitenrichtlijnen voor details), word je automatisch opgewaardeerd naar lidmaatschapsstatus en geniet je van meer skivoordelen.',
+            option2Point1: '✅ Geen extra kosten, automatisch lidmaatschap',
+            option2Point2: '📅 Meer deelname, meer voordelen ontgrendeld',
+            option2Point3: '🌟 Voorrang bij het boeken van skilessen en groepsactiviteiten',
+            option3Title: 'Betaal jaarlijkse bijdrage om lid te worden',
+            option3Desc: 'Je kunt ook lid worden door een lidmaatschapsbijdrage te betalen, geldig voor één jaar (vanaf de datum van betaling).',
+            option3Point1: '💶 Jaarlijkse bijdrage slechts €50',
+            option3Point2: '⏰ Eén jaar geldigheid, sluit je op elk moment aan',
+            option3Point3: '🎁 Ontgrendel exclusieve cursussen, kortingen en voordelen voor leden',
+            benefitsTitle: 'Exclusieve lidvoordelen',
+            benefit1: 'Bataleon - 40% korting op alle producten',
+            benefit2: 'Rome SDS - 40% korting op alle producten',
+            benefit3: 'Outdoor Master - 40%-50% korting op skibrillen',
+            notesTitle: 'Belangrijke opmerkingen',
+            note1: 'Elk lid ontvangt een uniek lidmaatschapsnummer en kan een elektronische lidmaatschapskaart gebruiken',
+            note2: 'Instructeurs en activiteitendeelnemers die aan de criteria voldoen, ontvangen meldingen over lidmaatschapsactivering',
+            note3: 'Alle leden kunnen tijdens de geldigheidsperiode genieten van voorrang bij deelname aan skiactiviteiten, cursuskortingen en interne voordeeltrekkingen',
+            applyButton: 'Aanmelden voor lidmaatschap',
+            modalTitle: 'Aanmelden voor SnowNavi lidmaatschap',
+            nameLabel: 'Volledige naam:',
+            genderLabel: 'Geslacht:',
+            genderPlaceholder: 'Selecteer uw geslacht',
+            genderMale: 'Man',
+            genderFemale: 'Vrouw',
+            genderOther: 'Anders',
+            genderPreferNot: 'Zeg ik liever niet',
+            membershipTypeLabel: 'Lidmaatschapstype:',
+            instructorLabel: 'Word lid van het SnowNavi instructeursteam',
+            activitiesLabel: 'Actief deelnemen aan clubactiviteiten',
+            feeLabel: 'Betaal jaarlijkse bijdrage (€50)',
+            submitButton: 'Aanmelding versturen',
+            emailSubject: 'SnowNavi Lidmaatschapsaanvraag',
+            emailToLabel: 'Aan:',
+            emailInstructionText: 'Stuur de volgende e-mailinhoud naar info@snownavi.ski om uw lidmaatschapsaanvraag te voltooien:',
+            copyButton: 'E-mailinhoud kopiëren',
+            copyButtonCopied: 'Gekopieerd!',
+            closeEmailModal: 'Sluiten',
+            contactText: 'Contact: info@snownavi.ski | Volg onze 微信公共号 SnowNavi指雪针 voor updates',
+            copyright: '© 2025 SnowNavi Sports. Alle rechten voorbehouden.'
+          }
+      };
+
+      // Function to apply translations
+      function applyTranslations(lang) {
+        // Get the translations for the selected language
+        const trans = translations[lang] || translations.en;
+
+        // Apply translations to the page
+        document.getElementById('page-title').textContent = trans.pageTitle;
+        document.getElementById('membership-title').textContent = trans.membershipTitle;
+        document.getElementById('membership-intro').textContent = trans.membershipIntro;
+
+        document.getElementById('option1-title').textContent = trans.option1Title;
+        document.getElementById('option1-desc').textContent = trans.option1Desc;
+        document.getElementById('option1-point1').textContent = trans.option1Point1;
+        document.getElementById('option1-point2').textContent = trans.option1Point2;
+        document.getElementById('option1-point3').textContent = trans.option1Point3;
+
+        document.getElementById('option2-title').textContent = trans.option2Title;
+        document.getElementById('option2-desc').textContent = trans.option2Desc;
+        document.getElementById('option2-point1').textContent = trans.option2Point1;
+        document.getElementById('option2-point2').textContent = trans.option2Point2;
+        document.getElementById('option2-point3').textContent = trans.option2Point3;
+
+        document.getElementById('option3-title').textContent = trans.option3Title;
+        document.getElementById('option3-desc').textContent = trans.option3Desc;
+        document.getElementById('option3-point1').textContent = trans.option3Point1;
+        document.getElementById('option3-point2').textContent = trans.option3Point2;
+        document.getElementById('option3-point3').textContent = trans.option3Point3;
+
+        document.getElementById('benefits-title').textContent = trans.benefitsTitle;
+        document.getElementById('benefit1').textContent = trans.benefit1;
+        document.getElementById('benefit2').textContent = trans.benefit2;
+        document.getElementById('benefit3').textContent = trans.benefit3;
+
+        document.getElementById('notes-title').textContent = trans.notesTitle;
+        document.getElementById('note1').textContent = trans.note1;
+        document.getElementById('note2').textContent = trans.note2;
+        document.getElementById('note3').textContent = trans.note3;
+
+        document.getElementById('apply-button').textContent = trans.applyButton;
+        document.getElementById('modal-title').textContent = trans.modalTitle;
+        document.getElementById('name-label').textContent = trans.nameLabel;
+        document.getElementById('gender-label').textContent = trans.genderLabel;
+        document.getElementById('gender-placeholder').textContent = trans.genderPlaceholder;
+        document.getElementById('gender-male').textContent = trans.genderMale;
+        document.getElementById('gender-female').textContent = trans.genderFemale;
+        document.getElementById('gender-other').textContent = trans.genderOther;
+        document.getElementById('gender-prefer-not').textContent = trans.genderPreferNot;
+        document.getElementById('membership-type-label').textContent = trans.membershipTypeLabel;
+        document.getElementById('instructor-label').textContent = trans.instructorLabel;
+        document.getElementById('activities-label').textContent = trans.activitiesLabel;
+        document.getElementById('fee-label').textContent = trans.feeLabel;
+        document.getElementById('submit-button').textContent = trans.submitButton;
+
+        document.getElementById('email-subject').textContent = trans.emailSubject;
+        document.getElementById('email-to-label').textContent = trans.emailToLabel;
+        document.getElementById('email-instruction-text').textContent = trans.emailInstructionText;
+        document.getElementById('copy-button').textContent = trans.copyButton;
+        document.getElementById('close-email-modal').textContent = trans.closeEmailModal;
+
+        document.getElementById('contact-text').textContent = trans.contactText;
+        document.getElementById('copyright').textContent = trans.copyright;
+      }
+
+      // Apply translations based on the selected language
+      applyTranslations(savedLang);
+
+      // Listen for language changes
+      langSelect.addEventListener('change', function(e) {
+        const selectedLang = e.target.value;
+        localStorage.setItem('preferredLang', selectedLang);
+        applyTranslations(selectedLang);
+      });
+
+      // Toggle mobile menu
+      document.getElementById('menu-toggle').addEventListener('click', function() {
+        document.getElementById('nav-links').classList.toggle('open');
+      });
+
+      // Modal control functions
+      const applicationModal = document.getElementById('application-modal');
+      const emailModal = document.getElementById('email-modal');
+      const applyButton = document.getElementById('apply-button');
+      const closeModal = document.getElementById('close-modal');
+      const closeEmailModal = document.getElementById('close-email-modal');
+
+      // Open application modal
+      applyButton.addEventListener('click', function() {
+        applicationModal.style.display = 'block';
+      });
+
+      // Close application modal
+      closeModal.addEventListener('click', function() {
+        applicationModal.style.display = 'none';
+      });
+
+      // Close email modal
+      closeEmailModal.addEventListener('click', function() {
+        emailModal.style.display = 'none';
+      });
+
+      // Copy email content functionality
+      const copyButton = document.getElementById('copy-button');
+      copyButton.addEventListener('click', function() {
+        const emailBody = document.getElementById('email-body');
+        const emailContent = emailBody.textContent;
+
+        // Try to use the modern clipboard API
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(emailContent).then(function() {
+            showCopySuccess();
+          }).catch(function(err) {
+            // Fallback to older method
+            fallbackCopyTextToClipboard(emailContent);
+          });
+        } else {
+          // Fallback for older browsers or non-secure contexts
+          fallbackCopyTextToClipboard(emailContent);
+        }
+      });
+
+      // Fallback copy method for older browsers
+      function fallbackCopyTextToClipboard(text) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+          const successful = document.execCommand('copy');
+          if (successful) {
+            showCopySuccess();
+          } else {
+            showCopyError();
+          }
+        } catch (err) {
+          showCopyError();
+        }
+
+        document.body.removeChild(textArea);
+      }
+
+      // Show copy success feedback
+      function showCopySuccess() {
+        const currentLang = langSelect.value;
+        const trans = translations[currentLang] || translations.en;
+
+        copyButton.textContent = trans.copyButtonCopied;
+        copyButton.classList.add('copied');
+
+        setTimeout(function() {
+          copyButton.textContent = trans.copyButton;
+          copyButton.classList.remove('copied');
+        }, 2000);
+      }
+
+      // Show copy error feedback
+      function showCopyError() {
+        alert('Unable to copy to clipboard. Please manually select and copy the email content.');
+      }
+
+      // Close modals when clicking outside
+      window.addEventListener('click', function(event) {
+        if (event.target === applicationModal) {
+          applicationModal.style.display = 'none';
+        }
+        if (event.target === emailModal) {
+          emailModal.style.display = 'none';
+        }
+      });
+
+      // Handle form submission
+      const membershipForm = document.getElementById('membership-form');
+      membershipForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        // Get form data
+        const formData = new FormData(membershipForm);
+        const name = formData.get('name');
+        const gender = formData.get('gender');
+        const membershipType = formData.get('membershipType');
+
+        // Generate email content
+        const emailContent = generateEmailContent(name, gender, membershipType);
+
+        // Try to open email client
+        const emailUrl = `mailto:info@snownavi.ski?subject=${encodeURIComponent(emailContent.subject)}&body=${encodeURIComponent(emailContent.body)}`;
+
+        // Attempt to open email client
+        const emailLink = document.createElement('a');
+        emailLink.href = emailUrl;
+        emailLink.style.display = 'none';
+        document.body.appendChild(emailLink);
+        emailLink.click();
+        document.body.removeChild(emailLink);
+
+        // Show email content modal as fallback after a short delay
+        setTimeout(function() {
+          showEmailContentModal(emailContent);
+        }, 1000);
+
+        // Close application modal
+        applicationModal.style.display = 'none';
+      });
+
+      // Function to generate email content
+      function generateEmailContent(name, gender, membershipType) {
+        const currentLang = langSelect.value;
+        const trans = translations[currentLang] || translations.en;
+
+        const subject = trans.emailSubject;
+
+        let membershipTypeText = '';
+        switch(membershipType) {
+          case 'instructor':
+            membershipTypeText = trans.instructorLabel;
+            break;
+          case 'activities':
+            membershipTypeText = trans.activitiesLabel;
+            break;
+          case 'fee':
+            membershipTypeText = trans.feeLabel;
+            break;
+        }
+
+        let body = '';
+        if (currentLang === 'zh') {
+          body = `尊敬的SnowNavi团队，
+
+我希望申请SnowNavi会员资格。
+
+个人信息：
+- 姓名：${name}
+- 性别：${gender}
+- 首选会员类型：${membershipTypeText}
+
+请联系我了解更多信息或后续步骤。
+
+此致
+敬礼！
+${name}`;
+        } else if (currentLang === 'nl') {
+          body = `Beste SnowNavi team,
+
+Ik zou graag een aanvraag indienen voor het SnowNavi lidmaatschap.
+
+Persoonlijke informatie:
+- Naam: ${name}
+- Geslacht: ${gender}
+- Gewenst lidmaatschapstype: ${membershipTypeText}
+
+Neem contact met mij op voor meer informatie of vervolgstappen.
+
+Met vriendelijke groet,
+${name}`;
+        } else {
+          body = `Dear SnowNavi Team,
+
+I would like to apply for SnowNavi membership.
+
+Personal Information:
+- Name: ${name}
+- Gender: ${gender}
+- Preferred Membership Type: ${membershipTypeText}
+
+Please contact me for further information or next steps.
+
+Best regards,
+${name}`;
+        }
+
+        return { subject, body };
+      }
+
+      // Function to show email content modal
+      function showEmailContentModal(emailContent) {
+        document.getElementById('email-body').textContent = emailContent.body;
+        emailModal.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

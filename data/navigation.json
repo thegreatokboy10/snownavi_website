@@ -45,15 +45,26 @@
       "order": 4
     },
     {
-      "id": "member",
-      "url": null,
+      "id": "membership",
+      "url": "membership.html",
       "translations": {
-        "en": "Member",
-        "zh": "会员",
-        "nl": "Lid"
+        "en": "Membership",
+        "zh": "会员资格",
+        "nl": "Lidmaatschap"
+      },
+      "visible": true,
+      "order": 5
+    },
+    {
+      "id": "member",
+      "url": "member.html",
+      "translations": {
+        "en": "Member Card",
+        "zh": "会员卡",
+        "nl": "Lidkaart"
       },
       "visible": false,
-      "order": 5
+      "order": 6
     }
   ]
 }
